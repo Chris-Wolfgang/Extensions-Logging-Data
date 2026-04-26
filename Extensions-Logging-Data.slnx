@@ -42,7 +42,11 @@
   </Folder>
   <Folder Name="/benchmarks/" />
   <Folder Name="/examples/" />
-  <Folder Name="/src/" />
-  <Folder Name="/tests/" />
+  <Folder Name="/src/">
+    <Project Path="src/Wolfgang.Extensions.Logging.Data/Wolfgang.Extensions.Logging.Data.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Wolfgang.Extensions.Logging.Data.Tests.Unit/Wolfgang.Extensions.Logging.Data.Tests.Unit.csproj" />
+  </Folder>
 </Solution>
 
