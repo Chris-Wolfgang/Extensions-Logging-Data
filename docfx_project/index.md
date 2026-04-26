@@ -2,40 +2,41 @@
 _layout: landing
 ---
 
-# {{PROJECT_NAME}} Documentation
+# Wolfgang.Extensions-Logging-Data Documentation
 
-Welcome to the {{PROJECT_NAME}} documentation. This site contains comprehensive guides, API reference, and examples to help you get started.
+Welcome to the Wolfgang.Extensions-Logging-Data documentation. This site contains comprehensive guides, API reference, and examples to help you get started.
 
 ## Quick Links
 
 - [Getting Started](docs/getting-started.md) - Learn the basics
-- [API Reference](xref:{{PROJECT_NAME}}) - Complete API documentation
-- [GitHub Repository]({{GITHUB_REPO_URL}}) - View source code
+- [API Reference](xref:Wolfgang.Extensions-Logging-Data) - Complete API documentation
+- [GitHub Repository](https://github.com/Chris-Wolfgang/Extensions-Logging-Data) - View source code
 
-## About {{PROJECT_NAME}}
+## About Wolfgang.Extensions-Logging-Data
 
-{{PROJECT_DESCRIPTION}}
+Exntension methods to ILogger and ILogger<T> for logging DbConnection, DbCommand, and other System.Data related data
 
 ## Installation
 
 ```bash
-dotnet add package {{PACKAGE_NAME}}
+dotnet add package Wolfgang.Extensions-Logging-Data
 ```
 
 ## Documentation Sections
 
 ### 📖 [Documentation](docs/getting-started.md)
-Step-by-step guides and tutorials to help you use {{PROJECT_NAME}} effectively.
+Step-by-step guides and tutorials to help you use Wolfgang.Extensions-Logging-Data effectively.
 
-### 📚 [API Reference](xref:{{PROJECT_NAME}})
+### 📚 [API Reference](xref:Wolfgang.Extensions-Logging-Data)
 Complete API documentation automatically generated from source code XML comments.
 
 ## Additional Resources
 
-- [Contributing Guidelines]({{GITHUB_REPO_URL}}/blob/main/CONTRIBUTING.md)
-- [Code of Conduct]({{GITHUB_REPO_URL}}/blob/main/CODE_OF_CONDUCT.md)
-- [License]({{GITHUB_REPO_URL}}/blob/main/LICENSE)
+- [Contributing Guidelines](https://github.com/Chris-Wolfgang/Extensions-Logging-Data/blob/main/CONTRIBUTING.md)
+- [Code of Conduct](https://github.com/Chris-Wolfgang/Extensions-Logging-Data/blob/main/CODE_OF_CONDUCT.md)
+- [License](https://github.com/Chris-Wolfgang/Extensions-Logging-Data/blob/main/LICENSE)
 
 ---
 
 *Documentation built with [DocFX](https://dotnet.github.io/docfx/)*
+
