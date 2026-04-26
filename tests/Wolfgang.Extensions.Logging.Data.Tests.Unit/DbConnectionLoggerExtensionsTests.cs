@@ -235,20 +235,10 @@ public class DbConnectionLoggerExtensionsTests
     [InlineData("PASSWORD")]
     [InlineData("password")]
     [InlineData("PassWord")]
-    public void RedactConnectionString_removes_password_case_insensitively(string casing)
-    {
-        var redacted = DbConnectionLoggerExtensions.RedactConnectionString($"Server=foo;{casing}=secret");
-
-        Assert.DoesNotContain("secret", redacted, StringComparison.OrdinalIgnoreCase);
-    }
-
-
-
-    [Theory]
     [InlineData("PWD")]
     [InlineData("pwd")]
     [InlineData("Pwd")]
-    public void RedactConnectionString_removes_pwd_case_insensitively(string casing)
+    public void RedactConnectionString_removes_password_or_pwd_case_insensitively(string casing)
     {
         var redacted = DbConnectionLoggerExtensions.RedactConnectionString($"Server=foo;{casing}=secret");
 
