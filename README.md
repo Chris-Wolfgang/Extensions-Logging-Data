@@ -1,6 +1,6 @@
-# Wolfgang.Extensions-Logging-Data
+# Wolfgang.Extensions.Logging.Data
 
-Exntension methods to ILogger and ILogger<T> for logging DbConnection, DbCommand, and other System.Data related data
+Extension methods for `ILogger` and `ILogger<T>` that log `DbConnection`, `DbCommand`, `DbParameter`, `DbParameterCollection`, and raw SQL command text from `System.Data.Common` &mdash; with built-in secret redaction (passwords in connection strings, configurable parameter values).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-Multi--Targeted-purple.svg)](https://dotnet.microsoft.com/)
@@ -11,7 +11,7 @@ Exntension methods to ILogger and ILogger<T> for logging DbConnection, DbCommand
 ## 📦 Installation
 
 ```bash
-dotnet add package Wolfgang.Extensions-Logging-Data
+dotnet add package Wolfgang.Extensions.Logging.Data
 ```
 
 **NuGet Package:** Coming soon to NuGet.org
@@ -35,26 +35,58 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 
 ## 🚀 Quick Start
 
-{{QUICK_START_EXAMPLE}}
+```csharp
+using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Logging;
+using Wolfgang.Extensions.Logging.Data;
+
+using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+ILogger logger = loggerFactory.CreateLogger("Demo");
+
+await using var connection = new SqliteConnection("Data Source=:memory:;User=alice;Password=topsecret");
+await connection.OpenAsync();
+
+// Logs ConnectionType, Database, DataSource, ServerVersion, State,
+// ConnectionTimeout, and the connection string with Password removed.
+logger.LogDbConnection(connection);
+
+await using var command = connection.CreateCommand();
+command.CommandText = "INSERT INTO Users (Email, PasswordHash) VALUES (@email, @password)";
+command.Parameters.AddWithValue("@email", "alice@example.com");
+command.Parameters.AddWithValue("@password", "hashed-secret");
+
+// Logs the command and every parameter; the @password value is replaced
+// with "[REDACTED]" while name, DbType, direction, etc. are preserved.
+logger.LogDbCommand(command, excludedParameterNames: new[] { "@password" });
+```
+
+A full runnable example lives in [examples/Wolfgang.Extensions.Logging.Data.Example](examples/Wolfgang.Extensions.Logging.Data.Example).
 
 ---
 
 ## ✨ Features
 
-{{FEATURES_TABLE}}
+| Method | What it captures | Redaction |
+|---|---|---|
+| `LogDbConnection` | `ConnectionType`, `Database`, `DataSource`, `ServerVersion` (when open), `State`, `ConnectionTimeout`, `ConnectionString` | `Password` and `Pwd` keys are removed from the connection string (case-insensitive). User name (`User ID`, `UID`, etc.) is preserved. |
+| `LogDbCommand` | `CommandType`, `CommandText`, `CommandTimeout`, snapshot of every parameter (name, `DbType`, direction, size, precision, scale, nullability, value) | Pass `excludedParameterNames`; values for matching parameters become `"[REDACTED]"`. |
+| `LogDbParameter` | A single parameter's full metadata + value | Pass `redactValue: true` to replace the value with `"[REDACTED]"`. |
+| `LogDbParameterCollection` | `Count` and a snapshot of every parameter | Pass `excludedParameterNames`; values for matching parameters become `"[REDACTED]"`. |
+| `LogCommandText` | Raw SQL `CommandText` and an optional `IReadOnlyDictionary<string, object?>` of parameter values | Pass `excludedParameterNames`; values for matching keys become `"[REDACTED]"`. |
 
-**Examples:**
-{{FEATURE_EXAMPLES}}
+**Parameter name matching for `excludedParameterNames`** is **case-insensitive** and **tolerant of provider prefixes** &mdash; `@password`, `:password`, `?password`, and `password` all match a parameter named `@password`. Each method emits **one structured log entry per call** so sinks like Serilog, Seq, or Application Insights can index/filter on the named template fields.
 
 ---
 
 ## 🎯 Target Frameworks
 
+The library targets a broad range of TFMs so it can be consumed from .NET Framework, .NET Standard, and modern .NET projects alike.
+
 | Framework | Versions |
 |-----------|----------|
-| .NET Framework | .NET 4.6.2, .NET 4.7.0, .NET 4.7.1, .NET 4.7.2, .NET 4.8, .NET 4.8.1 |
-| .NET Core | .NET Core 3.1 |
-| .NET | .NET 5.0, .NET 6.0, .NET 7.0, .NET 8.0, .NET 9.0, .NET 10.0 |
+| .NET Framework | 4.6.2 and later |
+| .NET Standard | 2.0, 2.1 |
+| .NET | 10.0 |
 
 ---
 
@@ -177,5 +209,6 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for:
 
 ## 🙏 Acknowledgments
 
-{{ACKNOWLEDGMENTS}}
+- Built on top of [Microsoft.Extensions.Logging.Abstractions](https://www.nuget.org/packages/Microsoft.Extensions.Logging.Abstractions/) and `System.Data.Common`.
+- Maintained by [Chris Wolfgang](https://github.com/Chris-Wolfgang).
 

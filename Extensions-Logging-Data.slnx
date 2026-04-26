@@ -41,7 +41,9 @@
     <File Path="scripts/setup.ps1" />
   </Folder>
   <Folder Name="/benchmarks/" />
-  <Folder Name="/examples/" />
+  <Folder Name="/examples/">
+    <Project Path="examples/Wolfgang.Extensions.Logging.Data.Example/Wolfgang.Extensions.Logging.Data.Example.csproj" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Wolfgang.Extensions.Logging.Data/Wolfgang.Extensions.Logging.Data.csproj" />
   </Folder>

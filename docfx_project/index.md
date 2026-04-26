@@ -2,33 +2,42 @@
 _layout: landing
 ---
 
-# Wolfgang.Extensions-Logging-Data Documentation
+# Wolfgang.Extensions.Logging.Data
 
-Welcome to the Wolfgang.Extensions-Logging-Data documentation. This site contains comprehensive guides, API reference, and examples to help you get started.
+Extension methods for `ILogger` and `ILogger<T>` that log `DbConnection`, `DbCommand`, `DbParameter`, `DbParameterCollection`, and raw SQL command text from `System.Data.Common` &mdash; with built-in secret redaction.
 
 ## Quick Links
 
-- [Getting Started](docs/getting-started.md) - Learn the basics
-- [API Reference](xref:Wolfgang.Extensions-Logging-Data) - Complete API documentation
-- [GitHub Repository](https://github.com/Chris-Wolfgang/Extensions-Logging-Data) - View source code
-
-## About Wolfgang.Extensions-Logging-Data
-
-Exntension methods to ILogger and ILogger<T> for logging DbConnection, DbCommand, and other System.Data related data
+- [Introduction](docs/introduction.md) &mdash; what the library does and why
+- [Getting Started](docs/getting-started.md) &mdash; install, first call, and the redaction model
+- [API Reference](xref:Wolfgang.Extensions.Logging.Data) &mdash; full type and method documentation
+- [GitHub Repository](https://github.com/Chris-Wolfgang/Extensions-Logging-Data)
 
 ## Installation
 
 ```bash
-dotnet add package Wolfgang.Extensions-Logging-Data
+dotnet add package Wolfgang.Extensions.Logging.Data
 ```
+
+## At a glance
+
+```csharp
+using Microsoft.Extensions.Logging;
+using Wolfgang.Extensions.Logging.Data;
+
+logger.LogDbConnection(connection);
+logger.LogDbCommand(command, excludedParameterNames: new[] { "@password" });
+```
+
+Each call emits a single structured log entry with named template fields (`ConnectionType`, `Database`, `CommandText`, `Parameters`, &hellip;) so sinks like Serilog, Seq, or Application Insights can index and filter on them. Connection-string passwords are removed automatically; parameter values are redacted by name on an opt-in basis.
 
 ## Documentation Sections
 
 ### 📖 [Documentation](docs/getting-started.md)
-Step-by-step guides and tutorials to help you use Wolfgang.Extensions-Logging-Data effectively.
+Step-by-step guides covering installation, the five extension methods, and the redaction model.
 
-### 📚 [API Reference](xref:Wolfgang.Extensions-Logging-Data)
-Complete API documentation automatically generated from source code XML comments.
+### 📚 [API Reference](xref:Wolfgang.Extensions.Logging.Data)
+Complete API documentation generated from XML doc comments in the source.
 
 ## Additional Resources
 
@@ -39,4 +48,3 @@ Complete API documentation automatically generated from source code XML comments
 ---
 
 *Documentation built with [DocFX](https://dotnet.github.io/docfx/)*
-
