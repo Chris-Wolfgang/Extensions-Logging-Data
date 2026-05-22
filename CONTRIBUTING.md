@@ -1,6 +1,6 @@
-# Contributing to {{PROJECT_NAME}}
+# Contributing to Wolfgang.Extensions.Logging.Data
 
-Thank you for your interest in contributing to **{{PROJECT_NAME}}**! We welcome contributions to help improve this project.
+Thank you for your interest in contributing to **Wolfgang.Extensions.Logging.Data**! We welcome contributions to help improve this project.
 
 ## How Can You Contribute?
 
