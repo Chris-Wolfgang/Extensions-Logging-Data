@@ -2,7 +2,6 @@
 	<PropertyGroup>
 		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 		<Version>0.1.0</Version>
 		<Title>$(AssemblyName)</Title>
