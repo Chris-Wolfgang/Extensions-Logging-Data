@@ -1,0 +1,4 @@
+#nullable enable
+Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions
+static Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection(this Microsoft.Extensions.Logging.ILogger logger, System.Data.Common.DbConnection connection) -> void
+static Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection(this Microsoft.Extensions.Logging.ILogger logger, System.Data.Common.DbConnection connection, Microsoft.Extensions.Logging.LogLevel level) -> void
