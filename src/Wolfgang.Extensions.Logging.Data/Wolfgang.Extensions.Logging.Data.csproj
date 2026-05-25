@@ -5,7 +5,6 @@
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 		<Version>0.1.0</Version>
 		<Title>$(AssemblyName)</Title>
-		<Authors>Chris Wolfgang</Authors>
 		<Description>Extension methods for ILogger and ILogger&lt;T&gt; that log DbConnection, DbCommand, DbParameter, and DbParameterCollection from System.Data.Common, with built-in secret redaction (passwords in connection strings, configurable parameter values).</Description>
 		<Copyright>Copyright 2026 Chris Wolfgang</Copyright>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data</PackageProjectUrl>
