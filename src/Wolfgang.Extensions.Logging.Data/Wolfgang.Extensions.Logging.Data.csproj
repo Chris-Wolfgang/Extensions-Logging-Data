@@ -7,8 +7,8 @@
 		<Title>$(AssemblyName)</Title>
 		<Description>Extension methods for ILogger and ILogger&lt;T&gt; that log DbConnection, DbCommand, DbParameter, and DbParameterCollection from System.Data.Common, with built-in secret redaction (passwords in connection strings, configurable parameter values).</Description>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data.git</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<AssemblyVersion>1.0.0</AssemblyVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
