@@ -279,4 +279,72 @@ public class DbConnectionLoggerExtensionsTests
         Assert.DoesNotContain("p1", redacted, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("p2", redacted, StringComparison.OrdinalIgnoreCase);
     }
+
+
+
+    // T4 (test-quality audit) gap-fill: the prior suite verified every
+    // logged FIELD individually, but never asserted that the structured
+    // log entry actually carries all SEVEN named properties the
+    // MessageTemplate declares. A future refactor that drops a parameter
+    // from the template would not have been caught.
+    [Fact]
+    public void LogDbConnection_emits_all_seven_named_log_properties()
+    {
+        var logger = new RecordingLogger();
+        var connection = new FakeDbConnection();
+
+        logger.LogDbConnection(connection);
+
+        var entry = Assert.Single(logger.Entries);
+        Assert.NotNull(entry.GetValue("ConnectionType"));
+        // Database/DataSource may be empty strings from the FakeDbConnection
+        // defaults but the named slot must exist.
+        Assert.True(entry.ContainsKey("Database"));
+        Assert.True(entry.ContainsKey("DataSource"));
+        Assert.True(entry.ContainsKey("ServerVersion"));
+        Assert.True(entry.ContainsKey("State"));
+        Assert.True(entry.ContainsKey("ConnectionTimeout"));
+        Assert.True(entry.ContainsKey("ConnectionString"));
+    }
+
+
+
+    // T4 gap-fill: connection.ConnectionString may be null at the source
+    // (e.g. a freshly-constructed DbConnection before any setter call).
+    // The redaction layer turns null into string.Empty; verify the logged
+    // value reflects that rather than NRE'ing or leaking 'null'.
+    [Fact]
+    public void LogDbConnection_when_connection_string_is_null_logs_empty_string()
+    {
+        var logger = new RecordingLogger();
+        var connection = new FakeDbConnection { ConnectionString = null! };
+
+        logger.LogDbConnection(connection);
+
+        var entry = Assert.Single(logger.Entries);
+        Assert.Equal(string.Empty, entry.GetValue("ConnectionString"));
+    }
+
+
+
+    // T4 gap-fill: the redaction round-trips through
+    // DbConnectionStringBuilder — verify the output is itself a parseable
+    // connection string (not malformed mid-redaction by stray semicolons,
+    // quoting issues, etc.). The other RedactConnectionString_* tests
+    // parse the result as a side check; this one makes the assertion the
+    // intent.
+    [Fact]
+    public void RedactConnectionString_output_is_parseable_via_DbConnectionStringBuilder()
+    {
+        var redacted = DbConnectionLoggerExtensions.RedactConnectionString(
+            "Server=foo;Database=bar;User ID=bob;Password=hunter2;Connect Timeout=15");
+
+        // No exception = the output is well-formed key=value;key=value pairs.
+        var parsed = new DbConnectionStringBuilder { ConnectionString = redacted };
+
+        Assert.Equal("foo", parsed["Server"]);
+        Assert.Equal("bar", parsed["Database"]);
+        Assert.Equal("bob", parsed["User ID"]);
+        Assert.Equal("15", parsed["Connect Timeout"]);
+    }
 }
