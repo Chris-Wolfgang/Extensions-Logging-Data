@@ -40,7 +40,10 @@
     <File Path="scripts/Setup-Labels.ps1" />
     <File Path="scripts/setup.ps1" />
   </Folder>
-  <Folder Name="/benchmarks/" />
+  <Folder Name="/benchmarks/">
+    <File Path="benchmarks/.editorconfig" />
+    <Project Path="benchmarks/Wolfgang.Extensions.Logging.Data.Benchmarks/Wolfgang.Extensions.Logging.Data.Benchmarks.csproj" />
+  </Folder>
   <Folder Name="/examples/" />
   <Folder Name="/src/">
     <Project Path="src/Wolfgang.Extensions.Logging.Data/Wolfgang.Extensions.Logging.Data.csproj" />

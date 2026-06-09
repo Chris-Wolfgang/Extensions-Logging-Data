@@ -1,0 +1,64 @@
+# Curated overrides for benchmark projects.
+#
+# BenchmarkDotNet code intentionally trips analyzers that are correct
+# for shipped library code but wrong for measurement harnesses:
+#   - `[Benchmark]` methods are invoked by reflection, so most "unused"
+#     warnings are false positives
+#   - the deliberately-naive measured code triggers async-first /
+#     allocation / banned-API rules that would otherwise mask the very
+#     thing we're trying to measure
+#   - GC.GetTotalMemory / Stopwatch-pattern measurement code looks
+#     suspicious to a thread-safety analyzer but is the canonical BDN
+#     pattern
+#
+# Rather than dropping TreatWarningsAsErrors for benchmarks (which would
+# also hide real bugs in the benchmark harness), this file disables the
+# specific rules that BDN code consistently breaks. Add new entries here
+# instead of editing per-csproj <NoWarn>.
+
+root = false
+
+[*.cs]
+
+# CA1822 — "member can be made static" fires on every [Benchmark] method
+# (BDN requires them to be instance methods so it can resolve fields).
+dotnet_diagnostic.CA1822.severity = none
+
+# CA1024 — "use property" fires on [Benchmark]-attributed methods that
+# look like getters. They aren't; they're measurement entry points.
+dotnet_diagnostic.CA1024.severity = none
+
+# CA1812 — "internal class is never instantiated" — BDN instantiates
+# benchmark classes by reflection, so the static analyzer can't see it.
+dotnet_diagnostic.CA1812.severity = none
+
+# CA2007 — ConfigureAwait warnings — benchmark code intentionally awaits
+# without ConfigureAwait(false) so the measured cost matches application
+# code rather than library code.
+dotnet_diagnostic.CA2007.severity = none
+
+# Meziantou MA0004 — same rationale as CA2007.
+dotnet_diagnostic.MA0004.severity = none
+
+# Roslynator RCS1213 — "remove unused member" fires on private helpers
+# that BenchmarkDotNet's [GlobalSetup] / [IterationSetup] discovers via
+# attribute, which the analyzer can't see.
+dotnet_diagnostic.RCS1213.severity = none
+
+# CS1591 — missing XML doc. Benchmarks are not part of the shipping
+# public surface; XML docs on every [Benchmark] method would be noise.
+dotnet_diagnostic.CS1591.severity = none
+
+# CA1707 — identifier names contain underscores. The canonical BDN
+# benchmark-method naming is "Method_Scenario" (e.g.
+# LogDbConnection_DisabledLogger_FastPath) so chart legends are
+# self-describing.
+dotnet_diagnostic.CA1707.severity = none
+
+# CA1051 — "do not declare visible instance fields" — measurement
+# harnesses use public fields to expose [Params] etc.
+dotnet_diagnostic.CA1051.severity = none
+
+# CA1849 — "call sync APIs in async context" — benchmark methods often
+# need to compare sync vs async measured paths side by side.
+dotnet_diagnostic.CA1849.severity = none
