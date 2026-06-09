@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="10.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+
+    <!-- Real Microsoft.Extensions.Logging pipeline, not just Abstractions. -->
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.7" />
+
+    <!-- Real DbConnection implementation for integration coverage. SQLite is
+         lightweight, in-process, and works across every TFM the integration
+         project targets, so the test doesn't need any external infrastructure. -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Wolfgang.Extensions.Logging.Data\Wolfgang.Extensions.Logging.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>
