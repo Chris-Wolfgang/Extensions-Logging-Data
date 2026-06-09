@@ -2,32 +2,32 @@
 _layout: landing
 ---
 
-# Wolfgang.Extensions-Logging-Data Documentation
+# Wolfgang.Extensions.Logging.Data Documentation
 
-Welcome to the Wolfgang.Extensions-Logging-Data documentation. This site contains comprehensive guides, API reference, and examples to help you get started.
+Welcome to the Wolfgang.Extensions.Logging.Data documentation. This site contains comprehensive guides, API reference, and examples to help you get started.
 
 ## Quick Links
 
 - [Getting Started](docs/getting-started.md) - Learn the basics
-- [API Reference](xref:Wolfgang.Extensions-Logging-Data) - Complete API documentation
+- [API Reference](xref:Wolfgang.Extensions.Logging.Data) - Complete API documentation
 - [GitHub Repository](https://github.com/Chris-Wolfgang/Extensions-Logging-Data) - View source code
 
-## About Wolfgang.Extensions-Logging-Data
+## About Wolfgang.Extensions.Logging.Data
 
-Exntension methods to ILogger and ILogger<T> for logging DbConnection, DbCommand, and other System.Data related data
+Extension methods on ILogger and ILogger<T> for logging DbConnection, DbCommand, and other System.Data related data
 
 ## Installation
 
 ```bash
-dotnet add package Wolfgang.Extensions-Logging-Data
+dotnet add package Wolfgang.Extensions.Logging.Data
 ```
 
 ## Documentation Sections
 
 ### 📖 [Documentation](docs/getting-started.md)
-Step-by-step guides and tutorials to help you use Wolfgang.Extensions-Logging-Data effectively.
+Step-by-step guides and tutorials to help you use Wolfgang.Extensions.Logging.Data effectively.
 
-### 📚 [API Reference](xref:Wolfgang.Extensions-Logging-Data)
+### 📚 [API Reference](xref:Wolfgang.Extensions.Logging.Data)
 Complete API documentation automatically generated from source code XML comments.
 
 ## Additional Resources

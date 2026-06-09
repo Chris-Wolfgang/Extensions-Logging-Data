@@ -1,10 +1,10 @@
 # Introduction
 
-Welcome to Wolfgang.Extensions-Logging-Data!
+Welcome to Wolfgang.Extensions.Logging.Data!
 
 ## Overview
 
-Exntension methods to ILogger and ILogger<T> for logging DbConnection, DbCommand, and other System.Data related data
+Extension methods on ILogger and ILogger<T> for logging DbConnection, DbCommand, and other System.Data related data
 
 <!-- Add your project overview here -->
 
@@ -18,7 +18,7 @@ Exntension methods to ILogger and ILogger<T> for logging DbConnection, DbCommand
 
 ## Getting Help
 
-If you need help with Wolfgang.Extensions-Logging-Data, please:
+If you need help with Wolfgang.Extensions.Logging.Data, please:
 
 - Check the [Getting Started](getting-started.md) guide
 - Review the [API Reference](../api/index.md)
