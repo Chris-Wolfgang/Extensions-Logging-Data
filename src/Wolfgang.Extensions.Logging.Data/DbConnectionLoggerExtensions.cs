@@ -11,8 +11,10 @@ namespace Wolfgang.Extensions.Logging.Data;
 /// <remarks>
 /// The <see cref="DbConnection.ConnectionString"/> is parsed via
 /// <see cref="DbConnectionStringBuilder"/> and the <c>Password</c> and <c>Pwd</c> keys are
-/// removed before logging so credentials are never written to the log. All other keys,
-/// including the user name (<c>User ID</c>, <c>UID</c>, etc.), are preserved.
+/// removed before logging so credentials are never written to the log. Key matching is
+/// case-insensitive per the <see cref="DbConnectionStringBuilder"/> contract, so
+/// <c>password</c>, <c>PASSWORD</c>, etc. are all redacted. All other keys, including the
+/// user name (<c>User ID</c>, <c>UID</c>, etc.), are preserved.
 /// </remarks>
 public static class DbConnectionLoggerExtensions
 {
@@ -54,6 +56,13 @@ public static class DbConnectionLoggerExtensions
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="logger"/> or <paramref name="connection"/> is <see langword="null"/>.
     /// </exception>
+    /// <example>
+    /// <code>
+    /// using var connection = new SqlConnection(connectionString);
+    /// await connection.OpenAsync();
+    /// logger.LogDbConnection(connection, LogLevel.Debug);
+    /// </code>
+    /// </example>
     public static void LogDbConnection(this ILogger logger, DbConnection connection, LogLevel level)
     {
         if (logger is null)
@@ -111,15 +120,12 @@ public static class DbConnectionLoggerExtensions
             ConnectionString = connectionString
         };
 
-        if (builder.ContainsKey("Password"))
-        {
-            builder.Remove("Password");
-        }
-
-        if (builder.ContainsKey("Pwd"))
-        {
-            builder.Remove("Pwd");
-        }
+        // DbConnectionStringBuilder.Remove is a no-op for keys that aren't present
+        // (returns false rather than throwing), so the ContainsKey checks would be
+        // redundant. Key matching is case-insensitive per the type contract, so
+        // "password" / "PASSWORD" / etc. are removed by either call.
+        builder.Remove("Password");
+        builder.Remove("Pwd");
 
         return builder.ConnectionString ?? string.Empty;
     }
