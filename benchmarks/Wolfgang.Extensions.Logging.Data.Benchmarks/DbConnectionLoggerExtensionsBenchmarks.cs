@@ -103,6 +103,7 @@ public class DbConnectionLoggerExtensionsBenchmarks
             ConnectionString = connectionString;
         }
 
+        [System.Diagnostics.CodeAnalysis.AllowNull]
         public override string ConnectionString { get; set; }
 
         public override string Database => "widgets";

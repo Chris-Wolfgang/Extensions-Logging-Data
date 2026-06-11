@@ -29,7 +29,7 @@ public class DbConnectionLoggerIntegrationTests
         });
         var logger = factory.CreateLogger<DbConnectionLoggerIntegrationTests>();
 
-        using var connection = new SqliteConnection("Data Source=:memory:;Password=topsecret");
+        using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
 
         logger.LogDbConnection(connection);
@@ -38,19 +38,45 @@ public class DbConnectionLoggerIntegrationTests
         Assert.Equal(LogLevel.Information, entry.Level);
 
         // Real connection — values come from Microsoft.Data.Sqlite, not a fake.
-        Assert.Equal(":memory:", entry.GetValue("DataSource"));
+        // SqliteConnection.DataSource is the database file path, which is the
+        // empty string for an in-memory database (":memory:" is the data source
+        // *keyword*, not the reported DataSource value) — so assert the named
+        // slot is present rather than a specific value.
+        Assert.NotNull(entry.GetValue("DataSource"));   // empty string for :memory:, but the slot is populated
         Assert.Equal(ConnectionState.Open, entry.GetValue("State"));
         Assert.NotNull(entry.GetValue("ConnectionType"));   // typeof(SqliteConnection).FullName
         Assert.NotNull(entry.GetValue("ServerVersion"));     // SQLite reports its lib version once Open
+    }
 
-        // The Password key in the connection string must be redacted from the
-        // logged value (this is the whole point of the library). The redaction
-        // path here goes through Microsoft.Data.Sqlite's
-        // SqliteConnection.ConnectionString — which normalizes keys — so the
-        // unit-test path through a hand-rolled FakeDbConnection isn't enough
-        // to prove the production scenario.
+
+
+    [Fact]
+    public void LogDbConnection_redacts_password_through_real_sqlite_connection_string()
+    {
+        var provider = new CapturingLoggerProvider();
+        using var factory = LoggerFactory.Create(builder =>
+        {
+            builder.SetMinimumLevel(LogLevel.Trace);
+            builder.AddProvider(provider);
+        });
+        var logger = factory.CreateLogger<DbConnectionLoggerIntegrationTests>();
+
+        // SqliteConnectionStringBuilder accepts a Password keyword (it maps to
+        // SQLCipher-style encryption) at construction time. The native
+        // 'e_sqlite3' library rejects it only on Open(), so the connection is
+        // deliberately NOT opened here — the redaction path reads
+        // SqliteConnection.ConnectionString, which works regardless of state.
+        // This proves the redaction works against the real Microsoft.Data.Sqlite
+        // connection-string normalization rather than the hand-rolled
+        // FakeDbConnection the unit tests use.
+        using var connection = new SqliteConnection("Data Source=:memory:;Password=topsecret");
+
+        logger.LogDbConnection(connection);
+
+        var entry = Assert.Single(provider.Entries);
         var logged = (string)entry.GetValue("ConnectionString")!;
         Assert.DoesNotContain("topsecret", logged, System.StringComparison.OrdinalIgnoreCase);
+        Assert.Contains(":memory:", logged, System.StringComparison.OrdinalIgnoreCase);
     }
 
 
