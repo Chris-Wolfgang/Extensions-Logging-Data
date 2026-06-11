@@ -16,7 +16,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
 
     <!-- Real Microsoft.Extensions.Logging pipeline, not just Abstractions. -->
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.8" />
 
     <!-- Real DbConnection implementation for integration coverage. SQLite is
          lightweight, in-process, and works across every TFM the integration
