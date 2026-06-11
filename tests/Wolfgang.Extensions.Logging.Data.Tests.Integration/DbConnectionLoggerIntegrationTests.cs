@@ -171,7 +171,7 @@ internal sealed class CapturedEntry
 
         foreach (var kv in _values)
         {
-            if (kv.Key == name)
+            if (string.Equals(kv.Key, name, System.StringComparison.Ordinal))
             {
                 return kv.Value;
             }
