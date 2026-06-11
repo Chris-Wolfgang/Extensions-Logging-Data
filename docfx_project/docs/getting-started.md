@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide will help you quickly get up and running with Wolfgang.Extensions-Logging-Data.
+This guide will help you quickly get up and running with Wolfgang.Extensions.Logging.Data.
 
 ## Prerequisites
 
@@ -14,13 +14,13 @@ This guide will help you quickly get up and running with Wolfgang.Extensions-Log
 ### Via NuGet Package Manager
 
 ```bash
-dotnet add package Wolfgang.Extensions-Logging-Data
+dotnet add package Wolfgang.Extensions.Logging.Data
 ```
 
 ### Via Package Manager Console
 
 ```powershell
-Install-Package Wolfgang.Extensions-Logging-Data
+Install-Package Wolfgang.Extensions.Logging.Data
 ```
 
 ## Quick Start
@@ -31,7 +31,7 @@ Install-Package Wolfgang.Extensions-Logging-Data
 // Add your quick start code example here
 // This should show the simplest way to use your library
 
-using Wolfgang.Extensions-Logging-Data;
+using Wolfgang.Extensions.Logging.Data;
 
 // Example usage
 ```
@@ -39,7 +39,7 @@ using Wolfgang.Extensions-Logging-Data;
 ## Next Steps
 
 - Explore the [API Reference](../api/index.md) for detailed documentation
-- Read the [Introduction](introduction.md) to learn more about Wolfgang.Extensions-Logging-Data
+- Read the [Introduction](introduction.md) to learn more about Wolfgang.Extensions.Logging.Data
 - Check out example projects in the [GitHub repository](https://github.com/Chris-Wolfgang/Extensions-Logging-Data)
 
 ## Common Issues
