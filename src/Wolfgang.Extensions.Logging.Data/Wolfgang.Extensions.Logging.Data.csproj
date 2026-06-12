@@ -2,16 +2,20 @@
 	<PropertyGroup>
 		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-		<Version>0.1.0</Version>
+		<Version>0.1.1</Version>
+		<!-- Pin AssemblyVersion to a fixed binding-stability baseline so consumers
+		     do not need to recompile / add binding redirects on every minor/patch
+		     bump. Bump only on a deliberate breaking API change. FileVersion +
+		     InformationalVersion (the latter auto-derived from <Version>) carry
+		     the actual release version. -->
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>$([System.Text.RegularExpressions.Regex]::Replace("$(Version)", "[-+].*$", "")).0</FileVersion>
 		<Title>$(AssemblyName)</Title>
-		<Authors>Chris Wolfgang</Authors>
 		<Description>Extension methods for ILogger and ILogger&lt;T&gt; that log DbConnection, DbCommand, DbParameter, and DbParameterCollection from System.Data.Common, with built-in secret redaction (passwords in connection strings, configurable parameter values).</Description>
-		<Copyright>Copyright 2026 Chris Wolfgang</Copyright>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data.git</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<AssemblyVersion>1.0.0</AssemblyVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
