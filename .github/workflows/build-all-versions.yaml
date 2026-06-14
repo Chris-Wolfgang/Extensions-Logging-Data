@@ -328,10 +328,13 @@ jobs:
           $repoName = ($env:GITHUB_REPOSITORY -split '/')[-1]
           $title    = if ($repoName) { "$repoName Documentation" } else { "Documentation" }
 
-          # Build the HTML as a string array joined with LF (see docfx.yaml for
-          # why a here-string would break the YAML literal-block scalar). Use a
-          # relative `versions/latest/` link so it resolves under the GitHub
-          # Pages project path `/<repo>/`.
+          # Build the HTML as a string array joined with LF. Avoids a
+          # PowerShell here-string whose unindented inner lines would
+          # break the surrounding YAML literal-block scalar (they'd
+          # drop below the block's required indentation and terminate
+          # the scalar prematurely). Use a relative `versions/latest/`
+          # link so it resolves under the GitHub Pages project path
+          # `/<repo>/`.
           $htmlLines = @(
             '<!DOCTYPE html>',
             '<html lang="en">',
