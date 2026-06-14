@@ -1,0 +1,34 @@
+### YamlMime:XRefMap
+sorted: true
+references:
+- uid: Wolfgang.Extensions.Logging.Data
+  name: Wolfgang.Extensions.Logging.Data
+  href: api/Wolfgang.Extensions.Logging.Data.html
+  commentId: N:Wolfgang.Extensions.Logging.Data
+  fullName: Wolfgang.Extensions.Logging.Data
+  nameWithType: Wolfgang.Extensions.Logging.Data
+- uid: Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions
+  name: DbConnectionLoggerExtensions
+  href: api/Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.html
+  commentId: T:Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions
+  fullName: Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions
+  nameWithType: DbConnectionLoggerExtensions
+- uid: Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbConnection)
+  name: LogDbConnection(ILogger, DbConnection)
+  href: api/Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbConnectionLoggerExtensions_LogDbConnection_Microsoft_Extensions_Logging_ILogger_System_Data_Common_DbConnection_
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbConnection)
+  fullName: Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection(Microsoft.Extensions.Logging.ILogger, System.Data.Common.DbConnection)
+  nameWithType: DbConnectionLoggerExtensions.LogDbConnection(ILogger, DbConnection)
+- uid: Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbConnection,Microsoft.Extensions.Logging.LogLevel)
+  name: LogDbConnection(ILogger, DbConnection, LogLevel)
+  href: api/Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbConnectionLoggerExtensions_LogDbConnection_Microsoft_Extensions_Logging_ILogger_System_Data_Common_DbConnection_Microsoft_Extensions_Logging_LogLevel_
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbConnection,Microsoft.Extensions.Logging.LogLevel)
+  fullName: Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection(Microsoft.Extensions.Logging.ILogger, System.Data.Common.DbConnection, Microsoft.Extensions.Logging.LogLevel)
+  nameWithType: DbConnectionLoggerExtensions.LogDbConnection(ILogger, DbConnection, LogLevel)
+- uid: Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection*
+  name: LogDbConnection
+  href: api/Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbConnectionLoggerExtensions_LogDbConnection_
+  commentId: Overload:Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection
+  nameWithType: DbConnectionLoggerExtensions.LogDbConnection

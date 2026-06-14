@@ -1,0 +1,23 @@
+Summary
+  Generated on: 6/14/2026 - 2:24:25 AM
+  Coverage date: 6/14/2026 - 2:24:22 AM
+  Parser: MultiReport (2x Cobertura)
+  Assemblies: 1
+  Classes: 1
+  Files: 1
+  Line coverage: 100%
+  Covered lines: 38
+  Uncovered lines: 0
+  Coverable lines: 38
+  Total lines: 151
+  Branch coverage: 91.6% (11 of 12)
+  Covered branches: 11
+  Total branches: 12
+  Method coverage: 100% (4 of 4)
+  Full method coverage: 100% (4 of 4)
+  Covered methods: 4
+  Fully covered methods: 4
+  Total methods: 4
+
+Wolfgang.Extensions.Logging.Data                                   100%
+  Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions    100%
