@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `ILogger.LogCommandText(...)` — logs a SQL command's text alongside its
+  parameters, with opt-in redaction of sensitive parameter values
+  (`excludedParameterNames`). Two parameter-supplying styles, four overloads
+  each:
+  - explicit `IReadOnlyDictionary<string, object?>` (lowest overhead), and
+  - a Dapper-style anonymous object (`new { id = 1, password = "x" }`) whose
+    public readable properties are reflected into the dictionary. Per-type
+    property accessors are cached (`ConcurrentDictionary<Type, …>`) so the
+    reflection cost is paid once per parameter shape, not per call.
+  Excluded-name matching is case-insensitive and ADO.NET-prefix-tolerant
+  (`@name`, `:name`, `?name`, `name` are equivalent). (#3)
+
 ### Changed
 
 ### Deprecated
