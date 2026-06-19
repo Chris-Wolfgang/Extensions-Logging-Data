@@ -34,13 +34,14 @@
         "files": [
           "logo.svg",
           "favicon.svg",
+          "apple-touch-icon.png",
+          "favicon.ico",
           "images/**",
           "public/**",
           "versions.json"
         ]
       }
     ],
-
     "output": "_site",
     "template": [
       "default",
@@ -62,4 +63,3 @@
     }
   }
 }
-
