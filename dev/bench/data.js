@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781229354443,
+  "lastUpdate": 1781885985219,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -84,6 +84,72 @@ window.BENCHMARK_DATA = {
             "value": 3133.5257568359375,
             "unit": "ns",
             "range": "± 24.83513125600716"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a6026ad780a469b6b84ea97a765b625baa9bd634",
+          "message": "Merge pull request #131 from Chris-Wolfgang/feature/3-log-command-text\n\nAdd LogCommandText with Dapper-style anonymous-object overloads (closes #3)",
+          "timestamp": "2026-06-19T12:17:16-04:00",
+          "tree_id": "ee69fc8a05e62a2be47ab5990e01a82bfdb28e5a",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/a6026ad780a469b6b84ea97a765b625baa9bd634"
+        },
+        "date": 1781885984141,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 324.3123927116394,
+            "unit": "ns",
+            "range": "± 1.6370779383730016"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 433.0786301294963,
+            "unit": "ns",
+            "range": "± 1.7572285247442316"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.0008657922347386678,
+            "unit": "ns",
+            "range": "± 0.0014995961393659725"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 100.81561787923177,
+            "unit": "ns",
+            "range": "± 1.2437760541224967"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0,
+            "unit": "ns",
+            "range": "± 0"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 2643.7482732137046,
+            "unit": "ns",
+            "range": "± 2.933350833986856"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 2654.855298360189,
+            "unit": "ns",
+            "range": "± 18.134692459398796"
           }
         ]
       }
