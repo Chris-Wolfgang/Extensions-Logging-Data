@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1782517278155,
+  "lastUpdate": 1782581996035,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -216,6 +216,72 @@ window.BENCHMARK_DATA = {
             "value": 2621.0166651407876,
             "unit": "ns",
             "range": "± 9.860726193499469"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "10b174b501b007ad5f2efa448e6c2ba23532920c",
+          "message": "Merge pull request #137 from Chris-Wolfgang/fix/publicapi-nullability-markers\n\nNormalize PublicAPI.Shipped.txt to canonical nullable-annotated format",
+          "timestamp": "2026-06-27T13:37:34-04:00",
+          "tree_id": "3182d29478e684f421e2f0e9752d20bb4bce97c6",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/10b174b501b007ad5f2efa448e6c2ba23532920c"
+        },
+        "date": 1782581995044,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 356.4296743075053,
+            "unit": "ns",
+            "range": "± 2.654285275938107"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 496.4018910725911,
+            "unit": "ns",
+            "range": "± 3.7612346167994994"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.0016317994644244511,
+            "unit": "ns",
+            "range": "± 0.002826359580146832"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 114.55776145060857,
+            "unit": "ns",
+            "range": "± 1.387085974163986"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0.0038162656128406525,
+            "unit": "ns",
+            "range": "± 0.005795059915733007"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 3290.002187093099,
+            "unit": "ns",
+            "range": "± 44.8591589485181"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 3207.898770650228,
+            "unit": "ns",
+            "range": "± 21.807538345734105"
           }
         ]
       }
