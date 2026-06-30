@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1782782329458,
+  "lastUpdate": 1782784631313,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -348,6 +348,72 @@ window.BENCHMARK_DATA = {
             "value": 3371.2649129231772,
             "unit": "ns",
             "range": "± 47.62641354298808"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "eff04a70e2e4501d3f59ab7158a0353da9a8e0d6",
+          "message": "Merge pull request #144 from Chris-Wolfgang/feature/66-ef6-companion-package\n\nAdd EntityFramework6 companion package (#66)",
+          "timestamp": "2026-06-29T21:54:45-04:00",
+          "tree_id": "45bf220629800d52d821443ff72284b33123915b",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/eff04a70e2e4501d3f59ab7158a0353da9a8e0d6"
+        },
+        "date": 1782784630277,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 318.5572196642558,
+            "unit": "ns",
+            "range": "± 0.8709735277266544"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 451.171391805013,
+            "unit": "ns",
+            "range": "± 3.9478320621481484"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0,
+            "unit": "ns",
+            "range": "± 0"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 99.30735635757446,
+            "unit": "ns",
+            "range": "± 0.18953708564391464"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0.0008524972945451736,
+            "unit": "ns",
+            "range": "± 0.001476568627467251"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 2626.714157104492,
+            "unit": "ns",
+            "range": "± 15.849884100001495"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 2766.455046335856,
+            "unit": "ns",
+            "range": "± 56.38406128104131"
           }
         ]
       }
