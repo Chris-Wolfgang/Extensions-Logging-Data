@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1782581996035,
+  "lastUpdate": 1782782329458,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -282,6 +282,72 @@ window.BENCHMARK_DATA = {
             "value": 3207.898770650228,
             "unit": "ns",
             "range": "± 21.807538345734105"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "66ebbba890e0597f060db8970df845b7126c9b79",
+          "message": "Merge pull request #139 from Chris-Wolfgang/feature/66-logdbcommand-core\n\nAdd LogDbCommand(DbCommand) core overloads (#66)",
+          "timestamp": "2026-06-29T21:16:25-04:00",
+          "tree_id": "eaf2ad462733c24e15fb71778fb63ffd8cc21a41",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/66ebbba890e0597f060db8970df845b7126c9b79"
+        },
+        "date": 1782782327358,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 397.4641450246175,
+            "unit": "ns",
+            "range": "± 5.4862121100694425"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 603.9086303710938,
+            "unit": "ns",
+            "range": "± 9.373534930529804"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.0032913188139597573,
+            "unit": "ns",
+            "range": "± 0.004117804391206589"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 119.64937241872151,
+            "unit": "ns",
+            "range": "± 0.5722000905252596"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0.005893714105089505,
+            "unit": "ns",
+            "range": "± 0.009820080819897499"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 3394.521251678467,
+            "unit": "ns",
+            "range": "± 14.652784499000141"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 3371.2649129231772,
+            "unit": "ns",
+            "range": "± 47.62641354298808"
           }
         ]
       }
