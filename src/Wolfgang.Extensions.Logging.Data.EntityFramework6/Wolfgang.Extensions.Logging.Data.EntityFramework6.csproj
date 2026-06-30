@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net462;net48;netstandard2.1</TargetFrameworks>
+		<LangVersion>latest</LangVersion>
+		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+		<Version>0.1.1</Version>
+		<!-- Pin AssemblyVersion to a fixed binding-stability baseline so consumers
+		     do not need to recompile / add binding redirects on every minor/patch
+		     bump. Bump only on a deliberate breaking API change. FileVersion +
+		     InformationalVersion (the latter auto-derived from <Version>) carry
+		     the actual release version. -->
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>$([System.Text.RegularExpressions.Regex]::Replace("$(Version)", "[-+].*$", "")).0</FileVersion>
+		<Title>$(AssemblyName)</Title>
+		<Description>Passive structured logging of every Entity Framework 6 command, connection, and transaction event via the EF6 interceptor pipeline. Register once at startup with AddLoggingInterceptors; delegates to Wolfgang.Extensions.Logging.Data for rendering and secret redaction.</Description>
+		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data.git</RepositoryUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageTags>logging;entityframework;ef6;interceptor;structured-logging;dbcommand;diagnostics</PackageTags>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<SignAssembly>False</SignAssembly>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Wolfgang.Extensions.Logging.Data\Wolfgang.Extensions.Logging.Data.csproj" />
+		<PackageReference Include="EntityFramework" Version="6.5.2" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.9" />
+	</ItemGroup>
+</Project>
