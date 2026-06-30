@@ -75,7 +75,34 @@ logger.LogDbConnection(connection, LogLevel.Debug);
 | **`IsEnabled(level)` short-circuit** — work is skipped if the log level isn't enabled, so the redaction / `DbConnectionStringBuilder` parse only runs when the entry will actually be written | (built-in) |
 | **Null-safe** — throws `ArgumentNullException` (not `NullReferenceException`) when `logger` or `connection` is `null` | (every overload) |
 
-**Roadmap:** `DbCommand` and additional `System.Data` types are next on the surface. The library is intentionally narrow today and grows one type at a time as needed.
+`DbCommand` logging is also available via `ILogger.LogCommandText(...)` (command text + parameter snapshot with opt-in redaction) and `ILogger.LogDbCommand(DbCommand, ...)` (logs a live command directly). The library is intentionally narrow and grows one type at a time as needed.
+
+---
+
+## 🪵 Entity Framework 6 companion
+
+The optional **`Wolfgang.Extensions.Logging.Data.EntityFramework6`** package wires these extension methods into the EF6 interceptor pipeline so a legacy EF6 app logs *every* command, connection, and transaction event with **no per-query call sites**. Register once at startup:
+
+```csharp
+// At application startup, before any DbContext is used:
+EntityFramework6Logging.AddLoggingInterceptors(
+    logger,
+    excludedParameterNames: new[] { "password" },   // optional — redacted in logged commands
+    level: LogLevel.Information);                    // optional — defaults to Information
+```
+
+From then on, every `DbContext` in the process logs:
+
+- **Commands** — text + parameter snapshot (redacted), via `LogDbCommand`.
+- **Connections** — open/close lifecycle, with connection-string redaction, via `LogDbConnection`.
+- **Transactions** — commit / rollback.
+- **Failures** — surfaced at `LogLevel.Error` from the EF6 interception context.
+
+`DbInterception.Add` is process-global and not idempotent, so `AddLoggingInterceptors` is a no-op if called again with the same `logger` instance. Targets `net462; net48; netstandard2.1`.
+
+```bash
+dotnet add package Wolfgang.Extensions.Logging.Data.EntityFramework6
+```
 
 ---
 

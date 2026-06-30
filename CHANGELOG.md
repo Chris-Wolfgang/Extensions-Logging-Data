@@ -26,6 +26,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `excludedParameterNames`, and both). `DBNull` parameter values render as
   `null`. This is the bridge the forthcoming EF6 interceptor companion
   package consumes to log commands without per-query call sites. (#66)
+- **New companion package `Wolfgang.Extensions.Logging.Data.EntityFramework6`** —
+  passive structured logging of every Entity Framework 6 command, connection,
+  and transaction event via the EF6 interceptor pipeline. A single startup call,
+  `EntityFramework6Logging.AddLoggingInterceptors(logger, excludedParameterNames,
+  level)`, wires command/connection/transaction interceptors so every
+  `DbContext` in the process is logged with zero per-query call sites. Commands
+  delegate to `LogDbCommand` (parameter snapshot + redaction), connections to
+  `LogDbConnection` (connection-string redaction), and failures are surfaced at
+  `LogLevel.Error` from the interception context. `DbInterception.Add` is
+  process-global and not idempotent, so registration is guarded against
+  double-registration per logger instance. Targets `net462;net48;netstandard2.1`.
+  (#66)
 
 ### Changed
 
