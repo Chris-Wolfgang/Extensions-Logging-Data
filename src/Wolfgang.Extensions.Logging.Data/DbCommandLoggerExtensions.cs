@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
@@ -271,6 +272,134 @@ public static class DbCommandLoggerExtensions
     public static void LogCommandText(this ILogger logger, string commandText, object parameters, IEnumerable<string> excludedParameterNames, LogLevel level)
     {
         LogCommandText(logger, commandText, ToDictionary(parameters), excludedParameterNames, level);
+    }
+
+
+
+    /// <summary>
+    /// Logs a live <see cref="DbCommand"/> — its <see cref="DbCommand.CommandText"/> and the
+    /// name/value pairs of its <see cref="DbCommand.Parameters"/> — at <see cref="Microsoft.Extensions.Logging.LogLevel"/>.Information.
+    /// </summary>
+    /// <param name="logger">The logger to write to.</param>
+    /// <param name="command">The command to log.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="logger"/> or <paramref name="command"/> is <see langword="null"/>.
+    /// </exception>
+    /// <example>
+    /// <code>
+    /// using var command = connection.CreateCommand();
+    /// command.CommandText = "SELECT * FROM Users WHERE Id = @id";
+    /// logger.LogDbCommand(command);
+    /// </code>
+    /// </example>
+    public static void LogDbCommand(this ILogger logger, DbCommand command)
+    {
+        LogDbCommand(logger, command, Array.Empty<string>(), LogLevel.Information);
+    }
+
+
+
+    /// <summary>
+    /// Logs a live <see cref="DbCommand"/> at the specified <paramref name="level"/>.
+    /// </summary>
+    /// <param name="logger">The logger to write to.</param>
+    /// <param name="command">The command to log.</param>
+    /// <param name="level">The log level to write the entry at.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="logger"/> or <paramref name="command"/> is <see langword="null"/>.
+    /// </exception>
+    public static void LogDbCommand(this ILogger logger, DbCommand command, LogLevel level)
+    {
+        LogDbCommand(logger, command, Array.Empty<string>(), level);
+    }
+
+
+
+    /// <summary>
+    /// Logs a live <see cref="DbCommand"/> at <see cref="Microsoft.Extensions.Logging.LogLevel"/>.Information,
+    /// redacting the values of any parameters named in <paramref name="excludedParameterNames"/>.
+    /// </summary>
+    /// <param name="logger">The logger to write to.</param>
+    /// <param name="command">The command to log.</param>
+    /// <param name="excludedParameterNames">
+    /// Parameter names whose values should be redacted. Matching is case-insensitive and
+    /// prefix-tolerant (<c>@name</c>, <c>:name</c>, <c>?name</c>, <c>name</c> are equivalent).
+    /// </param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="logger"/>, <paramref name="command"/>, or
+    /// <paramref name="excludedParameterNames"/> is <see langword="null"/>.
+    /// </exception>
+    public static void LogDbCommand(this ILogger logger, DbCommand command, IEnumerable<string> excludedParameterNames)
+    {
+        LogDbCommand(logger, command, excludedParameterNames, LogLevel.Information);
+    }
+
+
+
+    /// <summary>
+    /// Logs a live <see cref="DbCommand"/> at the specified <paramref name="level"/>, redacting the
+    /// values of any parameters named in <paramref name="excludedParameterNames"/>.
+    /// </summary>
+    /// <param name="logger">The logger to write to.</param>
+    /// <param name="command">The command to log.</param>
+    /// <param name="excludedParameterNames">
+    /// Parameter names whose values should be redacted. Matching is case-insensitive and
+    /// prefix-tolerant (<c>@name</c>, <c>:name</c>, <c>?name</c>, <c>name</c> are equivalent).
+    /// </param>
+    /// <param name="level">The log level to write the entry at.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="logger"/>, <paramref name="command"/>, or
+    /// <paramref name="excludedParameterNames"/> is <see langword="null"/>.
+    /// </exception>
+    public static void LogDbCommand(this ILogger logger, DbCommand command, IEnumerable<string> excludedParameterNames, LogLevel level)
+    {
+        if (logger is null)
+        {
+            throw new ArgumentNullException(nameof(logger));
+        }
+
+        if (command is null)
+        {
+            throw new ArgumentNullException(nameof(command));
+        }
+
+        if (excludedParameterNames is null)
+        {
+            throw new ArgumentNullException(nameof(excludedParameterNames));
+        }
+
+        if (!logger.IsEnabled(level))
+        {
+            return;
+        }
+
+        LogCommandText(logger, command.CommandText ?? string.Empty, ToDictionary(command.Parameters), excludedParameterNames, level);
+    }
+
+
+
+    /// <summary>
+    /// Reads the name/value pairs of a <see cref="DbParameterCollection"/> into a dictionary,
+    /// preserving each parameter's declared name (prefix and all) so the rendered output matches
+    /// the command text. The last value wins if a name appears more than once.
+    /// </summary>
+    /// <param name="parameters">The parameter collection to read. Must not be <see langword="null"/>.</param>
+    /// <returns>A dictionary of parameter name to value, with <see cref="DBNull"/> normalized to <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="parameters"/> is <see langword="null"/>.</exception>
+    internal static IReadOnlyDictionary<string, object?> ToDictionary(DbParameterCollection parameters)
+    {
+        if (parameters is null)
+        {
+            throw new ArgumentNullException(nameof(parameters));
+        }
+
+        var result = new Dictionary<string, object?>(parameters.Count, StringComparer.Ordinal);
+        foreach (DbParameter parameter in parameters)
+        {
+            result[parameter.ParameterName] = parameter.Value is DBNull ? null : parameter.Value;
+        }
+
+        return result;
     }
 
 

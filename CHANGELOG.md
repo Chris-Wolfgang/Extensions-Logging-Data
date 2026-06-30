@@ -20,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     reflection cost is paid once per parameter shape, not per call.
   Excluded-name matching is case-insensitive and ADO.NET-prefix-tolerant
   (`@name`, `:name`, `?name`, `name` are equivalent). (#3)
+- `ILogger.LogDbCommand(DbCommand, ...)` — logs a live `DbCommand` directly,
+  reading its `CommandText` and `Parameters` and delegating to
+  `LogCommandText`. Four overloads (default level, explicit level, with
+  `excludedParameterNames`, and both). `DBNull` parameter values render as
+  `null`. This is the bridge the forthcoming EF6 interceptor companion
+  package consumes to log commands without per-query call sites. (#66)
 
 ### Changed
 
