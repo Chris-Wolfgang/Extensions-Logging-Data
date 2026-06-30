@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Wolfgang.Extensions.Logging.Data.Tests.Unit.TestHelpers;
 
@@ -17,7 +16,12 @@ internal sealed class FakeDbCommand : DbCommand
 {
     private readonly FakeDbParameterCollection _parameters = new();
 
-    [AllowNull]
+    // AllowNullAttribute is public only on netcoreapp3.0+/net5+ (it's internal on the
+    // .NET Framework TFMs). The CS8765 it satisfies only fires where the base BCL setter
+    // is nullable-annotated, which is the same set of TFMs — so guarding both together.
+#if NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
+    [System.Diagnostics.CodeAnalysis.AllowNull]
+#endif
     public override string CommandText { get; set; } = string.Empty;
 
     public override int CommandTimeout { get; set; }
@@ -65,17 +69,32 @@ internal sealed class FakeDbParameter : DbParameter
 
     public override bool IsNullable { get; set; }
 
-    [AllowNull]
+    // AllowNullAttribute is public only on netcoreapp3.0+/net5+ (it's internal on the
+    // .NET Framework TFMs). The CS8765 it satisfies only fires where the base BCL setter
+    // is nullable-annotated, which is the same set of TFMs — so guarding both together.
+#if NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
+    [System.Diagnostics.CodeAnalysis.AllowNull]
+#endif
     public override string ParameterName { get; set; } = string.Empty;
 
     public override int Size { get; set; }
 
-    [AllowNull]
+    // AllowNullAttribute is public only on netcoreapp3.0+/net5+ (it's internal on the
+    // .NET Framework TFMs). The CS8765 it satisfies only fires where the base BCL setter
+    // is nullable-annotated, which is the same set of TFMs — so guarding both together.
+#if NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
+    [System.Diagnostics.CodeAnalysis.AllowNull]
+#endif
     public override string SourceColumn { get; set; } = string.Empty;
 
     public override bool SourceColumnNullMapping { get; set; }
 
-    [AllowNull]
+    // AllowNullAttribute is public only on netcoreapp3.0+/net5+ (it's internal on the
+    // .NET Framework TFMs). The CS8765 it satisfies only fires where the base BCL setter
+    // is nullable-annotated, which is the same set of TFMs — so guarding both together.
+#if NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
+    [System.Diagnostics.CodeAnalysis.AllowNull]
+#endif
     public override object? Value { get; set; }
 
     public override void ResetDbType()
