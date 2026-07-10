@@ -9,36 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `ILogger.LogCommandText(...)` — logs a SQL command's text alongside its
-  parameters, with opt-in redaction of sensitive parameter values
-  (`excludedParameterNames`). Two parameter-supplying styles, four overloads
-  each:
-  - explicit `IReadOnlyDictionary<string, object?>` (lowest overhead), and
-  - a Dapper-style anonymous object (`new { id = 1, password = "x" }`) whose
-    public readable properties are reflected into the dictionary. Per-type
-    property accessors are cached (`ConcurrentDictionary<Type, …>`) so the
-    reflection cost is paid once per parameter shape, not per call.
-  Excluded-name matching is case-insensitive and ADO.NET-prefix-tolerant
-  (`@name`, `:name`, `?name`, `name` are equivalent). (#3)
-- `ILogger.LogDbCommand(DbCommand, ...)` — logs a live `DbCommand` directly,
-  reading its `CommandText` and `Parameters` and delegating to
-  `LogCommandText`. Four overloads (default level, explicit level, with
-  `excludedParameterNames`, and both). `DBNull` parameter values render as
-  `null`. This is the bridge the forthcoming EF6 interceptor companion
-  package consumes to log commands without per-query call sites. (#66)
-- **New companion package `Wolfgang.Extensions.Logging.Data.EntityFramework6`** —
-  passive structured logging of every Entity Framework 6 command, connection,
-  and transaction event via the EF6 interceptor pipeline. A single startup call,
-  `EntityFramework6Logging.AddLoggingInterceptors(logger, excludedParameterNames,
-  level)`, wires command/connection/transaction interceptors so every
-  `DbContext` in the process is logged with zero per-query call sites. Commands
-  delegate to `LogDbCommand` (parameter snapshot + redaction), connections to
-  `LogDbConnection` (connection-string redaction), and failures are surfaced at
-  `LogLevel.Error` from the interception context. `DbInterception.Add` is
-  process-global and not idempotent, so registration is guarded against
-  double-registration per logger instance. Targets `net462;net48;netstandard2.1`.
-  (#66)
-
 ### Changed
 
 ### Deprecated
@@ -49,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.2.0] - 2026-07-06
+
+### Added
+
+- New companion package **`Wolfgang.Extensions.Logging.Data.EntityFramework6`** for classic EF6 integration (#66).
+- `LogDbCommand(DbCommand)` core overloads on the primary `Wolfgang.Extensions.Logging.Data` package (#66).
+- `LogCommandText` with Dapper-style anonymous-object parameter overloads (closes #3).
+
+### Changed
+
+- Normalized `PublicAPI.Shipped.txt` to the canonical nullable-annotated format used across the fleet.
 ## [0.1.1] - 2026-06-12
 
 Canonical maintenance round + binding-stability fix. No public API or
@@ -128,6 +109,7 @@ Initial release.
 - Multi-targeting: `net462`, `netstandard2.0`, `netstandard2.1`,
   `net10.0`.
 
-[Unreleased]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/releases/tag/v0.1.0
