@@ -1,23 +1,30 @@
 Summary
-  Generated on: 6/18/2026 - 10:38:04 PM
-  Coverage date: 6/18/2026 - 10:38:00 PM
-  Parser: MultiReport (2x Cobertura)
-  Assemblies: 1
-  Classes: 1
-  Files: 1
-  Line coverage: 100%
-  Covered lines: 38
-  Uncovered lines: 0
-  Coverable lines: 38
-  Total lines: 151
-  Branch coverage: 91.6% (11 of 12)
-  Covered branches: 11
-  Total branches: 12
-  Method coverage: 100% (4 of 4)
-  Full method coverage: 100% (4 of 4)
-  Covered methods: 4
-  Fully covered methods: 4
-  Total methods: 4
+  Generated on: 7/12/2026 - 1:51:52 PM
+  Coverage date: 7/12/2026 - 1:51:48 PM
+  Parser: MultiReport (3x Cobertura)
+  Assemblies: 2
+  Classes: 6
+  Files: 6
+  Line coverage: 98.7%
+  Covered lines: 230
+  Uncovered lines: 3
+  Coverable lines: 233
+  Total lines: 1065
+  Branch coverage: 89.6% (95 of 106)
+  Covered branches: 95
+  Total branches: 106
+  Method coverage: 98.6% (74 of 75)
+  Full method coverage: 97.3% (73 of 75)
+  Covered methods: 74
+  Fully covered methods: 73
+  Total methods: 75
 
-Wolfgang.Extensions.Logging.Data                                   100%
-  Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions    100%
+Wolfgang.Extensions.Logging.Data                                                    97.6%
+  Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions                        96.6%
+  Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions                      100%
+
+Wolfgang.Extensions.Logging.Data.EntityFramework6                                    100%
+  Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging          100%
+  Wolfgang.Extensions.Logging.Data.EntityFramework6.LoggingCommandInterceptor        100%
+  Wolfgang.Extensions.Logging.Data.EntityFramework6.LoggingConnectionInterceptor     100%
+  Wolfgang.Extensions.Logging.Data.EntityFramework6.LoggingTransactionInterceptor    100%

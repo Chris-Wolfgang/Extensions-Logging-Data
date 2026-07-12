@@ -7,6 +7,128 @@ references:
   commentId: N:Wolfgang.Extensions.Logging.Data
   fullName: Wolfgang.Extensions.Logging.Data
   nameWithType: Wolfgang.Extensions.Logging.Data
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions
+  name: DbCommandLoggerExtensions
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html
+  commentId: T:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions
+  nameWithType: DbCommandLoggerExtensions
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object})
+  name: LogCommandText(ILogger, string, IReadOnlyDictionary<string, object?>)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogCommandText_Microsoft_Extensions_Logging_ILogger_System_String_System_Collections_Generic_IReadOnlyDictionary_System_String_System_Object__
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object})
+  name.vb: LogCommandText(ILogger, String, IReadOnlyDictionary(Of String, Object))
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, string, System.Collections.Generic.IReadOnlyDictionary<string, object?>)
+  fullName.vb: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, String, System.Collections.Generic.IReadOnlyDictionary(Of String, Object))
+  nameWithType: DbCommandLoggerExtensions.LogCommandText(ILogger, string, IReadOnlyDictionary<string, object?>)
+  nameWithType.vb: DbCommandLoggerExtensions.LogCommandText(ILogger, String, IReadOnlyDictionary(Of String, Object))
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object},Microsoft.Extensions.Logging.LogLevel)
+  name: LogCommandText(ILogger, string, IReadOnlyDictionary<string, object?>, LogLevel)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogCommandText_Microsoft_Extensions_Logging_ILogger_System_String_System_Collections_Generic_IReadOnlyDictionary_System_String_System_Object__Microsoft_Extensions_Logging_LogLevel_
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object},Microsoft.Extensions.Logging.LogLevel)
+  name.vb: LogCommandText(ILogger, String, IReadOnlyDictionary(Of String, Object), LogLevel)
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, string, System.Collections.Generic.IReadOnlyDictionary<string, object?>, Microsoft.Extensions.Logging.LogLevel)
+  fullName.vb: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, String, System.Collections.Generic.IReadOnlyDictionary(Of String, Object), Microsoft.Extensions.Logging.LogLevel)
+  nameWithType: DbCommandLoggerExtensions.LogCommandText(ILogger, string, IReadOnlyDictionary<string, object?>, LogLevel)
+  nameWithType.vb: DbCommandLoggerExtensions.LogCommandText(ILogger, String, IReadOnlyDictionary(Of String, Object), LogLevel)
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object},System.Collections.Generic.IEnumerable{System.String})
+  name: LogCommandText(ILogger, string, IReadOnlyDictionary<string, object?>, IEnumerable<string>)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogCommandText_Microsoft_Extensions_Logging_ILogger_System_String_System_Collections_Generic_IReadOnlyDictionary_System_String_System_Object__System_Collections_Generic_IEnumerable_System_String__
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object},System.Collections.Generic.IEnumerable{System.String})
+  name.vb: LogCommandText(ILogger, String, IReadOnlyDictionary(Of String, Object), IEnumerable(Of String))
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, string, System.Collections.Generic.IReadOnlyDictionary<string, object?>, System.Collections.Generic.IEnumerable<string>)
+  fullName.vb: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, String, System.Collections.Generic.IReadOnlyDictionary(Of String, Object), System.Collections.Generic.IEnumerable(Of String))
+  nameWithType: DbCommandLoggerExtensions.LogCommandText(ILogger, string, IReadOnlyDictionary<string, object?>, IEnumerable<string>)
+  nameWithType.vb: DbCommandLoggerExtensions.LogCommandText(ILogger, String, IReadOnlyDictionary(Of String, Object), IEnumerable(Of String))
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object},System.Collections.Generic.IEnumerable{System.String},Microsoft.Extensions.Logging.LogLevel)
+  name: LogCommandText(ILogger, string, IReadOnlyDictionary<string, object?>, IEnumerable<string>, LogLevel)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogCommandText_Microsoft_Extensions_Logging_ILogger_System_String_System_Collections_Generic_IReadOnlyDictionary_System_String_System_Object__System_Collections_Generic_IEnumerable_System_String__Microsoft_Extensions_Logging_LogLevel_
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object},System.Collections.Generic.IEnumerable{System.String},Microsoft.Extensions.Logging.LogLevel)
+  name.vb: LogCommandText(ILogger, String, IReadOnlyDictionary(Of String, Object), IEnumerable(Of String), LogLevel)
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, string, System.Collections.Generic.IReadOnlyDictionary<string, object?>, System.Collections.Generic.IEnumerable<string>, Microsoft.Extensions.Logging.LogLevel)
+  fullName.vb: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, String, System.Collections.Generic.IReadOnlyDictionary(Of String, Object), System.Collections.Generic.IEnumerable(Of String), Microsoft.Extensions.Logging.LogLevel)
+  nameWithType: DbCommandLoggerExtensions.LogCommandText(ILogger, string, IReadOnlyDictionary<string, object?>, IEnumerable<string>, LogLevel)
+  nameWithType.vb: DbCommandLoggerExtensions.LogCommandText(ILogger, String, IReadOnlyDictionary(Of String, Object), IEnumerable(Of String), LogLevel)
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Object)
+  name: LogCommandText(ILogger, string, object)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogCommandText_Microsoft_Extensions_Logging_ILogger_System_String_System_Object_
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Object)
+  name.vb: LogCommandText(ILogger, String, Object)
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, string, object)
+  fullName.vb: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, String, Object)
+  nameWithType: DbCommandLoggerExtensions.LogCommandText(ILogger, string, object)
+  nameWithType.vb: DbCommandLoggerExtensions.LogCommandText(ILogger, String, Object)
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Object,Microsoft.Extensions.Logging.LogLevel)
+  name: LogCommandText(ILogger, string, object, LogLevel)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogCommandText_Microsoft_Extensions_Logging_ILogger_System_String_System_Object_Microsoft_Extensions_Logging_LogLevel_
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Object,Microsoft.Extensions.Logging.LogLevel)
+  name.vb: LogCommandText(ILogger, String, Object, LogLevel)
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, string, object, Microsoft.Extensions.Logging.LogLevel)
+  fullName.vb: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, String, Object, Microsoft.Extensions.Logging.LogLevel)
+  nameWithType: DbCommandLoggerExtensions.LogCommandText(ILogger, string, object, LogLevel)
+  nameWithType.vb: DbCommandLoggerExtensions.LogCommandText(ILogger, String, Object, LogLevel)
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Object,System.Collections.Generic.IEnumerable{System.String})
+  name: LogCommandText(ILogger, string, object, IEnumerable<string>)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogCommandText_Microsoft_Extensions_Logging_ILogger_System_String_System_Object_System_Collections_Generic_IEnumerable_System_String__
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Object,System.Collections.Generic.IEnumerable{System.String})
+  name.vb: LogCommandText(ILogger, String, Object, IEnumerable(Of String))
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, string, object, System.Collections.Generic.IEnumerable<string>)
+  fullName.vb: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, String, Object, System.Collections.Generic.IEnumerable(Of String))
+  nameWithType: DbCommandLoggerExtensions.LogCommandText(ILogger, string, object, IEnumerable<string>)
+  nameWithType.vb: DbCommandLoggerExtensions.LogCommandText(ILogger, String, Object, IEnumerable(Of String))
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Object,System.Collections.Generic.IEnumerable{System.String},Microsoft.Extensions.Logging.LogLevel)
+  name: LogCommandText(ILogger, string, object, IEnumerable<string>, LogLevel)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogCommandText_Microsoft_Extensions_Logging_ILogger_System_String_System_Object_System_Collections_Generic_IEnumerable_System_String__Microsoft_Extensions_Logging_LogLevel_
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger,System.String,System.Object,System.Collections.Generic.IEnumerable{System.String},Microsoft.Extensions.Logging.LogLevel)
+  name.vb: LogCommandText(ILogger, String, Object, IEnumerable(Of String), LogLevel)
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, string, object, System.Collections.Generic.IEnumerable<string>, Microsoft.Extensions.Logging.LogLevel)
+  fullName.vb: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText(Microsoft.Extensions.Logging.ILogger, String, Object, System.Collections.Generic.IEnumerable(Of String), Microsoft.Extensions.Logging.LogLevel)
+  nameWithType: DbCommandLoggerExtensions.LogCommandText(ILogger, string, object, IEnumerable<string>, LogLevel)
+  nameWithType.vb: DbCommandLoggerExtensions.LogCommandText(ILogger, String, Object, IEnumerable(Of String), LogLevel)
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText*
+  name: LogCommandText
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogCommandText_
+  commentId: Overload:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogCommandText
+  nameWithType: DbCommandLoggerExtensions.LogCommandText
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbCommand)
+  name: LogDbCommand(ILogger, DbCommand)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogDbCommand_Microsoft_Extensions_Logging_ILogger_System_Data_Common_DbCommand_
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbCommand)
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger, System.Data.Common.DbCommand)
+  nameWithType: DbCommandLoggerExtensions.LogDbCommand(ILogger, DbCommand)
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbCommand,Microsoft.Extensions.Logging.LogLevel)
+  name: LogDbCommand(ILogger, DbCommand, LogLevel)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogDbCommand_Microsoft_Extensions_Logging_ILogger_System_Data_Common_DbCommand_Microsoft_Extensions_Logging_LogLevel_
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbCommand,Microsoft.Extensions.Logging.LogLevel)
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger, System.Data.Common.DbCommand, Microsoft.Extensions.Logging.LogLevel)
+  nameWithType: DbCommandLoggerExtensions.LogDbCommand(ILogger, DbCommand, LogLevel)
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbCommand,System.Collections.Generic.IEnumerable{System.String})
+  name: LogDbCommand(ILogger, DbCommand, IEnumerable<string>)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogDbCommand_Microsoft_Extensions_Logging_ILogger_System_Data_Common_DbCommand_System_Collections_Generic_IEnumerable_System_String__
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbCommand,System.Collections.Generic.IEnumerable{System.String})
+  name.vb: LogDbCommand(ILogger, DbCommand, IEnumerable(Of String))
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger, System.Data.Common.DbCommand, System.Collections.Generic.IEnumerable<string>)
+  fullName.vb: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger, System.Data.Common.DbCommand, System.Collections.Generic.IEnumerable(Of String))
+  nameWithType: DbCommandLoggerExtensions.LogDbCommand(ILogger, DbCommand, IEnumerable<string>)
+  nameWithType.vb: DbCommandLoggerExtensions.LogDbCommand(ILogger, DbCommand, IEnumerable(Of String))
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbCommand,System.Collections.Generic.IEnumerable{System.String},Microsoft.Extensions.Logging.LogLevel)
+  name: LogDbCommand(ILogger, DbCommand, IEnumerable<string>, LogLevel)
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogDbCommand_Microsoft_Extensions_Logging_ILogger_System_Data_Common_DbCommand_System_Collections_Generic_IEnumerable_System_String__Microsoft_Extensions_Logging_LogLevel_
+  commentId: M:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger,System.Data.Common.DbCommand,System.Collections.Generic.IEnumerable{System.String},Microsoft.Extensions.Logging.LogLevel)
+  name.vb: LogDbCommand(ILogger, DbCommand, IEnumerable(Of String), LogLevel)
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger, System.Data.Common.DbCommand, System.Collections.Generic.IEnumerable<string>, Microsoft.Extensions.Logging.LogLevel)
+  fullName.vb: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand(Microsoft.Extensions.Logging.ILogger, System.Data.Common.DbCommand, System.Collections.Generic.IEnumerable(Of String), Microsoft.Extensions.Logging.LogLevel)
+  nameWithType: DbCommandLoggerExtensions.LogDbCommand(ILogger, DbCommand, IEnumerable<string>, LogLevel)
+  nameWithType.vb: DbCommandLoggerExtensions.LogDbCommand(ILogger, DbCommand, IEnumerable(Of String), LogLevel)
+- uid: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand*
+  name: LogDbCommand
+  href: api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html#Wolfgang_Extensions_Logging_Data_DbCommandLoggerExtensions_LogDbCommand_
+  commentId: Overload:Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.LogDbCommand
+  nameWithType: DbCommandLoggerExtensions.LogDbCommand
 - uid: Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions
   name: DbConnectionLoggerExtensions
   href: api/Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.html
@@ -32,3 +154,31 @@ references:
   isSpec: "True"
   fullName: Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.LogDbConnection
   nameWithType: DbConnectionLoggerExtensions.LogDbConnection
+- uid: Wolfgang.Extensions.Logging.Data.EntityFramework6
+  name: Wolfgang.Extensions.Logging.Data.EntityFramework6
+  href: api/Wolfgang.Extensions.Logging.Data.EntityFramework6.html
+  commentId: N:Wolfgang.Extensions.Logging.Data.EntityFramework6
+  fullName: Wolfgang.Extensions.Logging.Data.EntityFramework6
+  nameWithType: Wolfgang.Extensions.Logging.Data.EntityFramework6
+- uid: Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging
+  name: EntityFramework6Logging
+  href: api/Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.html
+  commentId: T:Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging
+  fullName: Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging
+  nameWithType: EntityFramework6Logging
+- uid: Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.AddLoggingInterceptors(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},Microsoft.Extensions.Logging.LogLevel)
+  name: AddLoggingInterceptors(ILogger, IEnumerable<string>?, LogLevel)
+  href: api/Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.html#Wolfgang_Extensions_Logging_Data_EntityFramework6_EntityFramework6Logging_AddLoggingInterceptors_Microsoft_Extensions_Logging_ILogger_System_Collections_Generic_IEnumerable_System_String__Microsoft_Extensions_Logging_LogLevel_
+  commentId: M:Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.AddLoggingInterceptors(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{System.String},Microsoft.Extensions.Logging.LogLevel)
+  name.vb: AddLoggingInterceptors(ILogger, IEnumerable(Of String), LogLevel)
+  fullName: Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.AddLoggingInterceptors(Microsoft.Extensions.Logging.ILogger, System.Collections.Generic.IEnumerable<string>?, Microsoft.Extensions.Logging.LogLevel)
+  fullName.vb: Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.AddLoggingInterceptors(Microsoft.Extensions.Logging.ILogger, System.Collections.Generic.IEnumerable(Of String), Microsoft.Extensions.Logging.LogLevel)
+  nameWithType: EntityFramework6Logging.AddLoggingInterceptors(ILogger, IEnumerable<string>?, LogLevel)
+  nameWithType.vb: EntityFramework6Logging.AddLoggingInterceptors(ILogger, IEnumerable(Of String), LogLevel)
+- uid: Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.AddLoggingInterceptors*
+  name: AddLoggingInterceptors
+  href: api/Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.html#Wolfgang_Extensions_Logging_Data_EntityFramework6_EntityFramework6Logging_AddLoggingInterceptors_
+  commentId: Overload:Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.AddLoggingInterceptors
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.AddLoggingInterceptors
+  nameWithType: EntityFramework6Logging.AddLoggingInterceptors

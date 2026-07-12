@@ -22,6 +22,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods on <xref href=\"Microsoft.Extensions.Logging.ILogger\" data-throw-if-not-resolved=\"false\"></xref> for logging a SQL command's text\nalongside its parameters, with opt-in redaction of sensitive parameter values.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.yml",
       "output": {
         ".html": {
@@ -33,6 +47,34 @@
       "IsMRef": true,
       "Title": "Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions",
       "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods on <xref href=\"Microsoft.Extensions.Logging.ILogger\" data-throw-if-not-resolved=\"false\"></xref> for logging <xref href=\"System.Data.Common.DbConnection\" data-throw-if-not-resolved=\"false\"></xref> instances.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging",
+      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.yml\" sourcestartlinenumber=\"1\">One-call registration of passive EF6 logging. Calling <code>AddLoggingInterceptors</code>\nonce at startup wires command, connection, and transaction interceptors into the\nprocess-global EF6 interception pipeline, so every <code>DbContext</code> in the process\nlogs its activity with no per-query call sites.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Wolfgang.Extensions.Logging.Data.EntityFramework6.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Wolfgang.Extensions.Logging.Data.EntityFramework6.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Wolfgang.Extensions.Logging.Data.EntityFramework6",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -67,6 +109,16 @@
         },
         ".json": {
           "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "apple-touch-icon.png",
+      "output": {
+        "resource": {
+          "relative_path": "apple-touch-icon.png"
         }
       },
       "version": ""
@@ -110,6 +162,16 @@
         },
         ".json": {
           "relative_path": "docs/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "favicon.ico",
+      "output": {
+        "resource": {
+          "relative_path": "favicon.ico"
         }
       },
       "version": ""
