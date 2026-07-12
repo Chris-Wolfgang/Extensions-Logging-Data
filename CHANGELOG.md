@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Normalized `PublicAPI.Shipped.txt` to the canonical nullable-annotated format used across the fleet.
+
 ## [0.1.1] - 2026-06-12
 
 Canonical maintenance round + binding-stability fix. No public API or
