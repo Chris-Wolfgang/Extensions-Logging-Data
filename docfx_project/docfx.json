@@ -5,7 +5,7 @@
       "src": [
         {
           "files": [
-            "src/**/*.csproj"
+            "src/Wolfgang.Extensions.Logging.Data/**/*.csproj"
           ],
           "src": "../"
         }
@@ -13,6 +13,22 @@
       "dest": "api",
       "properties": {
         "TargetFramework": "net10.0"
+      },
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+    {
+      "src": [
+        {
+          "files": [
+            "src/Wolfgang.Extensions.Logging.Data.EntityFramework6/**/*.csproj"
+          ],
+          "src": "../"
+        }
+      ],
+      "dest": "api",
+      "properties": {
+        "TargetFramework": "net48"
       },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
