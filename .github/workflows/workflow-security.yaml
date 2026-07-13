@@ -21,6 +21,9 @@ jobs:
   actionlint:
     name: actionlint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write   # reviewdog creates a Check run to surface annotations
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -30,7 +33,9 @@ jobs:
       - name: Run actionlint
         uses: reviewdog/action-actionlint@v1
         with:
-          reporter: github-pr-check
+          # github-check (not github-pr-check) so annotations are produced on
+          # both pull_request and push-to-main runs, not only in PR context.
+          reporter: github-check
           fail_level: error
 
   zizmor:
