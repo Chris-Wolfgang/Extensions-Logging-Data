@@ -253,7 +253,15 @@ jobs:
     name: "ReSharper InspectCode"
     runs-on: ubuntu-latest
     needs: detect-projects
-    if: github.repository != 'Chris-Wolfgang/repo-template' && needs.detect-projects.outputs.has-projects == 'true'
+    # SAME-REPO PRs ONLY. Under pull_request_target this job checks out and BUILDS
+    # PR code while holding security-events: write — so it must never run for a
+    # fork (untrusted contributor). `github.repository` is always the base repo
+    # under pull_request_target, so the repo != repo-template check does NOT
+    # exclude forks; the head-repo comparison does.
+    if: >-
+      github.repository != 'Chris-Wolfgang/repo-template'
+      && needs.detect-projects.outputs.has-projects == 'true'
+      && github.event.pull_request.head.repo.full_name == github.repository
     timeout-minutes: 20
     permissions:
       contents: read
@@ -266,23 +274,31 @@ jobs:
           ref: refs/pull/${{ github.event.pull_request.number }}/head
           persist-credentials: false
 
+      - name: Fetch trusted analysis config from main
+        # pull_request_target hardening: don't let the PR's own analyzer config
+        # drive InspectCode. Overwrite the analysis-relevant files with main's
+        # versions before building (mirrors the other jobs' trusted-config fetch).
+        run: |
+          git fetch origin main:main-ref
+          for f in .editorconfig Directory.Build.props Directory.Build.targets; do
+            if git cat-file -e "main-ref:$f" 2>/dev/null; then
+              git checkout main-ref -- "$f"
+            fi
+          done
+          # .globalconfig / .ruleset (any path)
+          while IFS= read -r f; do
+            [ -n "$f" ] && git checkout main-ref -- "$f" 2>/dev/null || true
+          done < <(git ls-tree -r --name-only main-ref | grep -E '\.(globalconfig|ruleset)$' || true)
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '10.0.x'
 
-      - name: Restore + Build (Release)
+      - name: Resolve solution
+        id: sln
         run: |
-          dotnet restore
-          dotnet build -c Release --no-restore
-
-      - name: Install JetBrains.ReSharper.GlobalTools
-        run: dotnet tool install -g JetBrains.ReSharper.GlobalTools
-
-      - name: Run InspectCode
-        run: |
-          # Find a solution to inspect. Prefer .slnx (new format) then .sln.
-          # InspectCode requires SOMETHING solution-shaped — fail loudly if neither exists.
+          # Prefer .slnx (new format) then .sln. Fail loudly if neither exists.
           SLN=$(ls *.slnx 2>/dev/null | head -n1)
           if [ -z "$SLN" ]; then
             SLN=$(ls *.sln 2>/dev/null | head -n1)
@@ -291,8 +307,23 @@ jobs:
             echo "::error::No .slnx or .sln found at repo root — InspectCode needs one to run."
             exit 1
           fi
-          echo "Inspecting: $SLN"
-          jb inspectcode "$SLN" \
+          echo "Solution: $SLN"
+          echo "sln=$SLN" >> "$GITHUB_OUTPUT"
+
+      - name: Restore + Build (Release)
+        # Build the resolved solution explicitly (not a bare `dotnet build`), so
+        # repos with more than one solution/project at the root don't fail on
+        # CLI disambiguation.
+        run: |
+          dotnet restore "${{ steps.sln.outputs.sln }}"
+          dotnet build "${{ steps.sln.outputs.sln }}" -c Release --no-restore
+
+      - name: Install JetBrains.ReSharper.GlobalTools
+        run: dotnet tool install -g JetBrains.ReSharper.GlobalTools
+
+      - name: Run InspectCode
+        run: |
+          jb inspectcode "${{ steps.sln.outputs.sln }}" \
             --output=inspect.sarif \
             --format=sarif \
             --severity=WARNING \
