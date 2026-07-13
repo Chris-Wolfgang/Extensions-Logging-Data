@@ -44,8 +44,17 @@ if (Test-Path $SuppressionsFile) {
 
 function Get-PreviousVersion([string]$packageId, [string]$currentVersion) {
     $url = "$flat/$($packageId.ToLowerInvariant())/index.json"
-    try { $all = (Invoke-RestMethod -Uri $url -ErrorAction Stop).versions }
-    catch { return $null }   # 404 => package never published => first release
+    try {
+        $all = (Invoke-RestMethod -Uri $url -ErrorAction Stop).versions
+    }
+    catch {
+        # Only a genuine 404 means the package has never been published (first
+        # release). Any other failure (transient network / NuGet outage / 5xx)
+        # must NOT silently skip the ABI gate — surface it and fail.
+        $status = $_.Exception.Response.StatusCode.value__
+        if ($status -eq 404) { return $null }
+        throw "Failed to query NuGet for '$packageId' (HTTP $status): $($_.Exception.Message)"
+    }
     $cur = [version]($currentVersion -replace '[-+].*$', '')
     $prev = $all |
         Where-Object { $_ -notmatch '-' } |
@@ -100,7 +109,6 @@ foreach ($proj in $projects) {
 
         Write-Host "--- $packageId [$tfm]: $prev -> $version ---"
         $raw = & apicompat --left $prevDll --right $curDll 2>&1
-        $text = ($raw | Out-String)
 
         $breaks = $raw |
             Where-Object { $_ -match 'CP[0-9]{4}' } |
