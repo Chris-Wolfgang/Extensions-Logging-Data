@@ -1,0 +1,58 @@
+# ============================================================================
+# OSSF Scorecard — automated security-posture scoring of the repo configuration
+# (branch protection, pinned deps, dangerous-workflow patterns, token
+# permissions, etc.). Complements CodeQL/DevSkim/InspectCode, which scan the
+# CODE; Scorecard scores the repo SETUP. Results publish to the Security tab
+# (SARIF) and to the public OpenSSF API so the README badge can render the score.
+# ============================================================================
+name: OSSF Scorecard
+
+on:
+  # Re-scan whenever branch protection changes (a key scored input).
+  branch_protection_rule:
+  # Weekly, plus on every push to main so the badge stays current.
+  schedule:
+    - cron: '27 5 * * 1'
+  push:
+    branches: [ main ]
+
+# Least-privilege default; the analysis job opts into the writes it needs.
+permissions:
+  contents: read
+
+jobs:
+  analysis:
+    name: Scorecard analysis
+    runs-on: ubuntu-latest
+    permissions:
+      # Upload the SARIF result to the code-scanning dashboard.
+      security-events: write
+      # Publish results to the public OpenSSF Scorecard API (drives the badge).
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Run analysis
+        uses: ossf/scorecard-action@v2.4.3
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          # Publish to the OpenSSF API — required for the README badge and for
+          # cross-repo trend data. Public repos only; publishes no source code.
+          publish_results: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SARIF file
+          path: results.sarif
+          retention-days: 5
+
+      - name: Upload SARIF to code-scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: results.sarif
