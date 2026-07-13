@@ -33,6 +33,13 @@ public class DocExampleCompilationTests
         var srcDir = FindSourceDirectory();
         foreach (var file in Directory.EnumerateFiles(srcDir, "*.cs", SearchOption.AllDirectories))
         {
+            // Skip build outputs — bin/obj can contain generated .cs (and copied
+            // sources) that would be scanned needlessly.
+            if (IsUnderBuildOutput(file))
+            {
+                continue;
+            }
+
             var text = File.ReadAllText(file);
             var i = 0;
             foreach (var code in ExtractCodeBlocks(text))
@@ -47,7 +54,6 @@ public class DocExampleCompilationTests
     [MemberData(nameof(Examples))]
     public void DocExample_compiles(string id, string code)
     {
-        _ = id;
         var program = BuildProgram(code);
 
         var references = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")!)
@@ -147,6 +153,13 @@ public class DocExampleCompilationTests
             return trimmed;
         }
         return line;
+    }
+
+    private static bool IsUnderBuildOutput(string path)
+    {
+        var parts = path.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        return parts.Any(p => string.Equals(p, "bin", StringComparison.OrdinalIgnoreCase)
+                           || string.Equals(p, "obj", StringComparison.OrdinalIgnoreCase));
     }
 
     private static string FindSourceDirectory()
