@@ -17,7 +17,8 @@ on:
     branches: [ main ]
 
 # Least-privilege default; the analysis job opts into the writes it needs.
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   analysis:
@@ -36,7 +37,7 @@ jobs:
           persist-credentials: false
 
       - name: Run analysis
-        uses: ossf/scorecard-action@v2
+        uses: ossf/scorecard-action@v2.4.3
         with:
           results_file: results.sarif
           results_format: sarif
