@@ -54,6 +54,7 @@
     <Project Path="tests/Wolfgang.Extensions.Logging.Data.Tests.Unit/Wolfgang.Extensions.Logging.Data.Tests.Unit.csproj" />
     <Project Path="tests/Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit/Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit.csproj" />
     <Project Path="tests/Wolfgang.Extensions.Logging.Data.Tests.Docs/Wolfgang.Extensions.Logging.Data.Tests.Docs.csproj" />
+    <Project Path="tests/Wolfgang.Extensions.Logging.Data.AotSmoke/Wolfgang.Extensions.Logging.Data.AotSmoke.csproj" />
   </Folder>
 </Solution>
 
