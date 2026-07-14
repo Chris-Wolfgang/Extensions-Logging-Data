@@ -299,10 +299,16 @@ jobs:
         id: sln
         run: |
           # Prefer .slnx (new format) then .sln. Fail loudly if neither exists.
-          SLN=$(ls *.slnx 2>/dev/null | head -n1)
-          if [ -z "$SLN" ]; then
-            SLN=$(ls *.sln 2>/dev/null | head -n1)
-          fi
+          # Glob directly (no `ls`) with a `./` prefix so filenames starting with
+          # a dash can't be read as options, and guard the no-match case where an
+          # unmatched glob stays literal (SC2012 / SC2035).
+          SLN=""
+          for candidate in ./*.slnx ./*.sln; do
+            if [ -e "$candidate" ]; then
+              SLN="$candidate"
+              break
+            fi
+          done
           if [ -z "$SLN" ]; then
             echo "::error::No .slnx or .sln found at repo root — InspectCode needs one to run."
             exit 1

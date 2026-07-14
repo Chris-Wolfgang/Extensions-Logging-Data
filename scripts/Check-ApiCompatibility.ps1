@@ -48,12 +48,16 @@ function Get-PreviousVersion([string]$packageId, [string]$currentVersion) {
         $all = (Invoke-RestMethod -Uri $url -ErrorAction Stop).versions
     }
     catch {
-        # Only a genuine 404 means the package has never been published (first
-        # release). Any other failure (transient network / NuGet outage / 5xx)
-        # must NOT silently skip the ABI gate — surface it and fail.
-        $status = $_.Exception.Response.StatusCode.value__
-        if ($status -eq 404) { return $null }
-        throw "Failed to query NuGet for '$packageId' (HTTP $status): $($_.Exception.Message)"
+        # Only a genuine HTTP 404 means the package has never been published
+        # (first release). Any other failure — a different HTTP status, or a
+        # network/DNS/TLS error with no HTTP response at all — must NOT silently
+        # skip the ABI gate; surface it and fail. `.Response` is null for the
+        # no-response cases, so guard it before touching StatusCode.
+        $response = $_.Exception.Response
+        if ($response -and [int]$response.StatusCode -eq 404) {
+            return $null
+        }
+        throw "Failed to query NuGet for '$packageId': $($_.Exception.Message)"
     }
     $cur = [version]($currentVersion -replace '[-+].*$', '')
     $prev = $all |
