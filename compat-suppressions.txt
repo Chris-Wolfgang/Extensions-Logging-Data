@@ -1,0 +1,4 @@
+# ABI-compatibility suppressions for scripts/Check-ApiCompatibility.ps1.
+# One accepted/intentional break per line — an ApiCompat id (e.g. CP0002) or a
+# substring of the finding message. Only add entries for breaks that are
+# deliberate (typically in a MAJOR release), with the reason in the commit/PR.

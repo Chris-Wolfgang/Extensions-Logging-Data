@@ -1,0 +1,82 @@
+# ============================================================================
+# Workflow Security — audits the GitHub Actions YAML itself (not the code).
+# actionlint catches syntax / expression / shell errors; zizmor audits for
+# workflow-level security issues (injection, over-broad permissions, dangerous
+# triggers, unpinned actions). Accepted findings are documented in
+# .github/zizmor.yml. Runs on `pull_request` (safe — no secrets, no PR code
+# executed in a privileged context) rather than `pull_request_target`.
+# ============================================================================
+name: Workflow Security
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    name: actionlint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write   # reviewdog creates a Check run to surface annotations
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Run actionlint
+        uses: reviewdog/action-actionlint@v1
+        with:
+          # github-check (not github-pr-check) so annotations are produced on
+          # both pull_request and push-to-main runs, not only in PR context.
+          reporter: github-check
+          fail_level: error
+
+  zizmor:
+    name: zizmor
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write   # upload SARIF to code scanning
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run zizmor (SARIF)
+        id: zizmor
+        run: |
+          # Version-pinned for reproducibility. Config (.github/zizmor.yml) is
+          # auto-discovered. --min-severity=high so only high-severity findings
+          # gate; informational/low/medium still appear in Code Scanning.
+          set +e
+          pipx run zizmor==1.26.1 --persona=regular --min-severity=high \
+            --format=sarif .github/workflows/ > zizmor.sarif
+          echo "exit=$?" >> "$GITHUB_OUTPUT"
+          set -e
+
+      - name: Upload SARIF to code-scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: zizmor.sarif
+
+      - name: Gate on high-severity findings
+        run: |
+          if [ "${{ steps.zizmor.outputs.exit }}" != "0" ]; then
+            echo "::error::zizmor found high-severity workflow issue(s) — see Security → Code scanning"
+            exit 1
+          fi
+          echo "✅ No high-severity zizmor findings."

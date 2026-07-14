@@ -375,6 +375,17 @@ jobs:
           dotnet restore
           dotnet build --no-restore --configuration Release
 
+      # ABI-compatibility gate (#88): diff each built package assembly against the
+      # previous version published on NuGet. Fails the release if a non-major bump
+      # introduces an unsuppressed binary break. Complements PublicApiAnalyzers,
+      # which only diffs source-level signatures.
+      - name: Check ABI compatibility (ApiCompat)
+        shell: pwsh
+        run: |
+          dotnet tool install -g Microsoft.DotNet.ApiCompat.Tool
+          $env:PATH += [IO.Path]::PathSeparator + (Join-Path $env:USERPROFILE '.dotnet/tools')
+          ./scripts/Check-ApiCompatibility.ps1 -Configuration Release
+
       - name: Pack NuGet packages
         id: check-packages
         shell: pwsh

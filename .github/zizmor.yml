@@ -1,0 +1,23 @@
+# zizmor configuration — GitHub Actions workflow security audit.
+# https://docs.zizmor.sh/configuration/
+#
+# Accepted suppressions (reason required per the maintenance policy):
+#   - unpinned-uses:      the fleet pins actions to floating major-version TAGS
+#                         (actions/checkout@v7), not commit hashes — a deliberate
+#                         maintenance decision (repo-template #425). `ref-pin`
+#                         accepts a tag/branch ref, so tag pins are clean and only
+#                         a mutable-branch/no-ref pin is flagged.
+#   - dangerous-triggers: pr.yaml uses `pull_request_target` ON PURPOSE so the
+#                         workflow definition comes from main (a PR branch cannot
+#                         weaken its own CI). The risk is mitigated by the
+#                         "Detect .NET Projects" job, which fetches every trusted
+#                         config file from main and never checks out PR code into
+#                         a privileged context. Intentional and reviewed.
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        "*": ref-pin
+  dangerous-triggers:
+    ignore:
+      - pr.yaml
