@@ -1,0 +1,125 @@
+# ============================================================================
+# Reproducible-build verification. Determinism is the SDK default for SDK-style
+# projects, and Directory.Build.props adds the remaining reproducibility inputs
+# (ContinuousIntegrationBuild path-normalization on CI, SourceLink,
+# EmbedUntrackedSources). This workflow VERIFIES the output: it builds the same
+# commit twice PER OS (ubuntu + windows) and fails if a given OS's two builds are
+# not byte-identical. Consumers reproduce the same check from source — see
+# docs/REPRODUCIBLE-BUILDS.md (added alongside this workflow).
+#
+# Note: the gate is per-OS determinism, not cross-OS byte-identity. Cross-OS
+# byte-identical assemblies (esp. PDBs and the net462 target) are not reliably
+# achievable, which is why the acceptance criteria hedge "different OS where
+# possible" — building on both OSes proves each is internally deterministic.
+# ============================================================================
+name: Reproducible Build
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: "Build ${{ matrix.os }} (attempt ${{ matrix.attempt }})"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        attempt: [1, 2]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build (Release, deterministic)
+        shell: bash
+        run: |
+          # Resolve the solution explicitly (no bare `dotnet build`) so a repo with
+          # more than one solution/project at the root can't fail on CLI
+          # disambiguation. `./`-prefixed glob is dash-safe; guard the no-match case.
+          SLN=""
+          for candidate in ./*.slnx ./*.sln; do
+            if [ -e "$candidate" ]; then SLN="$candidate"; break; fi
+          done
+          if [ -z "$SLN" ]; then
+            echo "::error::No .slnx or .sln at repo root."
+            exit 1
+          fi
+          echo "Building: $SLN"
+          # ContinuousIntegrationBuild normalizes stored source paths so two CI
+          # runs of the same commit on the same OS produce identical output.
+          dotnet build "$SLN" -c Release -p:ContinuousIntegrationBuild=true
+
+      - name: Hash the built Wolfgang.* artifacts
+        shell: bash
+        run: |
+          # Hash both the assemblies and their symbols (.dll + .pdb) so a symbol
+          # regression is caught too. Key by <tfm>/<file> so the two attempts line
+          # up regardless of path ordering.
+          : > hashes.txt
+          while IFS= read -r -d '' f; do
+            key=$(echo "$f" | sed -E 's#.*/bin/Release/##')
+            echo "$(sha256sum "$f" | cut -d' ' -f1)  $key" >> hashes.txt
+          done < <(find src -path '*/bin/Release/*' \( -name 'Wolfgang.Extensions.Logging.Data*.dll' -o -name 'Wolfgang.Extensions.Logging.Data*.pdb' \) -print0)
+          sort -o hashes.txt hashes.txt
+
+          # Fail loudly if nothing was hashed — otherwise an empty file would make
+          # the compare job pass vacuously (e.g. if outputs move or a project is renamed).
+          count=$(wc -l < hashes.txt)
+          if [ "$count" -eq 0 ]; then
+            echo "::error::No Wolfgang.* build artifacts were found to hash — the find pattern or output layout changed."
+            exit 1
+          fi
+          echo "=== ${{ matrix.os }} attempt ${{ matrix.attempt }}: $count artifacts ==="
+          cat hashes.txt
+
+      - name: Upload hashes
+        uses: actions/upload-artifact@v4
+        with:
+          name: hashes-${{ matrix.os }}-${{ matrix.attempt }}
+          path: hashes.txt
+          retention-days: 3
+
+  compare:
+    name: "Compare (per-OS determinism)"
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download all hashes
+        uses: actions/download-artifact@v4
+        with:
+          path: hashes
+
+      - name: Assert each OS is deterministic
+        shell: bash
+        run: |
+          rc=0
+          for os in ubuntu-latest windows-latest; do
+            a="hashes/hashes-$os-1/hashes.txt"
+            b="hashes/hashes-$os-2/hashes.txt"
+            if [ ! -s "$a" ] || [ ! -s "$b" ]; then
+              echo "::error::Missing or empty hashes for $os."
+              rc=1
+              continue
+            fi
+            if diff -u "$a" "$b"; then
+              echo "✅ $os: two builds of the same commit are byte-identical."
+            else
+              echo "::error::$os build is NOT reproducible — assembly/symbol hashes differ between two builds of the same commit (diff above)."
+              rc=1
+            fi
+          done
+          exit "$rc"
