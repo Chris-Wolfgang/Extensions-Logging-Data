@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
@@ -43,6 +44,11 @@ public static class DbCommandLoggerExtensions
         "DbCommand CommandText={CommandText} Parameters={Parameters}";
 
     private const string RedactedValue = "***";
+
+    private const string ReflectionParametersTrimMessage =
+        "The anonymous-object parameter overload reflects over the runtime type's public " +
+        "properties, which the trimmer cannot statically preserve. In trimmed / Native AOT " +
+        "applications, pass an IReadOnlyDictionary<string, object?> instead.";
 
     /// <summary>
     /// Per-type cache of "read the public properties of an instance of this type into a
@@ -201,6 +207,7 @@ public static class DbCommandLoggerExtensions
     ///     new[] { "password" });
     /// </code>
     /// </example>
+    [RequiresUnreferencedCode(ReflectionParametersTrimMessage)]
     public static void LogCommandText(this ILogger logger, string commandText, object parameters)
     {
         LogCommandText(logger, commandText, ToDictionary(parameters), Array.Empty<string>(), LogLevel.Information);
@@ -220,6 +227,7 @@ public static class DbCommandLoggerExtensions
     /// Thrown when <paramref name="logger"/>, <paramref name="commandText"/>, or
     /// <paramref name="parameters"/> is <see langword="null"/>.
     /// </exception>
+    [RequiresUnreferencedCode(ReflectionParametersTrimMessage)]
     public static void LogCommandText(this ILogger logger, string commandText, object parameters, LogLevel level)
     {
         LogCommandText(logger, commandText, ToDictionary(parameters), Array.Empty<string>(), level);
@@ -244,6 +252,7 @@ public static class DbCommandLoggerExtensions
     /// <paramref name="parameters"/>, or <paramref name="excludedParameterNames"/> is
     /// <see langword="null"/>.
     /// </exception>
+    [RequiresUnreferencedCode(ReflectionParametersTrimMessage)]
     public static void LogCommandText(this ILogger logger, string commandText, object parameters, IEnumerable<string> excludedParameterNames)
     {
         LogCommandText(logger, commandText, ToDictionary(parameters), excludedParameterNames, LogLevel.Information);
@@ -269,6 +278,7 @@ public static class DbCommandLoggerExtensions
     /// <paramref name="parameters"/>, or <paramref name="excludedParameterNames"/> is
     /// <see langword="null"/>.
     /// </exception>
+    [RequiresUnreferencedCode(ReflectionParametersTrimMessage)]
     public static void LogCommandText(this ILogger logger, string commandText, object parameters, IEnumerable<string> excludedParameterNames, LogLevel level)
     {
         LogCommandText(logger, commandText, ToDictionary(parameters), excludedParameterNames, level);
@@ -411,6 +421,7 @@ public static class DbCommandLoggerExtensions
     /// <param name="parameters">The object to read. Must not be <see langword="null"/>.</param>
     /// <returns>A dictionary of property name to value.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="parameters"/> is <see langword="null"/>.</exception>
+    [RequiresUnreferencedCode(ReflectionParametersTrimMessage)]
     internal static IReadOnlyDictionary<string, object?> ToDictionary(object parameters)
     {
         if (parameters is null)
@@ -436,6 +447,7 @@ public static class DbCommandLoggerExtensions
     /// Builds a delegate that reads the public readable instance properties of objects of the
     /// given <paramref name="type"/> into a dictionary. Called once per type via the cache.
     /// </summary>
+    [RequiresUnreferencedCode(ReflectionParametersTrimMessage)]
     private static Func<object, IReadOnlyDictionary<string, object?>> BuildPropertyReader(Type type)
     {
         var properties = type

@@ -35,6 +35,10 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 - **API Documentation:** https://Chris-Wolfgang.github.io/Extensions-Logging-Data/
 - **CHANGELOG:** [CHANGELOG.md](CHANGELOG.md)
 - **Contributing Guide:** [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Architecture Decision Records:** [docs/adr/](docs/adr/README.md)
+- **Reproducible builds (independent verification):** [docs/REPRODUCIBLE-BUILDS.md](docs/REPRODUCIBLE-BUILDS.md)
+- **Migration guides:** [docs/migrations/](docs/migrations/README.md)
+- **Disaster recovery runbook:** [docs/DISASTER-RECOVERY.md](docs/DISASTER-RECOVERY.md)
 - **DocFX Version Picker Troubleshooting:** [docs/DOCFX-VERSION-PICKER.md](docs/DOCFX-VERSION-PICKER.md)
 
 ---
@@ -77,6 +81,8 @@ logger.LogDbConnection(connection, LogLevel.Debug);
 | **Null-safe** — throws `ArgumentNullException` (not `NullReferenceException`) when `logger` or `connection` is `null` | (every overload) |
 
 `DbCommand` logging is also available via `ILogger.LogCommandText(...)` (command text + parameter snapshot with opt-in redaction) and `ILogger.LogDbCommand(DbCommand, ...)` (logs a live command directly). The library is intentionally narrow and grows one type at a time as needed.
+
+> **Trimming / Native AOT:** `LogDbConnection`, `LogDbCommand`, and the `IReadOnlyDictionary<string, object?>` overloads of `LogCommandText` are trim- and AOT-safe (verified by a `PublishAot` smoke in CI). The **anonymous-object** `LogCommandText(..., object parameters, ...)` overloads reflect over the parameter's runtime properties and are marked `[RequiresUnreferencedCode]` — in trimmed/AOT apps use the dictionary overload instead.
 
 ---
 
