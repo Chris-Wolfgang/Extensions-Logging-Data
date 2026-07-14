@@ -1,14 +1,14 @@
 # Reproducible builds — independent verification
 
-This package is built with reproducibility **inputs** enabled in
-`Directory.Build.props`:
+This package is built with reproducibility **inputs** enabled:
 
-- `<Deterministic>true</Deterministic>` — compiler output doesn't depend on wall
-  clock, machine paths, or ordering.
-- `<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>` (on CI) —
-  normalizes stored source paths.
-- SourceLink + `<EmbedUntrackedSources>` — the exact source is discoverable from
-  the symbols.
+- **Deterministic compilation** — `<Deterministic>` defaults to `true` for
+  SDK-style projects, so compiler output doesn't depend on the wall clock, machine
+  paths, or ordering.
+- `<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>` on CI (set in
+  `Directory.Build.props`) — normalizes stored source paths.
+- SourceLink + `<EmbedUntrackedSources>` (in `Directory.Build.props`) — the exact
+  source is discoverable from the symbols.
 
 That means a third party can rebuild the published package from source and confirm
 it matches — "trust, but verify". Here's how.
@@ -45,6 +45,21 @@ diff verify/mine.sha verify/theirs.sha && echo "✅ assemblies are byte-identica
 
 A clean `diff` proves the published binaries were built from this source with no
 injection in between.
+
+## If the hashes differ
+
+First rule out the benign causes below (a different SDK, or comparing the `.nupkg`
+zip instead of the assemblies). If the assemblies still differ after that, **treat
+it as a potential supply-chain discrepancy and report it**:
+
+- Open an issue at
+  <https://github.com/Chris-Wolfgang/Extensions-Logging-Data/issues> titled
+  "Reproducibility mismatch for v\<VERSION\>", including: the package version, your
+  **exact `dotnet --version`** and OS, and the two `sha256` lists (`verify/mine.sha`
+  and `verify/theirs.sha`) plus their `diff`.
+- If you believe the published package was tampered with (not just a toolchain
+  difference), also follow the reporting path in
+  [`SECURITY.md`](../SECURITY.md) / [`DISASTER-RECOVERY.md`](DISASTER-RECOVERY.md).
 
 ## Notes / caveats
 

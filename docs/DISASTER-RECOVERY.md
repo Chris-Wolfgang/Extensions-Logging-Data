@@ -50,9 +50,12 @@ then eradicate, then communicate).
 ## 4. Communicate
 
 - If a **malicious package version shipped**: open a security advisory on the repo,
-  contact **NuGet support** (<https://www.nuget.org/policies/Contact> / security@)
-  to request a hard delete (unlisting hides it but doesn't remove it), and note it
-  in `CHANGELOG.md` under **Security**.
+  then request a hard delete (unlisting hides it but doesn't remove it) —
+  [unlist it first](#unlist-a-package-version), file via the
+  [NuGet contact form](https://www.nuget.org/policies/Contact) and email
+  **support@nuget.org**, and for a platform-level compromise also report to the
+  Microsoft Security Response Center (**secure@microsoft.com** /
+  <https://msrc.microsoft.com/report>). Note it in `CHANGELOG.md` under **Security**.
 - Notify consumers via the advisory + release notes with the affected versions and
   the safe version to move to.
 
