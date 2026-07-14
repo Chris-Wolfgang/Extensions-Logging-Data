@@ -10,6 +10,9 @@
          any trim/AOT regression in the library's AOT-safe surface fails the build,
          and let `dotnet publish` produce a real native binary the CI step runs. -->
     <PublishAot>true</PublishAot>
+    <!-- PublishAot implies trimming, but set it explicitly so the project file
+         matches the documented intent and the trim analyzers are unambiguous. -->
+    <PublishTrimmed>true</PublishTrimmed>
     <IsAotCompatible>true</IsAotCompatible>
     <TrimmerSingleWarn>false</TrimmerSingleWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
