@@ -350,6 +350,10 @@ jobs:
     name: Pack & Validate NuGet
     needs: validate-release
     runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write        # SLSA build-provenance attestation (OIDC)
+      attestations: write    # SLSA build-provenance attestation
     outputs:
       has-packages: ${{ steps.check-packages.outputs.has-packages }}
     steps:
@@ -571,6 +575,17 @@ jobs:
             }
           }
 
+
+      # SLSA build-provenance attestation: cryptographically links each .nupkg to
+      # this repo + commit + workflow run, so a consumer can verify (via
+      # `gh attestation verify <nupkg> --repo Chris-Wolfgang/Extensions-Logging-Data`)
+      # that the package was built here and not injected downstream. Complements the
+      # SBOM above. (Author signing with a certificate is a separate follow-up.)
+      - name: Attest build provenance (SLSA)
+        if: steps.check-packages.outputs.has-packages == 'true'
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'nuget-packages/*.nupkg'
 
       - name: Upload NuGet packages
         uses: actions/upload-artifact@v7
