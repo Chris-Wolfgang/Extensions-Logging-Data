@@ -78,6 +78,8 @@ logger.LogDbConnection(connection, LogLevel.Debug);
 
 `DbCommand` logging is also available via `ILogger.LogCommandText(...)` (command text + parameter snapshot with opt-in redaction) and `ILogger.LogDbCommand(DbCommand, ...)` (logs a live command directly). The library is intentionally narrow and grows one type at a time as needed.
 
+> **Trimming / Native AOT:** `LogDbConnection`, `LogDbCommand`, and the `IReadOnlyDictionary<string, object?>` overloads of `LogCommandText` are trim- and AOT-safe (verified by a `PublishAot` smoke in CI). The **anonymous-object** `LogCommandText(..., object parameters, ...)` overloads reflect over the parameter's runtime properties and are marked `[RequiresUnreferencedCode]` — in trimmed/AOT apps use the dictionary overload instead.
+
 ---
 
 ## 🪵 Entity Framework 6 companion

@@ -353,6 +353,67 @@ jobs:
           echo "✅ No error-severity InspectCode findings."
 
   # ============================================================================
+  # AOT SMOKE: publish a Native-AOT + trimmed consumer of the library and run it.
+  # The trim/AOT analyzers (TreatWarningsAsErrors) fail the build on any regression
+  # to the AOT-safe surface; running the native binary catches runtime breaks
+  # (MissingMethod / NotSupported / silent no-op). Parallel to the test stages.
+  # ============================================================================
+  aot-smoke:
+    name: "Native AOT smoke"
+    runs-on: ubuntu-latest
+    needs: detect-projects
+    # Same-repo PRs only — builds PR code under pull_request_target (see the
+    # inspectcode job for the rationale).
+    if: >-
+      github.repository != 'Chris-Wolfgang/repo-template'
+      && needs.detect-projects.outputs.has-projects == 'true'
+      && github.event.pull_request.head.repo.full_name == github.repository
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/head
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install Native AOT prerequisites
+        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
+
+      - name: Find the AOT smoke project
+        id: smoke
+        run: |
+          PROJ=$(find . -name '*.AotSmoke.csproj' | head -n1)
+          if [ -z "$PROJ" ]; then
+            echo "No *.AotSmoke.csproj found — skipping."
+            echo "found=" >> "$GITHUB_OUTPUT"
+          else
+            echo "Smoke project: $PROJ"
+            echo "found=$PROJ" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish Native AOT (trim + AOT analyzers gate the build)
+        if: steps.smoke.outputs.found != ''
+        run: dotnet publish "${{ steps.smoke.outputs.found }}" -c Release -r linux-x64
+
+      - name: Run the published native binary
+        if: steps.smoke.outputs.found != ''
+        run: |
+          BIN=$(find "$(dirname "${{ steps.smoke.outputs.found }}")/bin" -type f -name '*.AotSmoke' -path '*publish*' | head -n1)
+          if [ -z "$BIN" ]; then
+            echo "::error::Native AOT binary not produced."
+            exit 1
+          fi
+          echo "Running: $BIN"
+          "$BIN"
+
+  # ============================================================================
   # STAGE 1: Linux - .NET Core/5+ Tests with Coverage Gate
   # ============================================================================
   test-linux-core:
