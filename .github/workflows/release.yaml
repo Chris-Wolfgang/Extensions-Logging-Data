@@ -585,7 +585,12 @@ jobs:
         if: steps.check-packages.outputs.has-packages == 'true'
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: 'nuget-packages/*.nupkg'
+          # Attest every shipped artifact: the packages, their symbol packages,
+          # and the CycloneDX SBOMs generated above.
+          subject-path: |
+            nuget-packages/*.nupkg
+            nuget-packages/*.snupkg
+            nuget-packages/*.bom.json
 
       - name: Upload NuGet packages
         uses: actions/upload-artifact@v7
