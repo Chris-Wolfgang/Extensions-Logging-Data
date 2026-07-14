@@ -9,7 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Trim / Native AOT compatibility.** The `LogDbConnection`, `LogDbCommand`,
+  and dictionary-based `LogCommandText` surface is verified trim- and AOT-safe by
+  a `PublishAot` + `PublishTrimmed` smoke consumer run in CI. (#94)
+
 ### Changed
+
+- The **anonymous-object `LogCommandText(..., object parameters, ...)` overloads
+  are now marked `[RequiresUnreferencedCode]`** — they reflect over the runtime
+  type's properties, which the trimmer cannot preserve. Callers in trimmed /
+  Native AOT apps get an `IL2026` warning; use the
+  `IReadOnlyDictionary<string, object?>` overload instead. No change for
+  non-trimmed consumers. (#94)
 
 ### Deprecated
 
