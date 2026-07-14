@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.3.0] - 2026-07-14
+
+`Wolfgang.Extensions.Logging.Data` only. The `EntityFramework6` companion package
+is unchanged and stays at 0.2.0.
+
+### Added
+
 - **Trim / Native AOT compatibility.** The `LogDbConnection`, `LogDbCommand`,
   and dictionary-based `LogCommandText` surface is verified trim- and AOT-safe by
   a `PublishAot` + `PublishTrimmed` smoke consumer run in CI. (#94)
@@ -21,14 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Native AOT apps get an `IL2026` warning; use the
   `IReadOnlyDictionary<string, object?>` overload instead. No change for
   non-trimmed consumers. (#94)
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 
 ## [0.2.0] - 2026-07-06
 
@@ -121,7 +130,8 @@ Initial release.
 - Multi-targeting: `net462`, `netstandard2.0`, `netstandard2.1`,
   `net10.0`.
 
-[Unreleased]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/releases/tag/v0.1.0
