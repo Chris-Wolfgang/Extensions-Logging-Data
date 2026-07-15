@@ -1,4 +1,5 @@
 using System.Data;
+using System.Data.Common;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 
