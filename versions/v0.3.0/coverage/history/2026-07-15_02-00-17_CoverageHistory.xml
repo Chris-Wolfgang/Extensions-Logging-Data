@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<coverage version="1.0" date="2026-07-15_02-00-17" tag="">
+  <assembly name="Wolfgang.Extensions.Logging.Data">
+    <class name="Wolfgang.Extensions.Logging.Data.DbCommandLoggerExtensions" coveredlines="86" coverablelines="89" totallines="515" coveredbranches="52" totalbranches="54" coveredcodeelements="17" fullcoveredcodeelements="16" totalcodeelements="18" />
+    <class name="Wolfgang.Extensions.Logging.Data.DbConnectionLoggerExtensions" coveredlines="38" coverablelines="38" totallines="151" coveredbranches="11" totalbranches="12" coveredcodeelements="4" fullcoveredcodeelements="4" totalcodeelements="4" />
+  </assembly>
+  <assembly name="Wolfgang.Extensions.Logging.Data.EntityFramework6">
+    <class name="Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging" coveredlines="19" coverablelines="19" totallines="91" coveredbranches="6" totalbranches="6" coveredcodeelements="6" fullcoveredcodeelements="6" totalcodeelements="6" />
+    <class name="Wolfgang.Extensions.Logging.Data.EntityFramework6.LoggingCommandInterceptor" coveredlines="25" coverablelines="25" totallines="80" coveredbranches="8" totalbranches="12" coveredcodeelements="9" fullcoveredcodeelements="9" totalcodeelements="9" />
+    <class name="Wolfgang.Extensions.Logging.Data.EntityFramework6.LoggingConnectionInterceptor" coveredlines="38" coverablelines="38" totallines="152" coveredbranches="10" totalbranches="12" coveredcodeelements="26" fullcoveredcodeelements="26" totalcodeelements="26" />
+    <class name="Wolfgang.Extensions.Logging.Data.EntityFramework6.LoggingTransactionInterceptor" coveredlines="24" coverablelines="24" totallines="88" coveredbranches="8" totalbranches="10" coveredcodeelements="12" fullcoveredcodeelements="12" totalcodeelements="12" />
+  </assembly>
+</coverage>
