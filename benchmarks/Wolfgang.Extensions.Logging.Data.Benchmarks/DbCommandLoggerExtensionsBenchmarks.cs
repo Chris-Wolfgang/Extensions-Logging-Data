@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Wolfgang.Extensions.Logging.Data;
 
 namespace Wolfgang.Extensions.Logging.Data.Benchmarks;
 

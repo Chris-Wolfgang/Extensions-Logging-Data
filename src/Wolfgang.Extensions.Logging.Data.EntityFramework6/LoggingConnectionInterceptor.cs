@@ -3,7 +3,6 @@ using System.Data;
 using System.Data.Common;
 using System.Data.Entity.Infrastructure.Interception;
 using Microsoft.Extensions.Logging;
-using Wolfgang.Extensions.Logging.Data;
 
 namespace Wolfgang.Extensions.Logging.Data.EntityFramework6;
 

@@ -1,0 +1,44 @@
+<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<!--
+	  ReSharper InspectCode noise-floor (see issue #136).
+
+	  Purpose: silence InspectCode inspections that are either (a) already covered
+	  and gated by the build's Roslyn analyzer stack (Meziantou, SonarAnalyzer,
+	  Roslynator, AsyncFixer, VS.Threading, BannedApiAnalyzers, .NET SDK analyzers,
+	  PublicApiAnalyzers) — double-reporting them here adds no signal — or (b) known
+	  false positives on this repo's multi-TFM layout. The goal is 0 noise findings
+	  on a clean main so the first error after the job lands is always actionable.
+
+	  Only error-severity findings gate merge (pr.yaml `inspectcode` job); these
+	  entries drop the corresponding warnings from Code Scanning entirely.
+
+	  This is the proving-ground profile for the canonical repo-template rollout
+	  (repo-template#431). Keep additions justified and grouped.
+	-->
+
+	<!-- Redundant-code style rules — covered in-build by Roslynator / IDE00xx and
+	     .editorconfig. RedundantUsingDirective in particular is a FALSE POSITIVE on
+	     the src library project: <ImplicitUsings> is enabled only for net10.0, so
+	     explicit System usings are REQUIRED on net462/netstandard2.0/2.1 but look
+	     redundant to InspectCode (which analyses a single TFM). -->
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=RedundantUsingDirective/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=RedundantNameQualifier/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=RedundantCast/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+
+	<!-- Nullability — owned by the Roslyn nullable reference-type analysis, not R#. -->
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=ReturnTypeCanBeNotNullable/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=RedundantNullableFlowAttribute/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+
+	<!-- Public-API false positive: R# cannot see external consumers of a library's
+	     public auto-properties, so it reports them as unused (.Global variant). -->
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=UnusedAutoPropertyAccessor_002EGlobal/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+
+	<!-- Roslyn / Sonar analyzer diagnostics re-run by InspectCode. These are already
+	     enforced (or intentionally dormant, e.g. PublicApiAnalyzers RS0016/RS0037)
+	     by the in-build analyzer stack; suppress the InspectCode double-report. -->
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=RS0016/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=RS0037/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=S3267/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=S3220/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=S2068/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+</wpf:ResourceDictionary>

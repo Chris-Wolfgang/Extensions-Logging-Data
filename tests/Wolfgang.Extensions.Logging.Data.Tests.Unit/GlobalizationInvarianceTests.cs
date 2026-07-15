@@ -1,8 +1,5 @@
-using System;
 using System.Data.Common;
 using System.Globalization;
-using System.Threading;
-using Microsoft.Extensions.Logging;
 using Wolfgang.Extensions.Logging.Data.Tests.Unit.TestHelpers;
 
 namespace Wolfgang.Extensions.Logging.Data.Tests.Unit;
