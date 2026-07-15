@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
-using Wolfgang.Extensions.Logging.Data;
 
 namespace Wolfgang.Extensions.Logging.Data.Tests.Integration;
 

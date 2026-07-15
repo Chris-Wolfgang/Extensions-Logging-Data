@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Wolfgang.Extensions.Logging.Data.Tests.Unit.TestHelpers;
 

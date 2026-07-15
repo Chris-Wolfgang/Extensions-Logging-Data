@@ -10,7 +10,6 @@
 // [RequiresUnreferencedCode] — documented as not AOT/trim-safe. The
 // IReadOnlyDictionary overloads are the AOT-safe equivalent and are covered.
 
-using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Wolfgang.Extensions.Logging.Data;
 using Wolfgang.Extensions.Logging.Data.AotSmoke;
