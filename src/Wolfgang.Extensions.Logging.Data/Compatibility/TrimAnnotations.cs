@@ -16,6 +16,7 @@ namespace System.Diagnostics.CodeAnalysis
     /// framework attribute for older target frameworks.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor, Inherited = false)]
+    [ExcludeFromCodeCoverage] // Attribute-only polyfill — no executable code to cover.
     internal sealed class RequiresUnreferencedCodeAttribute : Attribute
     {
         public RequiresUnreferencedCodeAttribute(string message)

@@ -29,6 +29,8 @@ internal sealed class CountingLogger : ILogger
 internal sealed class FakeDbConnection : DbConnection
 {
     [AllowNull]
+    [SuppressMessage("Major Code Smell", "S2068:Hard-coded credentials are security-sensitive",
+        Justification = "Fake connection string in an AOT smoke harness — not a real credential; it deliberately includes Password= so LogDbConnection's redaction is exercised.")]
     public override string ConnectionString { get; set; } = "Server=localhost;Database=Test;User Id=sa;Password=secret";
 
     public override string Database => "Test";
