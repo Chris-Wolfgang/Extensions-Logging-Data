@@ -30,6 +30,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Wolfgang.Extensions.Logging.Data\Wolfgang.Extensions.Logging.Data.csproj" />
 		<PackageReference Include="EntityFramework" Version="6.5.2" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.10" />
 	</ItemGroup>
 </Project>
