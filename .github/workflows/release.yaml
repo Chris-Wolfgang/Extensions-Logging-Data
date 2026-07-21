@@ -85,7 +85,7 @@ jobs:
           }
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             3.1.x
@@ -363,7 +363,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             3.1.x
@@ -583,7 +583,7 @@ jobs:
       # SBOM above. (Author signing with a certificate is a separate follow-up.)
       - name: Attest build provenance (SLSA)
         if: steps.check-packages.outputs.has-packages == 'true'
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           # Attest every shipped artifact: the packages, their symbol packages,
           # and the CycloneDX SBOMs generated above.
@@ -629,7 +629,7 @@ jobs:
 
       - name: Setup .NET
         if: steps.check.outputs.found == 'true'
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           # Install the same SDK set as validate-release so dotnet build can
           # compile every TFM the solution targets (some test projects span
@@ -708,7 +708,7 @@ jobs:
       contents: read
     steps:
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             3.1.x
@@ -720,7 +720,7 @@ jobs:
             10.0.x
 
       - name: Download packages
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@v8
         with:
           name: nuget-packages
           path: ./packages
@@ -786,13 +786,13 @@ jobs:
       contents: write  # Required to upload assets to the GitHub Release
     steps:
       - name: Download NuGet packages artifact
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@v8
         with:
           name: nuget-packages
           path: ./nuget-packages
 
       - name: Download coverage report artifact
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@v8
         with:
           name: release-coverage
           path: ./release-coverage
@@ -801,7 +801,7 @@ jobs:
         run: zip -r release-coverage.zip ./release-coverage
 
       - name: Attach artifacts to release
-        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b  # v3.0.1
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228  # v3.0.2
         with:
           tag_name: ${{ github.event.release.tag_name }}
           files: |
