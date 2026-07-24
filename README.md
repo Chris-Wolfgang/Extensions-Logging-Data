@@ -113,17 +113,18 @@ dotnet add package Wolfgang.Extensions.Logging.Data.EntityFramework6
 
 ---
 
-## 🎯 Target Frameworks
+## 🎯 Supported Frameworks
 
-| Family | Targets |
+This repo ships two packages, each with its own TFM matrix:
+
+| Package | Target Frameworks |
 |---|---|
-| .NET Framework | `net462` |
-| .NET Standard | `netstandard2.0`, `netstandard2.1` |
-| Modern .NET | `net10.0` |
+| `Wolfgang.Extensions.Logging.Data` | `net462`, `netstandard2.0`, `netstandard2.1`, `net10.0` |
+| `Wolfgang.Extensions.Logging.Data.EntityFramework6` | `net462`, `net48`, `netstandard2.1` |
 
 `net462` is included so the library is usable from .NET Framework 4.6.2+ application hosts (existing `System.Data.SqlClient` consumers, classic web apps).
 
----
+See each package's NuGet page for the authoritative per-TFM compatibility matrix.
 
 ## 🔍 Code Quality & Static Analysis
 
