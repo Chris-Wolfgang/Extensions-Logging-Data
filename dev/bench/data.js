@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1786656575552,
+  "lastUpdate": 1787158312247,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -744,6 +744,72 @@ window.BENCHMARK_DATA = {
             "value": 2723.6193606058755,
             "unit": "ns",
             "range": "± 19.530063626114593"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "c824e8a52bb6d80a9dbe6a72df996c1d6dc634b3",
+          "message": "Merge pull request #186 from Chris-Wolfgang/dependabot/nuget/benchmarks/Wolfgang.Extensions.Logging.Data.Benchmarks/dotnet-dependencies-24b2a8428f\n\nBump the dotnet-dependencies group with 7 updates",
+          "timestamp": "2026-08-19T12:49:26-04:00",
+          "tree_id": "ccc00017c3e412775d5aa178d04cf259acaf3066",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/c824e8a52bb6d80a9dbe6a72df996c1d6dc634b3"
+        },
+        "date": 1787158309275,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 253.99158970514932,
+            "unit": "ns",
+            "range": "± 5.2335205142656465"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 311.5782874425252,
+            "unit": "ns",
+            "range": "± 1.7651230953648"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.03679740118483702,
+            "unit": "ns",
+            "range": "± 0.06373496843863294"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 69.88951504230499,
+            "unit": "ns",
+            "range": "± 0.46175564828237287"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0.0017830319702625275,
+            "unit": "ns",
+            "range": "± 0.003088301964014337"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 2126.0578536987305,
+            "unit": "ns",
+            "range": "± 154.93298071504066"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 1984.548407236735,
+            "unit": "ns",
+            "range": "± 34.83205899989077"
           }
         ]
       }
