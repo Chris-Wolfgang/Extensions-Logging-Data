@@ -21,7 +21,7 @@
     <!-- Referenced so the types the doc examples use are on the compile reference
          set (via TRUSTED_PLATFORM_ASSEMBLIES): the package itself, the logging
          abstractions, and SqlConnection (used by the LogDbConnection examples). -->
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.11" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.1" />
   </ItemGroup>
 
