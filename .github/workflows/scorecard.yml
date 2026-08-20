@@ -32,12 +32,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
 
       - name: Run analysis
-        uses: ossf/scorecard-action@v2.4.4
+        uses: ossf/scorecard-action@2d1146689b8cda280b9bc96326124645441f03bc # v2.4.4
         with:
           results_file: results.sarif
           results_format: sarif
@@ -45,14 +45,102 @@ jobs:
           # cross-repo trend data. Public repos only; publishes no source code.
           publish_results: true
 
+      # Suppress Scorecard checks whose findings are known won't-fix or false
+      # positives for this repo, BEFORE the SARIF reaches code-scanning. Doing
+      # it here (rather than dismissing individual alerts) makes the suppression
+      # durable across weekly re-runs — Scorecard emits a fresh SARIF each run,
+      # and fingerprint drift means dismissals don't always survive.
+      #
+      # Suppressed rule IDs (whole rule):
+      #   DangerousWorkflowID  — pr.yaml deliberately uses pull_request_target
+      #                          so the workflow definition comes from trusted
+      #                          main (a PR branch can't weaken its own CI).
+      #                          The "Detect .NET Projects" step re-fetches
+      #                          every protected config file from main before
+      #                          any build runs. See the pr.yaml SECURITY NOTE
+      #                          header (and .github/zizmor.yml, which also
+      #                          waives dangerous-triggers on pr.yaml for the
+      #                          same reason).
+      #   BranchProtectionID   — solo-maintainer repo; approver / codeowner /
+      #                          last-push-approval would force admin-bypass on
+      #                          every PR without adding a real review gate.
+      #   CodeReviewID         — same underlying reason (solo maintainer).
+      #   CIIBestPracticesID   — external bestpractices.dev registration; not
+      #                          in scope for CI, tracked separately if pursued.
+      #   FuzzingID            — no fuzz-test integration in this repo (a small
+      #                          adapter library over Microsoft.Extensions.Logging).
+      #                          Scorecard's heuristic detects only OSS-Fuzz /
+      #                          ClusterFuzzLite integrations.
+      #
+      # Suppressed PinnedDependenciesID sub-checks (partial rule):
+      #   nugetCommand — `dotnet tool install` (ReSharper CLT, reportgenerator,
+      #                  DevSkim) and `dotnet restore` are not hash-pinned. Every
+      #                  csproj already uses explicit PackageReference Versions
+      #                  ("no floating"), Dependabot's `nuget` ecosystem bumps
+      #                  transitives weekly, and no repo in the fleet ships
+      #                  packages.lock.json. Adopting `--locked-mode` fleet-wide
+      #                  is a separate decision.
+      #   pipCommand   — future-proofing: no pip installs today, but if any get
+      #                  added (semgrep, zizmor requirements.txt, etc.) they'd
+      #                  be dev-time SAST tooling installed from PyPI over
+      #                  HTTPS with signed packages. Hash-pinning via
+      #                  requirements.txt + --require-hashes needs a pip-tools
+      #                  workflow not adopted fleet-wide.
+      # gitHubAction rows are NOT suppressed: any regression to an @vN action
+      # ref without a SHA pin should still fire on the next scan.
+      #
+      # NOT suppressed but low (real actionable signal):
+      #   CITestsID (9/10) — recover the last 10% by re-running any failed CI
+      #                      on the outstanding PRs so every commit has a
+      #                      passing CI record.
+      #   SASTID   (9/10) — same shape, one older commit escaped CodeQL when
+      #                     the workflow was first introduced.
+      #
+      # The scorecard.dev score published to the transparency log (README badge)
+      # still counts every check; this only trims the code-scanning-tab noise.
+      - name: Filter suppressed findings from SARIF
+        shell: bash
+        env:
+          SUPPRESSED_RULES: 'DangerousWorkflowID BranchProtectionID CodeReviewID CIIBestPracticesID FuzzingID'
+          # Substrings matched against each PinnedDependenciesID result's
+          # message text. Order-independent; a single match suppresses.
+          SUPPRESSED_PIN_KINDS: 'nugetCommand not pinned|pipCommand not pinned'
+        run: |
+          if ! command -v jq >/dev/null 2>&1; then
+            echo "::error::jq not available on the runner; cannot filter SARIF."
+            exit 1
+          fi
+          # Word-split SUPPRESSED_RULES intentionally — one rule per line for the
+          # jq -R/-s pipeline. shellcheck's default "quote to prevent globbing"
+          # rule (SC2086) would break this.
+          # shellcheck disable=SC2086
+          rules_json=$(printf '%s\n' $SUPPRESSED_RULES | jq -R . | jq -s .)
+          jq \
+            --argjson suppressed "$rules_json" \
+            --arg pinKinds "$SUPPRESSED_PIN_KINDS" \
+            '
+              .runs |= map(
+                .results |= map(select(
+                  (.ruleId // "") as $r
+                  | (.message.text // "") as $t
+                  | (($suppressed | index($r)) == null)
+                    and not ($r == "PinnedDependenciesID" and ($t | test($pinKinds)))
+                ))
+              )
+            ' results.sarif > results.filtered.sarif
+          before=$(jq '[.runs[].results[]] | length' results.sarif)
+          after=$(jq '[.runs[].results[]] | length' results.filtered.sarif)
+          echo "Scorecard SARIF results: $before -> $after after suppression"
+          mv results.filtered.sarif results.sarif
+
       - name: Upload artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: SARIF file
           path: results.sarif
           retention-days: 5
 
       - name: Upload SARIF to code-scanning
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@ff2f1c621b7f889edc0d3c761ac2e6a3f8cdb0dd # v4
         with:
           sarif_file: results.sarif

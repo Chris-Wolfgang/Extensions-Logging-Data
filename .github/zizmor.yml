@@ -2,17 +2,19 @@
 # https://docs.zizmor.sh/configuration/
 #
 # Accepted suppressions (reason required per the maintenance policy):
-#   - unpinned-uses:      the fleet pins actions to floating major-version TAGS
-#                         (actions/checkout@v7), not commit hashes — a deliberate
-#                         maintenance decision (repo-template #425). `ref-pin`
-#                         accepts a tag/branch ref, so tag pins are clean and only
-#                         a mutable-branch/no-ref pin is flagged.
+#   - unpinned-uses:      every action is SHA-pinned (see fleet convention
+#                         adopted in #187 / OSSF Scorecard #184). `ref-pin`
+#                         accepts either a tag or a commit hash, so SHA-pins
+#                         pass cleanly; only a mutable-branch / no-ref pin
+#                         is flagged.
 #   - dangerous-triggers: pr.yaml uses `pull_request_target` ON PURPOSE so the
 #                         workflow definition comes from main (a PR branch cannot
 #                         weaken its own CI). The risk is mitigated by the
 #                         "Detect .NET Projects" job, which fetches every trusted
 #                         config file from main and never checks out PR code into
-#                         a privileged context. Intentional and reviewed.
+#                         a privileged context. Intentional and reviewed; the
+#                         matching OSSF Scorecard `DangerousWorkflowID` finding
+#                         is suppressed at the SARIF layer in scorecard.yml.
 rules:
   unpinned-uses:
     config:
