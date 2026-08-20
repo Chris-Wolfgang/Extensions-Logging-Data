@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1787158312247,
+  "lastUpdate": 1787232797342,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -810,6 +810,72 @@ window.BENCHMARK_DATA = {
             "value": 1984.548407236735,
             "unit": "ns",
             "range": "± 34.83205899989077"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "3d2f89706065a6d9c6e9f446965dd57bc22a34e6",
+          "message": "Merge pull request #187 from Chris-Wolfgang/chore/sha-pin-actions\n\nchore(security): SHA-pin every GitHub Action across all workflows (#184)",
+          "timestamp": "2026-08-20T09:30:41-04:00",
+          "tree_id": "1559144be22aa519c2f6a591629caf1a23d610f6",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/3d2f89706065a6d9c6e9f446965dd57bc22a34e6"
+        },
+        "date": 1787232795727,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 357.35158586502075,
+            "unit": "ns",
+            "range": "± 9.319593574195057"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 512.416737874349,
+            "unit": "ns",
+            "range": "± 9.67464578395153"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.00016995457311471304,
+            "unit": "ns",
+            "range": "± 0.00018093259399013022"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 113.2234270175298,
+            "unit": "ns",
+            "range": "± 0.18053747056750585"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0.0006483079244693121,
+            "unit": "ns",
+            "range": "± 0.0011229022641303745"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 3298.253506978353,
+            "unit": "ns",
+            "range": "± 20.19809227929033"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 3250.3370043436685,
+            "unit": "ns",
+            "range": "± 41.71803353783918"
           }
         ]
       }
