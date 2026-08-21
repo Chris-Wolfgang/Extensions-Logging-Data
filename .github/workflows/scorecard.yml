@@ -115,6 +115,10 @@ jobs:
           # rule (SC2086) would break this.
           # shellcheck disable=SC2086
           rules_json=$(printf '%s\n' $SUPPRESSED_RULES | jq -R . | jq -s .)
+          # jq's `not` is a POSTFIX filter, not a prefix operator — the correct
+          # form is `(EXPR) | not`, never `not (EXPR)`. Using `and not (...)`
+          # yields "jq: error: not/1 is not defined at <top-level>" and the
+          # step exits 3 without writing any output.
           jq \
             --argjson suppressed "$rules_json" \
             --arg pinKinds "$SUPPRESSED_PIN_KINDS" \
@@ -124,7 +128,7 @@ jobs:
                   (.ruleId // "") as $r
                   | (.message.text // "") as $t
                   | (($suppressed | index($r)) == null)
-                    and not ($r == "PinnedDependenciesID" and ($t | test($pinKinds)))
+                    and (($r == "PinnedDependenciesID" and ($t | test($pinKinds))) | not)
                 ))
               )
             ' results.sarif > results.filtered.sarif
