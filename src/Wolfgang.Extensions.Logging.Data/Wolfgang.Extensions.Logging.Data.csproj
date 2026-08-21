@@ -11,6 +11,15 @@
 		     the actual release version. -->
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<FileVersion>$([System.Text.RegularExpressions.Regex]::Replace("$(Version)", "[-+].*$", "")).0</FileVersion>
+		<!-- Package validation: `dotnet pack` runs Microsoft.DotNet.ApiCompat
+		     against the last-published NuGet version so accidental ABI breaks
+		     (removed / renamed / type-changed public members, dropped TFMs)
+		     fail pack instead of shipping. release.yaml's pack-and-validate
+		     job exercises this at release time. Baseline must be bumped to
+		     the newest published version after every release — that's the
+		     "post-deploy baseline bump PR" step in the per-repo release flow. -->
+		<EnablePackageValidation>true</EnablePackageValidation>
+		<PackageValidationBaselineVersion>0.3.0</PackageValidationBaselineVersion>
 		<Title>$(AssemblyName)</Title>
 		<Description>Extension methods for ILogger and ILogger&lt;T&gt; that log DbConnection, DbCommand, DbParameter, and DbParameterCollection from System.Data.Common, with built-in secret redaction (passwords in connection strings, configurable parameter values).</Description>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data</PackageProjectUrl>
