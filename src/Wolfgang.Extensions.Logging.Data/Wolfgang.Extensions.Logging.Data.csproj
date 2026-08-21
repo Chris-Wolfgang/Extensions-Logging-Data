@@ -19,7 +19,7 @@
 		     the newest published version after every release — that's the
 		     "post-deploy baseline bump PR" step in the per-repo release flow. -->
 		<EnablePackageValidation>true</EnablePackageValidation>
-		<PackageValidationBaselineVersion>0.3.0</PackageValidationBaselineVersion>
+		<PackageValidationBaselineVersion>0.3.1</PackageValidationBaselineVersion>
 		<Title>$(AssemblyName)</Title>
 		<Description>Extension methods for ILogger and ILogger&lt;T&gt; that log DbConnection, DbCommand, DbParameter, and DbParameterCollection from System.Data.Common, with built-in secret redaction (passwords in connection strings, configurable parameter values).</Description>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data</PackageProjectUrl>
