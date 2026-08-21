@@ -7,17 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Both packages get this release. `Wolfgang.Extensions.Logging.Data` moves to
+`0.3.1` and `Wolfgang.Extensions.Logging.Data.EntityFramework6` moves to
+`0.2.1`. No public API changes on either package — this is a
+maintenance-only patch that raises the `Microsoft.Extensions.Logging.Abstractions`
+floor, adds a build-time ABI gate, and hardens the release pipeline.
+
 ### Added
+
+- **PackageValidation gate on both packages.** `dotnet pack` now runs
+  `Microsoft.DotNet.ApiCompat` against the last-published NuGet version
+  (`0.3.0` for `Wolfgang.Extensions.Logging.Data`, `0.2.0` for
+  `Wolfgang.Extensions.Logging.Data.EntityFramework6`). Accidental ABI
+  breaks — removed / renamed / type-changed public members, dropped
+  target frameworks — now fail `dotnet pack` instead of shipping. The
+  `release.yaml` pack-and-validate job exercises this at release time,
+  and `dotnet pack -c Release` reproduces it locally. (#175)
+
+- **Consumer supply-chain verification docs.** `SECURITY.md` now includes
+  a *Supply-Chain Verification* section covering how to inspect the
+  CycloneDX SBOM (`*.bom.json`) attached to every release and how to
+  verify each `.nupkg` against its SLSA build-provenance attestation
+  with `gh attestation verify`. The mechanics were already in place;
+  the docs close the loop by making the verification path
+  copy-pasteable. Package signing via a code-signing certificate stays
+  deferred (tracked in #181). (#90)
+
+- **SourceLink verification workflow.** New `.github/workflows/sourcelink.yaml`
+  builds every `net10.0`-targeted `src/` project with
+  `ContinuousIntegrationBuild=true`, then runs `dotnet sourcelink test`
+  on every produced PDB. Any regression that would break "step into
+  library source" (F11) in a debugger — mis-mapped commit SHA, unreachable
+  raw-URL, checksum drift — now fails the PR before the package ships.
+  Projects without a `net10.0` target (the `EntityFramework6` adapter's
+  `net462;net48;netstandard2.1` triad) are skipped; their PDBs ship in
+  their own package and are covered by that package's SourceLink. (#171)
 
 ### Changed
 
-### Deprecated
+- **`Microsoft.Extensions.Logging.Abstractions` floor bumped to 10.0.11**
+  in both shipped packages, via Dependabot's grouped `dotnet-dependencies`
+  updates. Consumers pinning lockfiles will see the floor move; API-level
+  behavior is unchanged. (#183, #186)
 
-### Removed
-
-### Fixed
+- **InspectCode noise floor driven to zero on main** via targeted fixes
+  (`InvalidXmlDocComment` in an integration test, `CheckNamespace` scoped
+  to the `RequiresUnreferencedCode` polyfill) plus `.DotSettings`
+  suppressions for defensive-null-check inspections that are intentional
+  in a library called from nullable-oblivious / older-TFM code, and for
+  the `MA0009` double-report. Result: `PR Checks v3 (Gated)` reports 0
+  InspectCode findings on a clean build. (#136)
 
 ### Security
+
+- **SHA-pinned every GitHub Action across all workflows** — fleet
+  mitigation for tj-actions-style attacks, applied to `actions/checkout`,
+  `actions/setup-dotnet`, `actions/upload-artifact`,
+  `actions/download-artifact`, `actions/setup-python`,
+  `actions/attest-build-provenance`, `github/codeql-action/*`,
+  `ossf/scorecard-action`, and `reviewdog/action-actionlint`. Dependabot's
+  `github-actions` ecosystem keeps the SHAs fresh weekly, so the
+  maintenance overhead stays automatic. (#187)
+
+- **Reduced OSSF Scorecard open-alert count from 76 to 2.** SHA-pinning
+  retired 58 `PinnedDependenciesID` alerts; a `jq`-based SARIF-filter
+  step in `scorecard.yml` durably suppresses 16 more that are
+  false-positive or structurally wrong-for-this-repo (deliberate
+  `pull_request_target` usage, solo-maintainer branch protection,
+  `nugetCommand` sub-check on `dotnet tool install` steps, etc.). The
+  two survivors (`CITestsID` and `SASTID`, both 9/10) are real
+  actionable signal — one older commit each is missing CI/CodeQL
+  coverage — and are intentionally left alive. (#184, #187, #188, #189)
 
 ## [0.3.0] - 2026-07-14
 
