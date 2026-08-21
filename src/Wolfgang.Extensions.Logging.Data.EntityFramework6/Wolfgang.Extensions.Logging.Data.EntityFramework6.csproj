@@ -11,6 +11,17 @@
 		     the actual release version. -->
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<FileVersion>$([System.Text.RegularExpressions.Regex]::Replace("$(Version)", "[-+].*$", "")).0</FileVersion>
+		<!-- Package validation: `dotnet pack` runs Microsoft.DotNet.ApiCompat
+		     against the last-published NuGet version so accidental ABI breaks
+		     (removed / renamed / type-changed public members, dropped TFMs)
+		     fail pack instead of shipping. release.yaml's pack-and-validate
+		     job exercises this at release time. Baseline must be bumped to
+		     the newest published version after every release — that's the
+		     "post-deploy baseline bump PR" step in the per-repo release flow.
+		     EF6 lags the main package's cadence — baseline is the last EF6
+		     release (0.2.0), not the current Data release. -->
+		<EnablePackageValidation>true</EnablePackageValidation>
+		<PackageValidationBaselineVersion>0.2.0</PackageValidationBaselineVersion>
 		<Title>$(AssemblyName)</Title>
 		<Description>Passive structured logging of every Entity Framework 6 command, connection, and transaction event via the EF6 interceptor pipeline. Register once at startup with AddLoggingInterceptors; delegates to Wolfgang.Extensions.Logging.Data for rendering and secret redaction.</Description>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data</PackageProjectUrl>
