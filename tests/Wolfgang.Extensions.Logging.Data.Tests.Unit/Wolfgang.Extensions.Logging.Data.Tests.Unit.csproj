@@ -16,7 +16,11 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.11" />
+    <!-- Microsoft.Extensions.Logging.Abstractions comes transitively from the
+         src project's ProjectReference below — do NOT re-pin it here. An
+         explicit version here NU1605-downgrades every time src's floor moves
+         (seen on #183 and #186); relying on the transitive keeps the test
+         project always aligned with whatever src ships. -->
   </ItemGroup>
 
   <ItemGroup>

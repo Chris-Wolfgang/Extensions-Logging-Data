@@ -43,6 +43,15 @@ floor, adds a build-time ABI gate, and hardens the release pipeline.
   `net462;net48;netstandard2.1` triad) are skipped; their PDBs ship in
   their own package and are covered by that package's SourceLink. (#171)
 
+- **`SECURITY.md` release-path & compromise-scope appendix.** A concise
+  runbook a maintainer would need at 2am if the release identity is
+  compromised: the OIDC trust boundary (Trusted Publishing has no
+  long-lived NuGet API key to rotate), the two-package coordinates for
+  unlisting on nuget.org, and the ownership/downstream-consumer facts.
+  Generic incident-response steps (rotating credentials, publishing
+  advisories) intentionally aren't duplicated here — GitHub's and
+  NuGet's own docs update faster than a checked-in runbook. (#102)
+
 ### Changed
 
 - **`Microsoft.Extensions.Logging.Abstractions` floor bumped to 10.0.11**
@@ -58,7 +67,26 @@ floor, adds a build-time ABI gate, and hardens the release pipeline.
   the `MA0009` double-report. Result: `PR Checks v3 (Gated)` reports 0
   InspectCode findings on a clean build. (#136)
 
+- **README `Supported Frameworks` section standardized** to the
+  fleet-canonical badge collection and target-framework matrix.
+  Consumers scanning the README can now match this repo's TFM story
+  against the same shape used across the `Wolfgang.*` family. (#174)
+
+- **Redundant `Microsoft.Extensions.Logging.Abstractions`
+  `PackageReference` removed from `Tests.Unit`.** The pin was already
+  provided transitively via the `ProjectReference` to the src project;
+  the explicit duplicate caused an NU1605 downgrade every time src's
+  floor bumped (seen on #183 and #186, both hand-fixed post-merge).
+  Test-project-only change — nothing shipped changes.
+
 ### Security
+
+- **Migrated NuGet publish to Trusted Publishing (OIDC).** The
+  `release.yaml` workflow no longer relies on a long-lived NuGet API
+  key stored in GitHub secrets; instead `NuGet/login@v1` mints an
+  ephemeral push token per run via the workflow's OIDC identity
+  (`Chris-Wolfgang/Extensions-Logging-Data`). Rotating the release
+  credential is now automatic — there is no key to leak. (#168)
 
 - **SHA-pinned every GitHub Action across all workflows** — fleet
   mitigation for tj-actions-style attacks, applied to `actions/checkout`,
