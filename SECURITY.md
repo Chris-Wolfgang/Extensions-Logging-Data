@@ -22,6 +22,75 @@ We will acknowledge your report within 48 hours and provide an estimated timelin
 Your help is greatly appreciated!
 Responsible disclosure of security vulnerabilities helps protect our entire community.
 
+## Supply-Chain Verification
+
+This section documents how consumers can verify that a published NuGet
+package was genuinely built from this repository by the `release.yaml`
+workflow.
+
+### SBOM (Software Bill of Materials)
+
+Every release attaches a CycloneDX SBOM per shipped package to the GitHub
+Release assets:
+
+- `Wolfgang.Extensions.Logging.Data.bom.json`
+- `Wolfgang.Extensions.Logging.Data.EntityFramework6.bom.json`
+
+Each SBOM lists every NuGet dependency and its version.
+
+To audit the dependency graph:
+
+1. Download the `.bom.json` file(s) from the GitHub Release page.
+2. Open in any CycloneDX-compatible tool (e.g.,
+   [CycloneDX CLI](https://github.com/CycloneDX/cyclonedx-cli),
+   [OWASP Dependency-Track](https://dependencytrack.org/)).
+3. Cross-reference component licenses and versions against your own policy.
+
+### SLSA Build Provenance Attestation
+
+Every release generates a **SLSA Build Level 2** provenance attestation
+signed via [Sigstore](https://sigstore.dev/) keyless signing through
+GitHub's OIDC identity. The attestation proves that the `.nupkg` / `.snupkg`
+files were produced by the `release.yaml` workflow at a specific commit in
+this repository — with no opportunity for an attacker to inject artifacts
+without leaving a verifiable audit trail.
+
+**To verify a package:**
+
+1. Install the [GitHub CLI](https://cli.github.com/) (v2.49.0+).
+2. Download the `.nupkg` from NuGet or the GitHub Release page.
+3. Run:
+
+   ```sh
+   gh attestation verify Wolfgang.Extensions.Logging.Data.<version>.nupkg \
+     --owner Chris-Wolfgang \
+     --repo Extensions-Logging-Data
+   ```
+
+   Or for the EF6 companion package:
+
+   ```sh
+   gh attestation verify Wolfgang.Extensions.Logging.Data.EntityFramework6.<version>.nupkg \
+     --owner Chris-Wolfgang \
+     --repo Extensions-Logging-Data
+   ```
+
+4. A successful verification prints the signing workflow, commit SHA, and
+   Sigstore transparency log entry. Failure means the artifact cannot be
+   traced to a legitimate release run.
+
+### Package Signing (deferred)
+
+NuGet package signing via a code-signing certificate (or Sigstore `cosign`)
+is **not yet implemented** — tracked as
+[#181](https://github.com/Chris-Wolfgang/Extensions-Logging-Data/issues/181),
+blocked on obtaining a code-signing certificate. SLSA attestation via
+`gh attestation verify` provides an equivalent supply-chain integrity
+guarantee for most scenarios.
+
+Once implemented, consumers will be able to run `dotnet nuget verify` to
+check the embedded signature independently of the GitHub CLI.
+
 ## Release path & compromise scope
 
 Facts a maintainer would need at 2am if the release identity is compromised. Generic incident-response steps (rotating credentials, revoking OAuth apps, publishing advisories, unlisting NuGet packages) are not duplicated here — GitHub's and NuGet's own docs update faster than a checked-in runbook.
