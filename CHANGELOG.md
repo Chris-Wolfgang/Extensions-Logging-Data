@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.3.1] - 2026-08-21
+
 Both packages get this release. `Wolfgang.Extensions.Logging.Data` moves to
 `0.3.1` and `Wolfgang.Extensions.Logging.Data.EntityFramework6` moves to
 `0.2.1`. No public API changes on either package — this is a
@@ -218,7 +232,8 @@ Initial release.
 - Multi-targeting: `net462`, `netstandard2.0`, `netstandard2.1`,
   `net10.0`.
 
-[Unreleased]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/Chris-Wolfgang/Extensions-Logging-Data/compare/v0.1.0...v0.1.1
