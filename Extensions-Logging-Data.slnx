@@ -6,7 +6,6 @@
     <File Path="Directory.Build.props" />
     <File Path="LICENSE" />
     <File Path="README.md" />
-    <File Path="REPO-INSTRUCTIONS.md" />
     <File Path="SECURITY.md" />
   </Folder>
   <Folder Name="/.root/.github/">
@@ -14,13 +13,18 @@
     <File Path=".github/copilot-instructions.md" />
     <File Path=".github/dependabot.yml" />
     <File Path=".github/pull_request_template.md" />
-    <File Path=".github/version-picker-template.html" />
   </Folder>
   <Folder Name="/.root/.github/ISSUE_TEMPLATE/">
     <File Path=".github/ISSUE_TEMPLATE/BUG_REPORT.yaml" />
     <File Path=".github/ISSUE_TEMPLATE/feature_request.yaml" />
   </Folder>
   <Folder Name="/.root/.github/workflows/">
+    <File Path=".github/workflows/semgrep.yaml" />
+    <File Path=".github/workflows/security-alerts.yml" />
+    <File Path=".github/workflows/scorecard.yaml" />
+    <File Path=".github/workflows/sbom.yaml" />
+    <File Path=".github/workflows/license-audit.yaml" />
+    <File Path=".github/workflows/actions-audit.yaml" />
     <File Path=".github/workflows/build-all-versions.yaml" />
     <File Path=".github/workflows/codeql.yaml" />
     <File Path=".github/workflows/docfx.yaml" />
@@ -29,16 +33,18 @@
   </Folder>
   <Folder Name="/.root/docs/">
     <File Path="docs/RELEASE-WORKFLOW-SETUP.md" />
-    <File Path="docs/SECURITY.md" />
   </Folder>
   <Folder Name="/.root/scripts/">
+    <File Path="scripts/tfm-parity.ps1" />
+    <File Path="scripts/security-alerts.ps1" />
+    <File Path="scripts/restack.ps1" />
+    <File Path="scripts/pin-actions.ps1" />
+    <File Path="scripts/changelog.ps1" />
+    <File Path="scripts/Validate-DocsDeploy.ps1" />
     <File Path="scripts/build-pr.ps1" />
     <File Path="scripts/Fix-BranchRuleset.ps1" />
     <File Path="scripts/format.ps1" />
-    <File Path="scripts/Setup-BranchRuleset.ps1" />
-    <File Path="scripts/Setup-GitHubPages.ps1" />
     <File Path="scripts/Setup-Labels.ps1" />
-    <File Path="scripts/setup.ps1" />
   </Folder>
   <Folder Name="/benchmarks/">
     <File Path="benchmarks/.editorconfig" />
