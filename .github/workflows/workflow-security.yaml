@@ -26,12 +26,12 @@ jobs:
       checks: write   # reviewdog creates a Check run to surface annotations
     steps:
       - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Run actionlint
-        uses: reviewdog/action-actionlint@d290e336d5a743810aef4404f757dc862276d2ae # v1
+        uses: reviewdog/action-actionlint@d290e336d5a743810aef4404f757dc862276d2ae # v1.73.4
         with:
           # github-check (not github-pr-check) so annotations are produced on
           # both pull_request and push-to-main runs, not only in PR context.
@@ -46,12 +46,12 @@ jobs:
       security-events: write   # upload SARIF to code scanning
     steps:
       - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
 
@@ -69,7 +69,7 @@ jobs:
 
       - name: Upload SARIF to code-scanning
         if: always()
-        uses: github/codeql-action/upload-sarif@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4
+        uses: github/codeql-action/upload-sarif@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
         with:
           sarif_file: zizmor.sarif
 
