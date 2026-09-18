@@ -1,8 +1,14 @@
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Wolfgang.Extensions.Logging.Data.Tests.Unit.TestHelpers;
 
+// Abstract-base test double: DbCommand/DbParameter/DbParameterCollection/DbConnection
+// force ~30 overrides, most of which the logging path under test never reaches. No
+// product logic lives here, so the class is excluded from the instrumented test
+// assembly rather than carrying an attribute per forced member.
+[ExcludeFromCodeCoverage]
 internal sealed class FakeDbConnection : DbConnection
 {
     private string _connectionString = string.Empty;
