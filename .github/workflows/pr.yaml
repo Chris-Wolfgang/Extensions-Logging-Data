@@ -288,7 +288,7 @@ jobs:
           done
           # .globalconfig / .ruleset (any path)
           while IFS= read -r f; do
-            [ -n "$f" ] && git checkout main-ref -- "$f" 2>/dev/null || true
+            if [ -n "$f" ]; then git checkout main-ref -- "$f"; fi
           done < <(git ls-tree -r --name-only main-ref | grep -E '\.(globalconfig|ruleset)$' || true)
 
       - name: Setup .NET
@@ -337,7 +337,7 @@ jobs:
             --no-build
 
       - name: Upload SARIF to Code Scanning
-        uses: github/codeql-action/upload-sarif@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
+        uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
         with:
           sarif_file: inspect.sarif
 
