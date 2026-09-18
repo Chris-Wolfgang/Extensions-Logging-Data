@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Data;
 using System.Data.Common;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Wolfgang.Extensions.Logging.Data.Tests.Unit.TestHelpers;
 
@@ -11,11 +10,6 @@ namespace Wolfgang.Extensions.Logging.Data.Tests.Unit.TestHelpers;
 /// <see cref="CommandText"/> and <see cref="DbParameterCollection"/> — are functional; the
 /// execution surface throws.
 /// </summary>
-// Abstract-base test double: DbCommand/DbParameter/DbParameterCollection/DbConnection
-// force ~30 overrides, most of which the logging path under test never reaches. No
-// product logic lives here, so the class is excluded from the instrumented test
-// assembly rather than carrying an attribute per forced member.
-[ExcludeFromCodeCoverage]
 internal sealed class FakeDbCommand : DbCommand
 {
     private readonly FakeDbParameterCollection _parameters = new();
@@ -65,11 +59,6 @@ internal sealed class FakeDbCommand : DbCommand
 }
 
 
-// Abstract-base test double: DbCommand/DbParameter/DbParameterCollection/DbConnection
-// force ~30 overrides, most of which the logging path under test never reaches. No
-// product logic lives here, so the class is excluded from the instrumented test
-// assembly rather than carrying an attribute per forced member.
-[ExcludeFromCodeCoverage]
 internal sealed class FakeDbParameter : DbParameter
 {
     public override DbType DbType { get; set; }
@@ -117,11 +106,6 @@ internal sealed class FakeDbParameter : DbParameter
 /// enumeration (what <c>ToDictionary(DbParameterCollection)</c> uses) plus <c>Add</c>; the rest
 /// throw, as they are never reached by the logging path under test.
 /// </summary>
-// Abstract-base test double: DbCommand/DbParameter/DbParameterCollection/DbConnection
-// force ~30 overrides, most of which the logging path under test never reaches. No
-// product logic lives here, so the class is excluded from the instrumented test
-// assembly rather than carrying an attribute per forced member.
-[ExcludeFromCodeCoverage]
 internal sealed class FakeDbParameterCollection : DbParameterCollection
 {
     private readonly List<DbParameter> _items = new();
