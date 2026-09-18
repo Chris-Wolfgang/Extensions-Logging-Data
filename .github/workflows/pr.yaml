@@ -288,7 +288,7 @@ jobs:
           done
           # .globalconfig / .ruleset (any path)
           while IFS= read -r f; do
-            [ -n "$f" ] && git checkout main-ref -- "$f" 2>/dev/null || true
+            if [ -n "$f" ]; then git checkout main-ref -- "$f"; fi
           done < <(git ls-tree -r --name-only main-ref | grep -E '\.(globalconfig|ruleset)$' || true)
 
       - name: Setup .NET
