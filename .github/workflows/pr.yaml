@@ -1746,12 +1746,19 @@ jobs:
 
       - name: Publish Native AOT (trim + AOT analyzers gate the build)
         if: steps.smoke.outputs.found != ''
-        run: dotnet publish "${{ steps.smoke.outputs.found }}" -c Release -r linux-x64
+        # The project path is discovered by a find over the PR's own tree, so it is a value a
+        # pull request controls. It arrives through env instead of being expanded into the
+        # script body (zizmor template-injection).
+        env:
+          SMOKE_PROJ: ${{ steps.smoke.outputs.found }}
+        run: dotnet publish "$SMOKE_PROJ" -c Release -r linux-x64
 
       - name: Run the published native binary
         if: steps.smoke.outputs.found != ''
+        env:
+          SMOKE_PROJ: ${{ steps.smoke.outputs.found }}
         run: |
-          BIN=$(find "$(dirname "${{ steps.smoke.outputs.found }}")/bin" -type f -name '*.AotSmoke' -path '*publish*' | head -n1)
+          BIN=$(find "$(dirname "$SMOKE_PROJ")/bin" -type f -name '*.AotSmoke' -path '*publish*' | head -n1)
           if [ -z "$BIN" ]; then
             echo "::error::Native AOT binary not produced."
             exit 1
