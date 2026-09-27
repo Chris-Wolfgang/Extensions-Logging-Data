@@ -1,8 +1,10 @@
 #if NET8_0_OR_GREATER
 
+using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Wolfgang.Extensions.Logging.Data.Tests.Unit.TestHelpers;
+using Xunit;
 
 namespace Wolfgang.Extensions.Logging.Data.Tests.Unit;
 
