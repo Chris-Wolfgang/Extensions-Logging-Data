@@ -18,16 +18,14 @@ public class FakeDbDoublesTests
     public void FakeDbCommand_settable_members_round_trip()
     {
         using var connection = new FakeDbConnection();
-        using var command = new FakeDbCommand
-        {
-            CommandText = "SELECT 1",
-            CommandTimeout = 42,
-            CommandType = CommandType.StoredProcedure,
-            DesignTimeVisible = true,
-            UpdatedRowSource = UpdateRowSource.OutputParameters,
-            Connection = connection,
-            Transaction = null,
-        };
+        using var command = new FakeDbCommand();
+        command.CommandText = "SELECT 1";
+        command.CommandTimeout = 42;
+        command.CommandType = CommandType.StoredProcedure;
+        command.DesignTimeVisible = true;
+        command.UpdatedRowSource = UpdateRowSource.OutputParameters;
+        command.Connection = connection;
+        command.Transaction = null;
 
         Assert.Equal("SELECT 1", command.CommandText);
         Assert.Equal(42, command.CommandTimeout);
