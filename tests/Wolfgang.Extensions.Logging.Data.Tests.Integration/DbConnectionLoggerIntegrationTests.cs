@@ -1,8 +1,8 @@
-using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using Xunit;
