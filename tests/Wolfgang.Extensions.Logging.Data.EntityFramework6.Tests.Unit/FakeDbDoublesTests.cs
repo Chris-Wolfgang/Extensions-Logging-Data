@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using Xunit;
 using Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit.TestHelpers;
 
 namespace Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit;
