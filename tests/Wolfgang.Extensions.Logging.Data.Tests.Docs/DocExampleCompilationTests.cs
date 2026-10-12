@@ -26,7 +26,7 @@ public class DocExampleCompilationTests
 
     public static IEnumerable<object[]> Examples()
     {
-        var srcDir = FindSourceDirectory();
+        var srcDir = FindSourceDirectory(AppContext.BaseDirectory);
         foreach (var file in Directory.EnumerateFiles(srcDir, "*.cs", SearchOption.AllDirectories))
         {
             // Skip build outputs — bin/obj can contain generated .cs (and copied
@@ -68,7 +68,6 @@ public class DocExampleCompilationTests
 
         var errors = compilation.GetDiagnostics()
             .Where(d => d.Severity == DiagnosticSeverity.Error)
-            .Select(d => d.ToString())
             .ToList();
 
         Assert.True
@@ -77,6 +76,26 @@ public class DocExampleCompilationTests
             $"Doc example {id} does not compile:{Environment.NewLine}{string.Join(Environment.NewLine, errors)}{Environment.NewLine}--- generated ---{Environment.NewLine}{program}"
         );
     }
+
+    [Fact]
+    public void FindSourceDirectory_when_no_ancestor_contains_the_src_project_throws_DirectoryNotFoundException()
+    {
+        var start = Path.Combine(Path.GetTempPath(), "logging-data-docs-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(start);
+
+        try
+        {
+            var ex = Assert.Throws<DirectoryNotFoundException>(() => FindSourceDirectory(start));
+
+            Assert.Contains(start, ex.Message, StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(start);
+        }
+    }
+
+
 
     [Fact]
     public void At_least_one_example_was_discovered()
@@ -158,9 +177,9 @@ public class DocExampleCompilationTests
                            || string.Equals(p, "obj", StringComparison.OrdinalIgnoreCase));
     }
 
-    private static string FindSourceDirectory()
+    internal static string FindSourceDirectory(string startDirectory)
     {
-        var dir = new DirectoryInfo(AppContext.BaseDirectory);
+        var dir = new DirectoryInfo(startDirectory);
         while (dir is not null)
         {
             var candidate = Path.Combine(dir.FullName, "src", "Wolfgang.Extensions.Logging.Data");
@@ -173,6 +192,6 @@ public class DocExampleCompilationTests
         }
 
         throw new DirectoryNotFoundException(
-            $"Could not locate src/Wolfgang.Extensions.Logging.Data walking up from {AppContext.BaseDirectory}");
+            $"Could not locate src/Wolfgang.Extensions.Logging.Data walking up from {startDirectory}");
     }
 }

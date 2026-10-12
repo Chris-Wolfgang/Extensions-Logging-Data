@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using Xunit;
@@ -23,7 +24,7 @@ public class DbConnectionLoggerIntegrationTests
     [Fact]
     public void LogDbConnection_against_open_sqlite_connection_emits_a_structured_entry()
     {
-        var provider = new CapturingLoggerProvider();
+        using var provider = new CapturingLoggerProvider();
         using var factory = LoggerFactory.Create(builder =>
         {
             builder.SetMinimumLevel(LogLevel.Trace);
@@ -38,6 +39,7 @@ public class DbConnectionLoggerIntegrationTests
 
         var entry = Assert.Single(provider.Entries);
         Assert.Equal(LogLevel.Information, entry.Level);
+        Assert.Contains(nameof(ConnectionState.Open), entry.Message, System.StringComparison.Ordinal);
 
         // Real connection — values come from Microsoft.Data.Sqlite, not a fake.
         // SqliteConnection.DataSource is the database file path, which is the
@@ -55,7 +57,7 @@ public class DbConnectionLoggerIntegrationTests
     [Fact]
     public void LogDbConnection_redacts_password_through_real_sqlite_connection_string()
     {
-        var provider = new CapturingLoggerProvider();
+        using var provider = new CapturingLoggerProvider();
         using var factory = LoggerFactory.Create(builder =>
         {
             builder.SetMinimumLevel(LogLevel.Trace);
@@ -86,7 +88,7 @@ public class DbConnectionLoggerIntegrationTests
     [Fact]
     public void LogDbConnection_against_closed_sqlite_connection_emits_null_server_version()
     {
-        var provider = new CapturingLoggerProvider();
+        using var provider = new CapturingLoggerProvider();
         using var factory = LoggerFactory.Create(builder => builder.AddProvider(provider));
         var logger = factory.CreateLogger<DbConnectionLoggerIntegrationTests>();
 
@@ -105,7 +107,7 @@ public class DbConnectionLoggerIntegrationTests
     [Fact]
     public void LogDbConnection_respects_pipeline_minimum_level()
     {
-        var provider = new CapturingLoggerProvider();
+        using var provider = new CapturingLoggerProvider();
         using var factory = LoggerFactory.Create(builder =>
         {
             builder.SetMinimumLevel(LogLevel.Warning);
@@ -125,6 +127,27 @@ public class DbConnectionLoggerIntegrationTests
         logger.LogDbConnection(connection, LogLevel.Warning);
         Assert.Single(provider.Entries);
     }
+
+
+
+    [Fact]
+    public void LogDbConnection_inside_a_caller_scope_emits_one_entry_through_the_pipeline()
+    {
+        using var provider = new CapturingLoggerProvider();
+        using var factory = LoggerFactory.Create(builder => builder.AddProvider(provider));
+        var logger = factory.CreateLogger<DbConnectionLoggerIntegrationTests>();
+
+        using var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+
+        using (logger.BeginScope("import {BatchId}", 42))
+        {
+            logger.LogDbConnection(connection);
+        }
+
+        Assert.Equal("import 42", Assert.Single(provider.Scopes));
+        Assert.Equal(ConnectionState.Open, Assert.Single(provider.Entries).GetValue("State"));
+    }
 }
 
 
@@ -137,6 +160,8 @@ public class DbConnectionLoggerIntegrationTests
 internal sealed class CapturingLoggerProvider : ILoggerProvider
 {
     public List<CapturedEntry> Entries { get; } = new();
+
+    public List<string?> Scopes { get; } = new();
 
     public ILogger CreateLogger(string categoryName) => new CapturingLogger(this);
 
@@ -153,13 +178,19 @@ internal sealed class CapturingLoggerProvider : ILoggerProvider
             _provider = provider;
         }
 
-        public IDisposable BeginScope<TState>(TState state) where TState : notnull => NullScope.Instance;
+        public IDisposable BeginScope<TState>(TState state) where TState : notnull
+        {
+            _provider.Scopes.Add(state.ToString());
+            return NullScope.Instance;
+        }
 
         public bool IsEnabled(LogLevel logLevel) => true;
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, System.Exception? exception, System.Func<TState, System.Exception?, string> formatter)
         {
-            var values = state as IReadOnlyList<KeyValuePair<string, object?>>;
+            // The library logs through LoggerMessage, whose state is always the
+            // structured key/value list; anything else is a contract change.
+            var values = (IReadOnlyList<KeyValuePair<string, object?>>)state!;
             _provider.Entries.Add(new CapturedEntry(logLevel, formatter(state, exception), values));
         }
     }
@@ -177,9 +208,9 @@ internal sealed class CapturingLoggerProvider : ILoggerProvider
 
 internal sealed class CapturedEntry
 {
-    private readonly IReadOnlyList<KeyValuePair<string, object?>>? _values;
+    private readonly IReadOnlyList<KeyValuePair<string, object?>> _values;
 
-    public CapturedEntry(LogLevel level, string message, IReadOnlyList<KeyValuePair<string, object?>>? values)
+    public CapturedEntry(LogLevel level, string message, IReadOnlyList<KeyValuePair<string, object?>> values)
     {
         Level = level;
         Message = message;
@@ -190,21 +221,13 @@ internal sealed class CapturedEntry
 
     public string Message { get; }
 
-    public object? GetValue(string name)
-    {
-        if (_values is null)
-        {
-            return null;
-        }
-
-        foreach (var kv in _values)
-        {
-            if (string.Equals(kv.Key, name, System.StringComparison.Ordinal))
-            {
-                return kv.Value;
-            }
-        }
-
-        return null;
-    }
+    /// <summary>
+    /// Returns the value of the named structured slot. Throws when the slot is
+    /// absent, so a misspelt or dropped slot fails the test instead of reading
+    /// as <see langword="null"/>.
+    /// </summary>
+    public object? GetValue(string name) =>
+        _values
+            .Single(kv => string.Equals(kv.Key, name, System.StringComparison.Ordinal))
+            .Value;
 }
