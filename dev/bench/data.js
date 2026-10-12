@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1790001419665,
+  "lastUpdate": 1791831669814,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -1272,6 +1272,72 @@ window.BENCHMARK_DATA = {
             "value": 3456.9390258789062,
             "unit": "ns",
             "range": "± 14.551368997881589"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "dd969612ae8d217f7212f15c7e6ca94bbf9de5dd",
+          "message": "chore: explicit usings on every TFM (no implicit/global usings in multi-TFM projects) (#256)\n\n* test: assign fake-DbCommand/DbConnection members after construction in using declarations\n\nInspectCode UsingStatementResourceInitialization flags object initializers on a\nusing-declared resource: if a setter throws, the half-built object is never disposed.\nConstruct first, then set the members, so the using owns the instance before any\nsetter runs. Fixes code-scanning alerts #315, #316, #317.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* chore: explicit usings on every TFM (no implicit/global usings in multi-TFM projects)\n\nRemove ImplicitUsings (net10.0-only in the main src project; all TFMs in\nthe Unit and Integration test projects) and the <Using Include=\"Xunit\" />\nglobal items from the multi-TFM projects, and add the explicit using\ndirectives each file needs. Usings-only change; no behaviour or API change.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-10-12T14:59:09-04:00",
+          "tree_id": "944151a0b4aa282bde1fd94888f7d71f54f13168",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/dd969612ae8d217f7212f15c7e6ca94bbf9de5dd"
+        },
+        "date": 1791831667318,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 257.16871404647827,
+            "unit": "ns",
+            "range": "± 0.41502262990713423"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 377.1106360753377,
+            "unit": "ns",
+            "range": "± 1.7323121444406135"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.00010195809106032054,
+            "unit": "ns",
+            "range": "± 0.0001765965939592093"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 79.88409767548244,
+            "unit": "ns",
+            "range": "± 1.975012265165"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 1.9225124046206474,
+            "unit": "ns",
+            "range": "± 0.01495013337636651"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 2172.4052937825522,
+            "unit": "ns",
+            "range": "± 1.520100428474705"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 2211.277816772461,
+            "unit": "ns",
+            "range": "± 10.544634478344365"
           }
         ]
       }
