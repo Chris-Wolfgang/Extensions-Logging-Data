@@ -1,7 +1,9 @@
+using System;
 using System.Data;
 using System.Data.Common;
 using Microsoft.Extensions.Logging;
 using Wolfgang.Extensions.Logging.Data.Tests.Unit.TestHelpers;
+using Xunit;
 
 namespace Wolfgang.Extensions.Logging.Data.Tests.Unit;
 
