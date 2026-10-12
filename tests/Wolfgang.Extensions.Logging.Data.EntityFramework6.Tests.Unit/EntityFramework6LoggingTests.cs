@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure.Interception;
 using Microsoft.Extensions.Logging;
+using Xunit;
 using Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit.TestHelpers;
 
 namespace Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit;
