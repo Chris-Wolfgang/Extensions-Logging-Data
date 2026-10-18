@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1791700641385,
+  "lastUpdate": 1792305252176,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "Mutation score": [
@@ -75,6 +75,33 @@ window.BENCHMARK_DATA = {
           "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/5b3ac649efe01eda010086858f81100341a53e59"
         },
         "date": 1791700636761,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score",
+            "value": 89.66,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "71f31a663d09f7dea8b0bfc08f6f8f95cde5c091",
+          "message": "fix(scripts): security-alerts updates the open summary issue instead of filing a new one (#280)\n\nGet-TrackedIssues keyed each marker to the LAST issue in the listing. The REST\nissues listing (state=all) is newest first, so with a closed old summary and an\nopen newer one the map kept the CLOSED issue, and every weekly run filed a\nduplicate summary issue. Prefer the OPEN issue for a marker, and between two of\nthe same state the higher number. Port of Chris-Wolfgang/repo-template#719.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-10-15T17:44:12Z",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/71f31a663d09f7dea8b0bfc08f6f8f95cde5c091"
+        },
+        "date": 1792305248271,
         "tool": "customBiggerIsBetter",
         "benches": [
           {
