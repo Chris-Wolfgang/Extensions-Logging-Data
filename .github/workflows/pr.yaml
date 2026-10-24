@@ -1446,20 +1446,23 @@ jobs:
 
           # while-read rather than mapfile: macOS runners ship bash 3.2, which has no
           # mapfile (the step would die with exit 127 before running a single test).
+          # *.Tests.Integration.* projects do not run on this stage, as on Stage 2 (Windows):
+          # macOS runners have no Docker, so container-based integration suites would only
+          # report Skipped tests and near-0% coverage against CODECOV_TEST_MINIMUM. Stage 1
+          # (Linux) runs every integration project and gates its coverage.
           test_projects=()
           while IFS= read -r -d '' file; do
             test_projects+=("$file")
           done < <(find ./tests -type f \( -name "*.csproj" -o -name "*.vbproj" -o -name "*.fsproj" \) -not -name "*.Tests.Integration.*" -print0)
 
-          # Report any integration test projects deliberately excluded from the
-          # coverage gate, so the skip is visible rather than silent (they are
-          # expected to run in a separate workflow).
+          # Report any integration test projects deliberately skipped on this stage,
+          # so the skip is visible rather than silent (Stage 1 runs and gates them).
           excluded_integration=()
           while IFS= read -r -d '' file; do
             excluded_integration+=("$file")
           done < <(find ./tests -type f \( -name "*.csproj" -o -name "*.vbproj" -o -name "*.fsproj" \) -name "*.Tests.Integration.*" -print0)
           if [ ${#excluded_integration[@]} -gt 0 ]; then
-            echo "::notice::Excluded ${#excluded_integration[@]} integration test project(s) from the coverage gate (expected to run in a separate workflow): ${excluded_integration[*]}"
+            echo "::notice::Skipped ${#excluded_integration[@]} integration test project(s) on Stage 3 (macOS); Stage 1 (Linux) runs and coverage-gates them: ${excluded_integration[*]}"
           fi
 
           if [ ${#test_projects[@]} -eq 0 ]; then
