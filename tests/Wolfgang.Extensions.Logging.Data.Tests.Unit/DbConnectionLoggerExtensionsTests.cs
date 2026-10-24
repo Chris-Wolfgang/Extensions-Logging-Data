@@ -283,6 +283,42 @@ public class DbConnectionLoggerExtensionsTests
 
 
 
+    [Theory]
+    [InlineData("Server=foo;Password='hunter2")]
+    [InlineData("Server=foo;Password=\"hunter2")]
+    public void RedactConnectionString_when_connection_string_is_unparseable_returns_placeholder(string connectionString)
+    {
+        var redacted = DbConnectionLoggerExtensions.RedactConnectionString(connectionString);
+
+        Assert.Equal
+        (
+            DbConnectionLoggerExtensions.UnparseableConnectionStringPlaceholder,
+            redacted
+        );
+    }
+
+
+
+    [Fact]
+    public void LogDbConnection_when_connection_string_is_unparseable_still_logs_without_the_secret()
+    {
+        var logger = new RecordingLogger();
+        var connection = new FakeDbConnection { ConnectionString = "Server=foo;Password='hunter2" };
+
+        logger.LogDbConnection(connection);
+
+        var entry = Assert.Single(logger.Entries);
+        var logged = (string)entry.GetValue("ConnectionString")!;
+        Assert.DoesNotContain("hunter2", logged, StringComparison.Ordinal);
+        Assert.Equal
+        (
+            DbConnectionLoggerExtensions.UnparseableConnectionStringPlaceholder,
+            logged
+        );
+    }
+
+
+
     // T4 (test-quality audit) gap-fill: the prior suite verified every
     // logged FIELD individually, but never asserted that the structured
     // log entry actually carries all SEVEN named properties the
