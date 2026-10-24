@@ -34,7 +34,20 @@ internal sealed class FakeDbCommand : DbCommand
 
     protected override DbConnection? DbConnection { get; set; }
 
-    protected override DbParameterCollection DbParameterCollection => _parameters;
+    /// <summary>
+    /// Number of times the parameter collection was read, so a test can prove that a
+    /// disabled log level returns before the parameters are snapshotted.
+    /// </summary>
+    public int ParameterCollectionReadCount { get; private set; }
+
+    protected override DbParameterCollection DbParameterCollection
+    {
+        get
+        {
+            ParameterCollectionReadCount++;
+            return _parameters;
+        }
+    }
 
     protected override DbTransaction? DbTransaction { get; set; }
 
