@@ -31,6 +31,15 @@
 		<SignAssembly>False</SignAssembly>
 	</PropertyGroup>
 
+	<!-- Turns on the trim and Native AOT analyzers and marks the assembly trimmable.
+	     Only net8.0+ supports these properties, so they are set for net10.0 alone. The
+	     anonymous-object LogCommandText overloads carry [RequiresUnreferencedCode];
+	     everything else must stay warning-free. -->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+		<IsAotCompatible>true</IsAotCompatible>
+		<IsTrimmable>true</IsTrimmable>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
