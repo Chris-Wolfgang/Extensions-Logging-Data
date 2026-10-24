@@ -96,6 +96,40 @@ public class GlobalizationInvarianceTests
 
 
 
+    [Theory]
+    [InlineData("tr-TR")]
+    [InlineData("de-DE")]
+    [InlineData("zh-CN")]
+    [InlineData("ar-SA")]
+    [InlineData("ja-JP")]
+    [InlineData("")]
+    public void LogCommandText_renders_parameter_values_with_invariant_culture(string cultureName)
+    {
+        using var _ = WithCurrentCulture(cultureName);
+
+        var logger = new RecordingLogger();
+        var when = new DateTime(2026, 6, 14, 13, 45, 30, DateTimeKind.Utc);
+
+        logger.LogCommandText
+        (
+            "INSERT ...",
+            new { ratio = 1.5, amount = 1234.56m, when }
+        );
+
+        var rendered = (string)Assert.Single(logger.Entries).GetValue("Parameters")!;
+
+        Assert.Contains("ratio=1.5", rendered, StringComparison.Ordinal);
+        Assert.Contains("amount=1234.56", rendered, StringComparison.Ordinal);
+        Assert.Contains
+        (
+            "when=" + when.ToString(CultureInfo.InvariantCulture),
+            rendered,
+            StringComparison.Ordinal
+        );
+    }
+
+
+
     private static IDisposable WithCurrentCulture(string cultureName)
     {
         var culture = string.IsNullOrEmpty(cultureName)
