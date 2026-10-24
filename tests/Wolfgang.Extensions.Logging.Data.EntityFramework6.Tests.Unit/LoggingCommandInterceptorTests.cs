@@ -34,6 +34,31 @@ public class LoggingCommandInterceptorTests
 
 
     [Fact]
+    public void Constructor_enumerates_the_excluded_parameter_names_once()
+    {
+        var logger = new RecordingLogger();
+        var enumerations = 0;
+        System.Collections.Generic.IEnumerable<string> ExcludedNames()
+        {
+            enumerations++;
+            yield return "password";
+        }
+
+        var sut = new LoggingCommandInterceptor(logger, ExcludedNames(), LogLevel.Information);
+        sut.NonQueryExecuting(SampleCommand(), new DbCommandInterceptionContext<int>());
+        sut.NonQueryExecuting(SampleCommand(), new DbCommandInterceptionContext<int>());
+
+        Assert.Equal(1, enumerations);
+        Assert.All
+        (
+            logger.Entries,
+            entry => Assert.DoesNotContain("hunter2", (string)entry.GetValue("Parameters")!, StringComparison.Ordinal)
+        );
+    }
+
+
+
+    [Fact]
     public void ReaderExecuting_logs_the_command()
     {
         var logger = new RecordingLogger();

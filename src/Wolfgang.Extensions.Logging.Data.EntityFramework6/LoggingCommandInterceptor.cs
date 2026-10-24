@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity.Infrastructure.Interception;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 
 namespace Wolfgang.Extensions.Logging.Data.EntityFramework6;
@@ -17,13 +18,15 @@ namespace Wolfgang.Extensions.Logging.Data.EntityFramework6;
 internal sealed class LoggingCommandInterceptor : IDbCommandInterceptor
 {
     private readonly ILogger _logger;
-    private readonly IEnumerable<string> _excludedParameterNames;
+    // Materialized once: a lazy sequence passed to AddLoggingInterceptors must not be
+    // re-evaluated for every command EF6 executes over the life of the process.
+    private readonly string[] _excludedParameterNames;
     private readonly LogLevel _level;
 
     public LoggingCommandInterceptor(ILogger logger, IEnumerable<string> excludedParameterNames, LogLevel level)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _excludedParameterNames = excludedParameterNames ?? Array.Empty<string>();
+        _excludedParameterNames = excludedParameterNames?.ToArray() ?? Array.Empty<string>();
         _level = level;
     }
 
