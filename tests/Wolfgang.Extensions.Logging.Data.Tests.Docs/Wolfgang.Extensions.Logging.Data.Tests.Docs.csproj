@@ -3,7 +3,6 @@
     <!-- Single modern TFM: this project compiles doc examples with Roslyn, which
          needs net472+/net8+. No need to run it on the .NET Framework matrix. -->
     <TargetFramework>net10.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 

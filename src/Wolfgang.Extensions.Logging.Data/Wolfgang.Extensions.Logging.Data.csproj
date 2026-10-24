@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
-		<LangVersion>latest</LangVersion>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 		<Version>0.3.1</Version>
 		<!-- Pin AssemblyVersion to a fixed binding-stability baseline so consumers
@@ -21,7 +20,8 @@
 		<EnablePackageValidation>true</EnablePackageValidation>
 		<PackageValidationBaselineVersion>0.3.1</PackageValidationBaselineVersion>
 		<Title>$(AssemblyName)</Title>
-		<Description>Extension methods for ILogger and ILogger&lt;T&gt; that log DbConnection, DbCommand, DbParameter, and DbParameterCollection from System.Data.Common, with built-in secret redaction (passwords in connection strings, configurable parameter values).</Description>
+		<Description>Extension methods for ILogger and ILogger&lt;T&gt; that log a DbConnection, a DbCommand, or command text with its parameters, with built-in secret redaction (passwords in connection strings, configurable parameter values).</Description>
+		<PackageTags>logging;ilogger;dbconnection;dbcommand;ado.net;redaction;structured-logging</PackageTags>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data.git</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
