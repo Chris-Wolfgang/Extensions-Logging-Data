@@ -204,6 +204,65 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
+    public void LogCommandText_renders_parameters_as_a_brace_wrapped_comma_separated_list()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?>(StringComparer.Ordinal)
+        {
+            ["@a"] = 1,
+            ["@b"] = "x",
+        };
+
+        logger.LogCommandText("SELECT 1", parameters);
+
+        Assert.Equal
+        (
+            "{@a=1, @b=x}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_with_an_empty_parameter_name_renders_it_without_throwing()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?>(StringComparer.Ordinal)
+        {
+            [string.Empty] = 1,
+        };
+
+        logger.LogCommandText("SELECT 1", parameters, new[] { "secret" });
+
+        Assert.Equal
+        (
+            "{=1}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_object_skips_indexers_and_write_only_properties()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new ParametersWithIndexerAndWriteOnlyProperty { Id = 7, WriteOnly = "never-read" };
+        Assert.Equal(3, parameters[3]);   // the indexer is a real, readable member
+
+        logger.LogCommandText("SELECT 1", parameters);
+
+        Assert.Equal
+        (
+            "{Id=7}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
+    [Fact]
     public void LogCommandText_object_handles_mixed_value_types()
     {
         var logger = new RecordingLogger();
@@ -276,4 +335,25 @@ public class DbCommandLoggerExtensionsTests
 
         Assert.Same(dict, result);
     }
+}
+
+
+
+/// <summary>
+/// Parameter object with an indexer and a write-only property, neither of which the
+/// anonymous-object overloads may read: only <see cref="Id"/> is a readable, non-indexed
+/// property.
+/// </summary>
+internal sealed class ParametersWithIndexerAndWriteOnlyProperty
+{
+    public int Id { get; set; }
+
+#pragma warning disable S2376, CA1044 // Write-only on purpose: the reader must skip it.
+    public string WriteOnly
+    {
+        set => _ = value;
+    }
+#pragma warning restore S2376, CA1044
+
+    public int this[int index] => index;
 }
