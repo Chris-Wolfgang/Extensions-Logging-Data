@@ -9,6 +9,18 @@ This package is built with reproducibility **inputs** enabled:
   `Directory.Build.props`) — normalizes stored source paths.
 - SourceLink + `<EmbedUntrackedSources>` (in `Directory.Build.props`) — the exact
   source is discoverable from the symbols.
+- **Cross-OS inputs pinned:** `Directory.Build.targets` rewrites the SDK-generated
+  sources (`AssemblyInfo.cs`, `AssemblyAttributes.cs`) to LF before compilation, and
+  `Directory.Build.props` compiles every `net4x` target against the
+  `Microsoft.NETFramework.ReferenceAssemblies` package instead of the machine's
+  targeting pack. Those were the only inputs that differed between a Windows and a
+  Linux build of the same commit.
+
+**What is guaranteed:** the compiled assemblies and symbols (`.dll` / `.pdb`, every
+target framework) are byte-identical for the same commit and the same SDK, on any OS.
+The `.nupkg` / `.snupkg` files are not: NuGet stamps the pack time into every zip
+entry, so two packs of one commit differ even on one machine. Compare what is inside
+the package, never the package file.
 
 That means a third party can rebuild the published package from source and confirm
 it matches — "trust, but verify". Here's how.
@@ -65,10 +77,14 @@ it as a potential supply-chain discrepancy and report it**:
 
 - Compare the **assemblies** (`lib/**/*.dll`), not the `.nupkg` zip bytes — the
   package envelope stores creation timestamps and isn't itself byte-reproducible.
-- Use the **same SDK major.minor**. A different Roslyn version can legitimately
-  produce different (but equally correct) IL.
-- The `net462` target may embed a framework-reference hash; if a specific TFM
-  differs, verify the others and file an issue noting the TFM.
-- This is the consumer-side counterpart to the repo's own build-reproducibility
-  check (which builds the same commit twice on CI and compares). If that check is
-  green and this local diff is clean, the chain from source to NuGet is verified.
+- Use the **same SDK version** (`dotnet --version`), ideally the same patch. The
+  symbols record the compiler version and the version of the runtime the compiler ran
+  on, so a different SDK patch gives different `.pdb` bytes, and the `.dll` follows
+  because its debug-directory entry hashes the `.pdb`.
+- The `net4x` targets compile against the `Microsoft.NETFramework.ReferenceAssemblies`
+  package on every OS, so they reproduce like the others.
+- This is the consumer-side counterpart to the repo's own Reproducible Build workflow,
+  which builds the same commit twice on Ubuntu and twice on Windows and fails unless
+  each OS is deterministic and the Ubuntu and Windows assemblies and symbols are
+  identical. If that check is green and this local diff is clean, the chain from
+  source to NuGet is verified.
