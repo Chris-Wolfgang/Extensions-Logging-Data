@@ -2,7 +2,7 @@ using System;
 using System.Data.Entity.Infrastructure.Interception;
 using Microsoft.Extensions.Logging;
 using Xunit;
-using Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit.TestHelpers;
+using Wolfgang.Extensions.Logging.Data.Tests.Unit.TestHelpers;
 
 namespace Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit;
 
@@ -14,13 +14,16 @@ public class LoggingConnectionInterceptorTests
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Debug);
 
-        sut.Opening(new FakeDbConnection(), new DbConnectionInterceptionContext());
+        using var connection = new FakeDbConnection { ConnectionString = "Server=localhost;Database=Test;User Id=sa;Password=secret" };
+
+        sut.Opening(connection, new DbConnectionInterceptionContext());
 
         var entry = Assert.Single(logger.Entries);
         Assert.Equal(LogLevel.Debug, entry.Level);
         // The rich connection entry carries the redacted connection string.
         var connectionString = (string)entry.GetValue("ConnectionString")!;
         Assert.DoesNotContain("secret", connectionString, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("server=localhost", connectionString, StringComparison.OrdinalIgnoreCase);
     }
 
 
