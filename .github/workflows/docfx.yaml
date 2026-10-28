@@ -50,6 +50,14 @@ on:
 permissions:
   contents: read  # Default to read-only; the build-and-deploy job overrides with write
 
+# Deploys to gh-pages must not overlap or be cancelled half-way (a cancelled push can
+# leave the site without a version folder), so runs queue. The group is distinct from
+# release.yaml's own group: when release.yaml calls this workflow, a shared name would
+# make the called workflow wait on its caller forever.
+concurrency:
+  group: docfx-deploy-${{ github.repository }}
+  cancel-in-progress: false
+
 jobs:
   build-and-deploy:
     name: Build & Deploy Documentation

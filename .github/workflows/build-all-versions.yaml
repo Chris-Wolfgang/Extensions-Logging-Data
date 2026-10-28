@@ -15,6 +15,11 @@ on:
 permissions:
   contents: read  # Default to read-only; the build-and-deploy job overrides with write
 
+# A newer manual run of the same ref supersedes an older one.
+concurrency:
+  group: build-all-versions-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     name: Build & Deploy All Versioned Docs
