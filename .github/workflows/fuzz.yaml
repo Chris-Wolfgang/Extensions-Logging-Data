@@ -1,0 +1,87 @@
+name: Fuzz
+
+# Continuous fuzz sweep. tests/Wolfgang.Extensions.Logging.Data.Tests.Fuzz runs its CsCheck
+# properties at 500 cases each on every PR (seconds, as part of the normal test run); this
+# scheduled workflow runs the same properties at a far higher case count to surface rare edge
+# cases, and files an issue when a property is falsified. CsCheck shrinks the failing input
+# and prints a replayable seed, so the reported case can be pinned as a deterministic
+# regression in the unit suite.
+#
+# Scorecard's FuzzingID check does not recognise .NET property-based fuzzing, so this
+# workflow does not clear that alert; the value is the fuzzing itself.
+
+on:
+  schedule:
+    - cron: '0 5 * * 0'   # weekly, Sunday 05:00 UTC
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: 'Cases per property'
+        required: false
+        default: '200000'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fuzz-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fuzz:
+    name: Property fuzz sweep
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: read
+      issues: write   # file an issue when a property is falsified
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68  # v6.0.0
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Run fuzz sweep
+        shell: bash
+        env:
+          FUZZ_ITER: ${{ github.event.inputs.iterations || '200000' }}
+        run: |
+          set -o pipefail
+          dotnet test tests/Wolfgang.Extensions.Logging.Data.Tests.Fuzz/Wolfgang.Extensions.Logging.Data.Tests.Fuzz.csproj \
+            -c Release --logger "console;verbosity=detailed" 2>&1 | tee fuzz-output.txt
+
+      - name: Upload fuzz log
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: fuzz-output
+          path: fuzz-output.txt
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: File issue on failure
+        if: failure()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # The issue body carries the log tail, which holds CsCheck's replayable seed.
+          {
+            echo "The scheduled fuzz sweep falsified a property."
+            echo ""
+            echo "Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            echo ""
+            echo '```'
+            tail -c 4000 fuzz-output.txt || true
+            echo '```'
+          } > issue-body.txt
+          gh issue create \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Fuzz sweep falsified a property ($(date -u +%Y-%m-%d))" \
+            --label bug \
+            --body-file issue-body.txt
