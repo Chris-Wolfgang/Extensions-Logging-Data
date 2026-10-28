@@ -21,13 +21,14 @@ then eradicate, then communicate).
 
 ## 1. Contain (minutes)
 
-1. **NuGet:** sign in → **Account → API Keys → Regenerate/Delete** every key.
-   If trusted publishing is used, remove the trusted-publisher policy for the repo.
+1. **NuGet:** sign in → **Trusted Publishing** and remove the policy for
+   `Chris-Wolfgang/Extensions-Logging-Data` (this repository publishes through it; there is no
+   stored NuGet API key). Also **Account → API Keys → Delete** any key you created by hand.
 2. **GitHub:** **Settings → Password** (rotate) and **Developer settings → Personal
    access tokens** (revoke all). **Settings → Sessions** → sign out everywhere.
 3. **Repo secrets:** **Settings → Secrets and variables → Actions** → rotate/delete
-   `NUGET_API_KEY` and anything else. Disable Actions if a workflow is actively
-   exfiltrating (`Settings → Actions → Disable`).
+   every secret. Disable Actions if a workflow is actively exfiltrating
+   (`Settings → Actions → Disable`).
 4. If a **machine** was compromised, assume everything on it is exposed — rotate
    from a known-clean device.
 
@@ -43,8 +44,9 @@ then eradicate, then communicate).
 ## 3. Recover
 
 - Restore branch protection / rulesets from `repo-template` canonical.
-- Re-issue a clean `NUGET_API_KEY` (scoped to the `Wolfgang.*` package glob only,
-  "push new packages and versions") or re-establish trusted publishing.
+- Re-add the NuGet trusted-publisher policy (owner `Chris-Wolfgang`, repository
+  `Extensions-Logging-Data`, workflow `release.yaml`) once the repository is clean. Do not
+  fall back to a long-lived API key.
 - Rebuild and re-release a known-good version from a clean checkout.
 
 ## 4. Communicate
