@@ -23,4 +23,13 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Wolfgang.Extensions.Logging.Data.EntityFramework6\Wolfgang.Extensions.Logging.Data.EntityFramework6.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <!-- The ADO.NET test doubles and the recording logger are shared with Tests.Unit rather than
+         copied, so the two suites cannot drift apart. Their own contract tests come along, which
+         keeps this assembly's coverage of the linked doubles at 100%. -->
+    <Compile Include="..\Wolfgang.Extensions.Logging.Data.Tests.Unit\TestHelpers\*.cs" Link="TestHelpers\%(Filename)%(Extension)" />
+    <Compile Include="..\Wolfgang.Extensions.Logging.Data.Tests.Unit\FakeDbDoublesTests.cs" Link="Shared\FakeDbDoublesTests.cs" />
+    <Compile Include="..\Wolfgang.Extensions.Logging.Data.Tests.Unit\RecordingLoggerTests.cs" Link="Shared\RecordingLoggerTests.cs" />
+  </ItemGroup>
 </Project>
