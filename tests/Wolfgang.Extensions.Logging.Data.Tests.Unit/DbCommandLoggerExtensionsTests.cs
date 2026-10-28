@@ -163,6 +163,50 @@ public class DbCommandLoggerExtensionsTests
 
 
 
+
+    [Theory]
+    [InlineData("password", "password", true)]
+    [InlineData(":password", "password", true)]
+    [InlineData("password", "?password", true)]
+    [InlineData("@password", "@@password", false)]  // "@password" normalises to "password", not "@password"
+    [InlineData("@@password", "@password", false)]  // "@@password" normalises to "@password"
+    [InlineData("@@password", "@@password", true)]
+    [InlineData("@@password", ":@password", true)]
+    [InlineData("pass", "password", false)]
+    public void LogCommandText_when_names_carry_prefixes_redacts_only_names_that_normalise_to_the_excluded_name
+    (
+        string parameterName,
+        string excludedName,
+        bool redacted
+    )
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?> { [parameterName] = "hunter2" };
+
+        logger.LogCommandText("INSERT ...", parameters, new[] { excludedName });
+
+        Assert.Equal
+        (
+            "{" + parameterName + "=" + (redacted ? "***" : "hunter2") + "}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_when_nothing_is_excluded_renders_every_value()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?> { ["@id"] = 1, ["name"] = "x" };
+
+        logger.LogCommandText("SELECT ...", parameters, Array.Empty<string>());
+
+        Assert.Equal("{@id=1, name=x}", Assert.Single(logger.Entries).GetValue("Parameters"));
+    }
+
+
+
     [Fact]
     public void LogCommandText_object_reflects_public_properties_into_parameters()
     {

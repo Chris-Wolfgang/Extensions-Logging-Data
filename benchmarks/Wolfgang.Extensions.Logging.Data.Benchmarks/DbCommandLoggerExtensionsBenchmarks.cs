@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -33,12 +34,41 @@ public class DbCommandLoggerExtensionsBenchmarks
 
     private static readonly string[] Excluded = { "password" };
 
+    // A live command for the LogDbCommand path (the one the EF6 interceptor calls for every
+    // command). SqliteCommand needs no open connection to hold text and parameters.
+    private static readonly SqliteCommand LiveCommand = CreateLiveCommand();
+
 
 
     [Benchmark(Baseline = true)]
     public void Dictionary_EnabledLogger()
     {
         EnabledLogger.LogCommandText(CommandText, DictParameters, Excluded);
+    }
+
+
+
+    [Benchmark]
+    public void Dictionary_EnabledLogger_NoExclusions()
+    {
+        // The common case: the 2- and 3-argument overloads pass an empty exclusion list.
+        EnabledLogger.LogCommandText(CommandText, DictParameters);
+    }
+
+
+
+    [Benchmark]
+    public void LogDbCommand_EnabledLogger()
+    {
+        EnabledLogger.LogDbCommand(LiveCommand, Excluded);
+    }
+
+
+
+    [Benchmark]
+    public void LogDbCommand_EnabledLogger_NoExclusions()
+    {
+        EnabledLogger.LogDbCommand(LiveCommand);
     }
 
 
@@ -68,6 +98,17 @@ public class DbCommandLoggerExtensionsBenchmarks
         // reflect-even-when-disabled cost — useful for deciding whether to gate
         // the anonymous overload behind an explicit IsEnabled at the call site.
         DisabledLogger.LogCommandText(CommandText, new { id = 42, status = "active", password = "hunter2" }, Excluded);
+    }
+
+
+
+    private static SqliteCommand CreateLiveCommand()
+    {
+        var command = new SqliteCommand(CommandText);
+        command.Parameters.AddWithValue("@id", 42);
+        command.Parameters.AddWithValue("@status", "active");
+        command.Parameters.AddWithValue("@password", "hunter2");
+        return command;
     }
 
 
