@@ -32,6 +32,11 @@ on:
 permissions:
   contents: read
 
+# A newer push to the same PR/branch supersedes the older run; manual runs queue.
+concurrency:
+  group: reproducible-build-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build:
     name: "Build ${{ matrix.os }} (attempt ${{ matrix.attempt }})"
