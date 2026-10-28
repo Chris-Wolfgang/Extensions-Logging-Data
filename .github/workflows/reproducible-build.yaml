@@ -7,10 +7,18 @@
 # not byte-identical. Consumers reproduce the same check from source — see
 # docs/REPRODUCIBLE-BUILDS.md (added alongside this workflow).
 #
-# Note: the gate is per-OS determinism, not cross-OS byte-identity. Cross-OS
-# byte-identical assemblies (esp. PDBs and the net462 target) are not reliably
-# achievable, which is why the acceptance criteria hedge "different OS where
-# possible" — building on both OSes proves each is internally deterministic.
+# It gates two things on the compiled assemblies and symbols (.dll + .pdb, every TFM):
+# 1. per-OS determinism: two builds of the commit on the same OS are identical;
+# 2. cross-OS identity: the Ubuntu and the Windows build are identical.
+# (2) holds because Directory.Build.targets rewrites the SDK-generated sources to LF
+# and Directory.Build.props compiles net4x targets against the
+# Microsoft.NETFramework.ReferenceAssemblies package on every OS; those were the only
+# inputs that differed. Package files (.nupkg/.snupkg) are never hashed: NuGet stamps
+# the pack time into every zip entry, so they differ on every run.
+#
+# The symbols also record the compiler version and the runtime the compiler ran on, so
+# both runners must resolve the same SDK and runtime; each build prints them, and the
+# cross-OS step shows them next to a mismatch.
 # ============================================================================
 name: Reproducible Build
 
@@ -43,6 +51,11 @@ jobs:
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           dotnet-version: '10.0.x'
+
+      - name: Record the toolchain
+        shell: bash
+        run: |
+          { echo "sdk: $(dotnet --version)"; dotnet --list-runtimes | grep 'Microsoft.NETCore.App'; } | tee toolchain.txt
 
       - name: Build (Release, deterministic)
         shell: bash
@@ -90,11 +103,13 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: hashes-${{ matrix.os }}-${{ matrix.attempt }}
-          path: hashes.txt
+          path: |
+            hashes.txt
+            toolchain.txt
           retention-days: 3
 
   compare:
-    name: "Compare (per-OS determinism)"
+    name: "Compare (per-OS determinism + cross-OS identity)"
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -123,3 +138,22 @@ jobs:
             fi
           done
           exit "$rc"
+
+      - name: Assert Ubuntu and Windows produce identical assemblies and symbols
+        shell: bash
+        run: |
+          a="hashes/hashes-ubuntu-latest-1/hashes.txt"
+          b="hashes/hashes-windows-latest-1/hashes.txt"
+          if [ ! -s "$a" ] || [ ! -s "$b" ]; then
+            echo "::error::Missing or empty hashes for one of the operating systems."
+            exit 1
+          fi
+          if diff -u "$a" "$b"; then
+            echo "✅ Ubuntu and Windows built byte-identical assemblies and symbols."
+          else
+            echo "Toolchains (a different SDK or compiler-host runtime changes the .pdb):"
+            echo "--- ubuntu";  cat hashes/hashes-ubuntu-latest-1/toolchain.txt  || true
+            echo "--- windows"; cat hashes/hashes-windows-latest-1/toolchain.txt || true
+            echo "::error::The Ubuntu and Windows builds differ (diff above). Check the toolchains first, then the generated sources and the referenced assemblies recorded in the .pdb."
+            exit 1
+          fi
