@@ -1,0 +1,4 @@
+# Overrides for `uv pip compile` (see the header of semgrep.txt).
+# semgrep pins mcp==1.29.0, which is affected by GHSA-84m7-p3x7-pcfv (fixed in 1.30.0).
+# Delete this line once semgrep's own requirement allows mcp>=1.30.0.
+mcp>=1.30.0,<2
