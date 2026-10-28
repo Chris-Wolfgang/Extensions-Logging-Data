@@ -31,3 +31,4 @@ changes, write a new ADR that supersedes the old one and update both statuses.
 | [0001](0001-vnext-protected-branching-model.md) | vNext / protected-vNext release branching model | Accepted |
 | [0002](0002-pinned-assemblyversion.md) | Pin `AssemblyVersion` at `1.0.0.0` | Accepted |
 | [0003](0003-anonymous-object-overload-not-aot-safe.md) | Anonymous-object `LogCommandText` overloads are not trim/AOT-safe | Accepted |
+| [0004](0004-netstandard20-build-only.md) | The `netstandard2.0` build is compiled and analysed, not executed by tests | Proposed |

@@ -156,4 +156,33 @@ public class DbCommandLoggerExtensions_LogDbCommandTests
 
         Assert.Equal(string.Empty, Assert.Single(logger.Entries).GetValue("CommandText"));
     }
+
+
+
+    [Fact]
+    public void LogDbCommand_when_a_parameter_name_repeats_logs_the_last_value()
+    {
+        var logger = new RecordingLogger();
+        var command = new FakeDbCommand { CommandText = "SELECT @id" };
+        command.AddParameter("@id", 1);
+        command.AddParameter("@id", 2);
+
+        logger.LogDbCommand(command);
+
+        Assert.Equal("{@id=2}", Assert.Single(logger.Entries).GetValue("Parameters"));
+    }
+
+
+
+    [Fact]
+    public void LogDbCommand_when_excludedParameterNames_contains_null_skips_it_and_redacts_the_rest()
+    {
+        var logger = new RecordingLogger();
+
+        logger.LogDbCommand(SampleCommand(), new[] { null!, "password" });
+
+        var rendered = (string)Assert.Single(logger.Entries).GetValue("Parameters")!;
+        Assert.Contains("@password=***", rendered, StringComparison.Ordinal);
+        Assert.Contains("@id=1", rendered, StringComparison.Ordinal);
+    }
 }

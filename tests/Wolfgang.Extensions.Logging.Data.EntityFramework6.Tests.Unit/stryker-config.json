@@ -1,0 +1,16 @@
+{
+  "stryker-config": {
+    "project": "Wolfgang.Extensions.Logging.Data.EntityFramework6.csproj",
+    "target-framework": "net8.0",
+    "reporters": [
+      "html",
+      "json",
+      "progress"
+    ],
+    "thresholds": {
+      "high": 90,
+      "low": 75,
+      "break": 0
+    }
+  }
+}

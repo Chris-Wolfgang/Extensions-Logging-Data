@@ -147,4 +147,31 @@ public class FakeDbDoublesTests
         Assert.Throws<NotSupportedException>(() => connection.CreateCommand());
         Assert.Throws<NotSupportedException>(() => connection.BeginTransaction());
     }
+
+
+
+    [Fact]
+    public void FakeDbConnection_when_values_are_set_reports_them_and_throws_the_configured_ServerVersion_exception()
+    {
+        // Pins every settable member here, so a suite that links these doubles without the
+        // connection-logging tests (the EF6 suite) still covers all of them.
+        using var connection = new FakeDbConnection
+        {
+            DatabaseValue = "Db",
+            DataSourceValue = "Host",
+            ServerVersionValue = "9.9",
+            StateValue = ConnectionState.Open,
+            ConnectionTimeoutValue = 7,
+        };
+
+        Assert.Equal("Db", connection.Database);
+        Assert.Equal("Host", connection.DataSource);
+        Assert.Equal("9.9", connection.ServerVersion);
+        Assert.Equal(ConnectionState.Open, connection.State);
+        Assert.Equal(7, connection.ConnectionTimeout);
+
+        connection.ServerVersionException = new InvalidOperationException("boom");
+
+        Assert.Same(connection.ServerVersionException, Assert.Throws<InvalidOperationException>(() => connection.ServerVersion));
+    }
 }
