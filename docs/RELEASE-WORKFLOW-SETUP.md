@@ -15,25 +15,29 @@ The release workflow triggers when you **publish a GitHub Release** and implemen
 
 Complete the following one-time setup so that the workflow can publish releases:
 
-### Add NuGet API Key Secret
+### Register the Trusted Publisher on NuGet.org
 
-**Location:** Settings → Secrets and variables → Actions → New repository secret
+`release.yaml` publishes with [NuGet Trusted Publishing](https://learn.microsoft.com/nuget/nuget-org/trusted-publishing):
+the `publish-nuget` job requests a GitHub OIDC token (`id-token: write`), and the
+`NuGet/login` action exchanges it for a short-lived API key. There is **no `NUGET_API_KEY`
+repository secret** to create or rotate.
 
-1. Click **"New repository secret"**
-2. **Name:** `NUGET_API_KEY`
-3. **Value:** Your NuGet.org API key
-   - Get your key from [NuGet.org Account → API Keys](https://www.nuget.org/account/apikeys)
-   - Recommended scopes: **Push new packages and package versions**
-   - Set expiration date (recommended: 1 year)
-4. Click **"Add secret"**
+**Location:** [NuGet.org → your account → Trusted Publishing](https://www.nuget.org/account/trustedpublishing)
 
-**What this does:** Allows the workflow to authenticate with NuGet.org and publish packages. The workflow validates this secret exists before attempting to publish.
+1. Add a policy for the GitHub repository owner `Chris-Wolfgang`, repository `Extensions-Logging-Data`.
+2. **Workflow file:** `release.yaml`.
+3. Leave the environment empty (the publish job does not use a GitHub environment).
+4. The policy must cover both package IDs: `Wolfgang.Extensions.Logging.Data` and
+   `Wolfgang.Extensions.Logging.Data.EntityFramework6`.
+
+**What this does:** Lets the `publish-nuget` job authenticate as the package owner without a
+stored key. The `NuGet/login` step fails the job when no matching policy exists.
 
 ### Verify Branch Protection Rules
 
 **Location:** Settings → Branches → main (or Settings → Rules → Rulesets)
 
-> **Note:** Repos created from `repo-template` ship with `scripts/Setup-BranchRuleset.ps1`, which configures branch protection interactively (option `[1]` for single-developer mode, `[2]` for multi-developer mode). The script may not be present in older repos — if it is missing, configure the equivalent settings manually using the checklist below.
+> **Note:** This repository ships `scripts/Fix-BranchRuleset.ps1`, which applies the standard branch ruleset. If you prefer, configure the equivalent settings manually using the checklist below.
 
 Ensure the following settings are enabled:
 
@@ -83,9 +87,9 @@ The workflow triggers automatically when the release is published.
    - ✅ Auto-passes if packages are valid
 
 3. **Job 3: publish-nuget** (1-2 minutes)
-   - Validates NUGET_API_KEY secret
+   - Exchanges the job's OIDC token for a short-lived NuGet API key (`NuGet/login`)
    - Publishes packages to NuGet.org automatically
-   - ✅ Auto-completes if secret is valid
+   - ✅ Auto-completes if the trusted-publisher policy matches
 
 ### Monitoring the Workflow
 
@@ -95,13 +99,14 @@ The workflow triggers automatically when the release is published.
 
 ## Troubleshooting
 
-### "NUGET_API_KEY secret not configured" Error
+### "NuGet login" step fails
 
-**Problem:** The `publish-nuget` job fails with secret validation error.
+**Problem:** The `publish-nuget` job fails at the `NuGet login (OIDC → temporary API key)` step.
 
 **Solution:**
-1. Verify the secret name is exactly `NUGET_API_KEY` (case-sensitive)
-2. Re-add the secret in Settings → Secrets → Actions
+1. Check the trusted-publisher policy on NuGet.org: owner `Chris-Wolfgang`, repository
+   `Extensions-Logging-Data`, workflow `release.yaml`, and both package IDs.
+2. Check that the job still has `permissions: id-token: write`.
 3. Re-run the workflow from the Actions tab (do not re-publish the release)
 
 ### Tests Fail on Specific Framework
@@ -189,7 +194,7 @@ Before creating a production GitHub Release (e.g., `v1.0.0`):
 ┌─────────────────────────────────────────────────────────────┐
 │  Job 3: publish-nuget (Windows)                             │
 │  • Download packages                                        │
-│  • Validate NUGET_API_KEY                                   │
+│  • NuGet login (OIDC → short-lived API key)                │
 │  • Publish to NuGet.org automatically                       │
 └─────────────────────────────────────────────────────────────┘
 ```
