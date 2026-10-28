@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Fuzzing explores the input space, not per-TFM runtime behaviour: one modern TFM.
+         The per-PR run (500 cases per property) is part of the normal test run; the weekly
+         fuzz.yaml raises FUZZ_ITER for a deep sweep. CsCheck targets netstandard2.0. -->
+    <TargetFramework>net10.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="10.1.0" />
+    <PackageReference Include="CsCheck" Version="4.9.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <!-- net8.0+ only, so the 3.x runner (it runs xunit v2 tests) with no cap. -->
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.1" />
+    <!-- Microsoft.Extensions.Logging.Abstractions comes transitively from the src project;
+         do NOT re-pin it here (an explicit version NU1605-downgrades when src moves). -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Wolfgang.Extensions.Logging.Data\Wolfgang.Extensions.Logging.Data.csproj" />
+  </ItemGroup>
+
+</Project>
