@@ -45,6 +45,12 @@ on:
 permissions:
   contents: read
 
+# A newer push to the same PR supersedes the older run. Scheduled and manual runs are
+# never cancelled: they publish the score history.
+concurrency:
+  group: stryker-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   detect:
     name: Detect Stryker configuration
