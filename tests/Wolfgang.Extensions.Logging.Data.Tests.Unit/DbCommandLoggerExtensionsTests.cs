@@ -79,7 +79,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_default_overload_logs_at_information()
+    public void LogCommandText_when_using_the_default_overload_logs_at_information()
     {
         var logger = new RecordingLogger();
 
@@ -98,7 +98,7 @@ public class DbCommandLoggerExtensionsTests
     [InlineData(LogLevel.Warning)]
     [InlineData(LogLevel.Error)]
     [InlineData(LogLevel.Critical)]
-    public void LogCommandText_logs_at_specified_level(LogLevel level)
+    public void LogCommandText_when_a_level_is_specified_logs_at_that_level(LogLevel level)
     {
         var logger = new RecordingLogger();
 
@@ -111,7 +111,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_dict_logs_command_text_and_parameters_in_log_values()
+    public void LogCommandText_when_given_a_dictionary_logs_command_text_and_parameters_in_log_values()
     {
         var logger = new RecordingLogger();
 
@@ -127,7 +127,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_dict_redacts_excluded_parameter_value()
+    public void LogCommandText_when_a_dictionary_parameter_is_excluded_redacts_its_value()
     {
         var logger = new RecordingLogger();
         var parameters = new Dictionary<string, object?> { ["id"] = 1, ["password"] = "hunter2" };
@@ -150,7 +150,7 @@ public class DbCommandLoggerExtensionsTests
     [InlineData("?password")]  // ODBC positional-ish
     [InlineData("PASSWORD")]   // case-insensitive
     [InlineData("@PassWord")]  // prefix + casing
-    public void LogCommandText_excluded_name_matching_is_prefix_tolerant_and_case_insensitive(string excludedName)
+    public void LogCommandText_when_an_excluded_name_differs_by_prefix_or_case_still_redacts_it(string excludedName)
     {
         var logger = new RecordingLogger();
         var parameters = new Dictionary<string, object?> { ["@password"] = "hunter2" };
@@ -164,7 +164,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_object_reflects_public_properties_into_parameters()
+    public void LogCommandText_when_given_an_object_reflects_public_properties_into_parameters()
     {
         var logger = new RecordingLogger();
 
@@ -178,7 +178,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_object_with_no_properties_logs_empty_parameter_set()
+    public void LogCommandText_when_object_has_no_properties_logs_empty_parameter_set()
     {
         var logger = new RecordingLogger();
 
@@ -191,7 +191,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_object_renders_null_property_values_as_null_literal()
+    public void LogCommandText_when_an_object_property_is_null_renders_null_literal()
     {
         var logger = new RecordingLogger();
 
@@ -204,7 +204,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_object_handles_mixed_value_types()
+    public void LogCommandText_when_object_has_mixed_value_types_renders_each_value()
     {
         var logger = new RecordingLogger();
         var when = new DateTime(2026, 6, 14, 0, 0, 0, DateTimeKind.Utc);
@@ -223,7 +223,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_object_redacts_excluded_property_value()
+    public void LogCommandText_when_an_object_property_is_excluded_redacts_its_value()
     {
         var logger = new RecordingLogger();
 
@@ -238,7 +238,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_object_overload_with_level_logs_at_that_level()
+    public void LogCommandText_when_object_overload_is_given_a_level_logs_at_that_level()
     {
         var logger = new RecordingLogger();
 
@@ -250,7 +250,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void ToDictionary_caches_accessors_so_repeated_calls_are_consistent()
+    public void ToDictionary_when_called_repeatedly_returns_consistent_results_from_cached_accessors()
     {
         // Two anonymous instances of the same shape exercise the per-type cache
         // (first call builds the reader, second reuses it). Both must render the
@@ -268,7 +268,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void ToDictionary_passes_through_an_existing_dictionary_without_reflection()
+    public void ToDictionary_when_given_a_dictionary_passes_it_through_without_reflection()
     {
         var dict = new Dictionary<string, object?> { ["id"] = 1 };
 

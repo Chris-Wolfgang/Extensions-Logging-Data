@@ -22,7 +22,7 @@ namespace Wolfgang.Extensions.Logging.Data.Tests.Integration;
 public class DbConnectionLoggerIntegrationTests
 {
     [Fact]
-    public void LogDbConnection_against_open_sqlite_connection_emits_a_structured_entry()
+    public void LogDbConnection_when_sqlite_connection_is_open_emits_a_structured_entry()
     {
         using var provider = new CapturingLoggerProvider();
         using var factory = LoggerFactory.Create(builder =>
@@ -55,7 +55,7 @@ public class DbConnectionLoggerIntegrationTests
 
 
     [Fact]
-    public void LogDbConnection_redacts_password_through_real_sqlite_connection_string()
+    public void LogDbConnection_when_sqlite_connection_string_has_a_password_redacts_it()
     {
         using var provider = new CapturingLoggerProvider();
         using var factory = LoggerFactory.Create(builder =>
@@ -86,7 +86,7 @@ public class DbConnectionLoggerIntegrationTests
 
 
     [Fact]
-    public void LogDbConnection_against_closed_sqlite_connection_emits_null_server_version()
+    public void LogDbConnection_when_sqlite_connection_is_closed_emits_null_server_version()
     {
         using var provider = new CapturingLoggerProvider();
         using var factory = LoggerFactory.Create(builder => builder.AddProvider(provider));
@@ -105,7 +105,7 @@ public class DbConnectionLoggerIntegrationTests
 
 
     [Fact]
-    public void LogDbConnection_respects_pipeline_minimum_level()
+    public void LogDbConnection_when_pipeline_minimum_is_Warning_logs_only_at_Warning_or_above()
     {
         using var provider = new CapturingLoggerProvider();
         using var factory = LoggerFactory.Create(builder =>
@@ -131,7 +131,7 @@ public class DbConnectionLoggerIntegrationTests
 
 
     [Fact]
-    public void LogDbConnection_inside_a_caller_scope_emits_one_entry_through_the_pipeline()
+    public void LogDbConnection_when_inside_a_caller_scope_emits_one_entry_through_the_pipeline()
     {
         using var provider = new CapturingLoggerProvider();
         using var factory = LoggerFactory.Create(builder => builder.AddProvider(provider));

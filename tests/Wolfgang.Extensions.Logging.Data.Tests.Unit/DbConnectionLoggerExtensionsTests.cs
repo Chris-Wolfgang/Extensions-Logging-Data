@@ -65,7 +65,7 @@ public class DbConnectionLoggerExtensionsTests
 
 
     [Fact]
-    public void LogDbConnection_default_overload_logs_at_information()
+    public void LogDbConnection_when_using_the_default_overload_logs_at_information()
     {
         var logger = new RecordingLogger();
         var connection = new FakeDbConnection();
@@ -85,7 +85,7 @@ public class DbConnectionLoggerExtensionsTests
     [InlineData(LogLevel.Warning)]
     [InlineData(LogLevel.Error)]
     [InlineData(LogLevel.Critical)]
-    public void LogDbConnection_logs_at_specified_level(LogLevel level)
+    public void LogDbConnection_when_a_level_is_specified_logs_at_that_level(LogLevel level)
     {
         var logger = new RecordingLogger();
         var connection = new FakeDbConnection();
@@ -99,7 +99,7 @@ public class DbConnectionLoggerExtensionsTests
 
 
     [Fact]
-    public void LogDbConnection_includes_database_data_source_state_timeout_in_log_values()
+    public void LogDbConnection_when_enabled_includes_database_data_source_state_timeout_in_log_values()
     {
         var logger = new RecordingLogger();
         var connection = new FakeDbConnection
@@ -124,7 +124,7 @@ public class DbConnectionLoggerExtensionsTests
 
 
     [Fact]
-    public void LogDbConnection_includes_connection_type_full_name()
+    public void LogDbConnection_when_enabled_includes_connection_type_full_name()
     {
         var logger = new RecordingLogger();
         var connection = new FakeDbConnection();
@@ -174,7 +174,7 @@ public class DbConnectionLoggerExtensionsTests
 
 
     [Fact]
-    public void LogDbConnection_redacts_password_from_logged_connection_string()
+    public void LogDbConnection_when_connection_string_has_a_password_redacts_it()
     {
         var logger = new RecordingLogger();
         var connection = new FakeDbConnection
@@ -193,7 +193,7 @@ public class DbConnectionLoggerExtensionsTests
 
 
     [Fact]
-    public void RedactConnectionString_with_null_returns_empty_string()
+    public void RedactConnectionString_when_input_is_null_returns_empty_string()
     {
         Assert.Equal(string.Empty, DbConnectionLoggerExtensions.RedactConnectionString(connectionString: null));
     }
@@ -201,7 +201,7 @@ public class DbConnectionLoggerExtensionsTests
 
 
     [Fact]
-    public void RedactConnectionString_with_empty_returns_empty_string()
+    public void RedactConnectionString_when_input_is_empty_returns_empty_string()
     {
         Assert.Equal(string.Empty, DbConnectionLoggerExtensions.RedactConnectionString(string.Empty));
     }
@@ -209,7 +209,7 @@ public class DbConnectionLoggerExtensionsTests
 
 
     [Fact]
-    public void RedactConnectionString_removes_Password_key()
+    public void RedactConnectionString_when_Password_key_is_present_removes_it()
     {
         var redacted = DbConnectionLoggerExtensions.RedactConnectionString("Server=foo;Password=secret");
 
@@ -221,7 +221,7 @@ public class DbConnectionLoggerExtensionsTests
 
 
     [Fact]
-    public void RedactConnectionString_removes_Pwd_key()
+    public void RedactConnectionString_when_Pwd_key_is_present_removes_it()
     {
         var redacted = DbConnectionLoggerExtensions.RedactConnectionString("Server=foo;Pwd=secret");
 
@@ -239,7 +239,7 @@ public class DbConnectionLoggerExtensionsTests
     [InlineData("PWD")]
     [InlineData("pwd")]
     [InlineData("Pwd")]
-    public void RedactConnectionString_removes_password_or_pwd_case_insensitively(string casing)
+    public void RedactConnectionString_when_password_key_casing_varies_removes_it(string casing)
     {
         var redacted = DbConnectionLoggerExtensions.RedactConnectionString($"Server=foo;{casing}=secret");
 
@@ -249,7 +249,7 @@ public class DbConnectionLoggerExtensionsTests
 
 
     [Fact]
-    public void RedactConnectionString_keeps_user_id_value()
+    public void RedactConnectionString_when_User_ID_is_present_keeps_its_value()
     {
         var redacted = DbConnectionLoggerExtensions.RedactConnectionString("Server=foo;User ID=bob;Password=secret");
 
@@ -261,7 +261,7 @@ public class DbConnectionLoggerExtensionsTests
 
 
     [Fact]
-    public void RedactConnectionString_with_no_password_preserves_all_keys()
+    public void RedactConnectionString_when_no_password_is_present_preserves_all_keys()
     {
         var redacted = DbConnectionLoggerExtensions.RedactConnectionString("Server=foo;User ID=bob");
 
@@ -273,7 +273,7 @@ public class DbConnectionLoggerExtensionsTests
 
 
     [Fact]
-    public void RedactConnectionString_with_both_Password_and_Pwd_removes_both_values()
+    public void RedactConnectionString_when_both_Password_and_Pwd_are_present_removes_both_values()
     {
         var redacted = DbConnectionLoggerExtensions.RedactConnectionString("Server=foo;Password=p1;Pwd=p2");
 
@@ -289,7 +289,7 @@ public class DbConnectionLoggerExtensionsTests
     // MessageTemplate declares. A future refactor that drops a parameter
     // from the template would not have been caught.
     [Fact]
-    public void LogDbConnection_emits_all_seven_named_log_properties()
+    public void LogDbConnection_when_enabled_emits_all_seven_named_log_properties()
     {
         var logger = new RecordingLogger();
         var connection = new FakeDbConnection();
@@ -335,7 +335,7 @@ public class DbConnectionLoggerExtensionsTests
     // parse the result as a side check; this one makes the assertion the
     // intent.
     [Fact]
-    public void RedactConnectionString_output_is_parseable_via_DbConnectionStringBuilder()
+    public void RedactConnectionString_when_output_is_reparsed_DbConnectionStringBuilder_accepts_it()
     {
         var redacted = DbConnectionLoggerExtensions.RedactConnectionString(
             "Server=foo;Database=bar;User ID=bob;Password=hunter2;Connect Timeout=15");

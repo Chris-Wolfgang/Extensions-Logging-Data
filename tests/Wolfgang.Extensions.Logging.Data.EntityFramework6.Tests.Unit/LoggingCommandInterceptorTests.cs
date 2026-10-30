@@ -19,7 +19,7 @@ public class LoggingCommandInterceptorTests
 
 
     [Fact]
-    public void NonQueryExecuting_logs_the_command_at_the_configured_level()
+    public void NonQueryExecuting_when_called_logs_the_command_at_the_configured_level()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingCommandInterceptor(logger, Array.Empty<string>(), LogLevel.Debug);
@@ -34,7 +34,7 @@ public class LoggingCommandInterceptorTests
 
 
     [Fact]
-    public void ReaderExecuting_logs_the_command()
+    public void ReaderExecuting_when_called_logs_the_command()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingCommandInterceptor(logger, Array.Empty<string>(), LogLevel.Information);
@@ -47,7 +47,7 @@ public class LoggingCommandInterceptorTests
 
 
     [Fact]
-    public void ScalarExecuting_logs_the_command()
+    public void ScalarExecuting_when_called_logs_the_command()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingCommandInterceptor(logger, Array.Empty<string>(), LogLevel.Information);
@@ -60,7 +60,7 @@ public class LoggingCommandInterceptorTests
 
 
     [Fact]
-    public void Executing_redacts_excluded_parameter_values()
+    public void Executing_when_a_parameter_is_excluded_redacts_its_value()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingCommandInterceptor(logger, new[] { "password" }, LogLevel.Information);
@@ -75,7 +75,7 @@ public class LoggingCommandInterceptorTests
 
 
     [Fact]
-    public void Executing_with_null_command_logs_nothing()
+    public void Executing_when_command_is_null_logs_nothing()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingCommandInterceptor(logger, Array.Empty<string>(), LogLevel.Information);
@@ -88,7 +88,7 @@ public class LoggingCommandInterceptorTests
 
 
     [Fact]
-    public void Executed_without_an_exception_logs_nothing()
+    public void Executed_when_no_exception_occurred_logs_nothing()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingCommandInterceptor(logger, Array.Empty<string>(), LogLevel.Information);
@@ -101,7 +101,7 @@ public class LoggingCommandInterceptorTests
 
 
     [Fact]
-    public void NonQueryExecuted_with_an_exception_logs_it_at_Error()
+    public void NonQueryExecuted_when_an_exception_occurred_logs_it_at_Error()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingCommandInterceptor(logger, Array.Empty<string>(), LogLevel.Information);
@@ -118,7 +118,7 @@ public class LoggingCommandInterceptorTests
 
 
     [Fact]
-    public void ReaderExecuted_with_an_exception_logs_it_at_Error()
+    public void ReaderExecuted_when_an_exception_occurred_logs_it_at_Error()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingCommandInterceptor(logger, Array.Empty<string>(), LogLevel.Information);
@@ -132,7 +132,7 @@ public class LoggingCommandInterceptorTests
 
 
     [Fact]
-    public void ScalarExecuted_with_an_exception_logs_it_at_Error()
+    public void ScalarExecuted_when_an_exception_occurred_logs_it_at_Error()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingCommandInterceptor(logger, Array.Empty<string>(), LogLevel.Information);

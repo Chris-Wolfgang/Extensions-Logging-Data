@@ -48,7 +48,7 @@ public class DocExampleCompilationTests
 
     [Theory]
     [MemberData(nameof(Examples))]
-    public void DocExample_compiles(string id, string code)
+    public void DocExample_when_compiled_produces_no_errors(string id, string code)
     {
         var program = BuildProgram(code);
 
@@ -98,10 +98,10 @@ public class DocExampleCompilationTests
 
 
     [Fact]
-    public void At_least_one_example_was_discovered()
+    public void Examples_when_the_docs_are_scanned_finds_at_least_one_example()
     {
         // Guards against the extraction silently finding nothing (e.g. a regex or path
-        // regression) — which would make DocExample_compiles a vacuous green.
+        // regression) — which would make DocExample_when_compiled_produces_no_errors a vacuous green.
         Assert.NotEmpty(Examples());
     }
 

@@ -9,7 +9,7 @@ namespace Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit;
 public class LoggingTransactionInterceptorTests
 {
     [Fact]
-    public void Committing_logs_at_the_configured_level()
+    public void Committing_when_called_logs_at_the_configured_level()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingTransactionInterceptor(logger, LogLevel.Debug);
@@ -24,7 +24,7 @@ public class LoggingTransactionInterceptorTests
 
 
     [Fact]
-    public void Committed_without_an_exception_logs_a_state_transition()
+    public void Committed_when_no_exception_occurred_logs_a_state_transition()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingTransactionInterceptor(logger, LogLevel.Information);
@@ -37,7 +37,7 @@ public class LoggingTransactionInterceptorTests
 
 
     [Fact]
-    public void Committed_with_an_exception_logs_it_at_Error()
+    public void Committed_when_an_exception_occurred_logs_it_at_Error()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingTransactionInterceptor(logger, LogLevel.Information);
@@ -54,7 +54,7 @@ public class LoggingTransactionInterceptorTests
 
 
     [Fact]
-    public void RollingBack_logs_at_the_configured_level()
+    public void RollingBack_when_called_logs_at_the_configured_level()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingTransactionInterceptor(logger, LogLevel.Information);
@@ -67,7 +67,7 @@ public class LoggingTransactionInterceptorTests
 
 
     [Fact]
-    public void RolledBack_without_an_exception_logs_a_state_transition()
+    public void RolledBack_when_no_exception_occurred_logs_a_state_transition()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingTransactionInterceptor(logger, LogLevel.Information);
@@ -80,7 +80,7 @@ public class LoggingTransactionInterceptorTests
 
 
     [Fact]
-    public void RolledBack_with_an_exception_logs_it_at_Error()
+    public void RolledBack_when_an_exception_occurred_logs_it_at_Error()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingTransactionInterceptor(logger, LogLevel.Information);
@@ -94,7 +94,7 @@ public class LoggingTransactionInterceptorTests
 
 
     [Fact]
-    public void Accessor_callbacks_are_silent_noops()
+    public void AccessorCallbacks_when_invoked_log_nothing()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingTransactionInterceptor(logger, LogLevel.Information);
