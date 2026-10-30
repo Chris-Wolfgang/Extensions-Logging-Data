@@ -23,7 +23,7 @@ public class RecordingLoggerTests
 
 
     [Fact]
-    public void BeginScope_returns_null()
+    public void BeginScope_when_called_returns_null()
     {
         var logger = new RecordingLogger();
 
@@ -33,7 +33,7 @@ public class RecordingLoggerTests
 
 
     [Fact]
-    public void Log_records_level_eventId_message_exception_and_structured_values()
+    public void Log_when_called_records_level_eventId_message_exception_and_structured_values()
     {
         var logger = new RecordingLogger();
         var exception = new InvalidOperationException("boom");

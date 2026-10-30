@@ -9,7 +9,7 @@ namespace Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit;
 public class LoggingConnectionInterceptorTests
 {
     [Fact]
-    public void Opening_logs_the_connection_at_the_configured_level()
+    public void Opening_when_called_logs_the_connection_at_the_configured_level()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Debug);
@@ -29,7 +29,7 @@ public class LoggingConnectionInterceptorTests
 
 
     [Fact]
-    public void Opening_with_null_connection_logs_nothing()
+    public void Opening_when_connection_is_null_logs_nothing()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Information);
@@ -42,7 +42,7 @@ public class LoggingConnectionInterceptorTests
 
 
     [Fact]
-    public void Opened_without_an_exception_logs_a_state_transition()
+    public void Opened_when_no_exception_occurred_logs_a_state_transition()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Information);
@@ -57,7 +57,7 @@ public class LoggingConnectionInterceptorTests
 
 
     [Fact]
-    public void Opened_with_an_exception_logs_it_at_Error()
+    public void Opened_when_an_exception_occurred_logs_it_at_Error()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Information);
@@ -74,7 +74,7 @@ public class LoggingConnectionInterceptorTests
 
 
     [Fact]
-    public void Closing_logs_nothing()
+    public void Closing_when_called_logs_nothing()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Information);
@@ -87,7 +87,7 @@ public class LoggingConnectionInterceptorTests
 
 
     [Fact]
-    public void Closed_without_an_exception_logs_a_state_transition()
+    public void Closed_when_no_exception_occurred_logs_a_state_transition()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Information);
@@ -100,7 +100,7 @@ public class LoggingConnectionInterceptorTests
 
 
     [Fact]
-    public void Closed_with_an_exception_logs_it_at_Error()
+    public void Closed_when_an_exception_occurred_logs_it_at_Error()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Information);
@@ -114,7 +114,7 @@ public class LoggingConnectionInterceptorTests
 
 
     [Fact]
-    public void Property_and_transaction_callbacks_are_silent_noops()
+    public void PropertyAndTransactionCallbacks_when_invoked_log_nothing()
     {
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Information);
