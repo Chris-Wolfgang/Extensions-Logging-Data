@@ -1,3 +1,6 @@
 #nullable enable
 static Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.AddLoggingInterceptors(Microsoft.Extensions.Logging.ILogger! logger, System.Collections.Generic.IEnumerable<string!>? excludedParameterNames = null, Microsoft.Extensions.Logging.LogLevel level = Microsoft.Extensions.Logging.LogLevel.Information) -> void
 Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging
+static Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.AddLoggingInterceptors(Microsoft.Extensions.Logging.ILogger! logger) -> void
+static Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.AddLoggingInterceptors(Microsoft.Extensions.Logging.ILogger! logger, Microsoft.Extensions.Logging.LogLevel level) -> void
+static Wolfgang.Extensions.Logging.Data.EntityFramework6.EntityFramework6Logging.AddLoggingInterceptors(Microsoft.Extensions.Logging.ILogger! logger, System.Collections.Generic.IEnumerable<string!>! excludedParameterNames) -> void
