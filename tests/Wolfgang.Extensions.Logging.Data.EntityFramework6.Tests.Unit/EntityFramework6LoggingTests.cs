@@ -79,4 +79,91 @@ public class EntityFramework6LoggingTests
 
         Assert.Empty(logger.Entries);
     }
+
+
+    [Fact]
+    public void AddLoggingInterceptors_when_called_with_logger_only_registers_that_logger()
+    {
+        var logger = new RecordingLogger();
+
+        EntityFramework6Logging.AddLoggingInterceptors(logger);
+
+        AssertAlreadyRegistered(logger);
+    }
+
+
+
+    [Fact]
+    public void AddLoggingInterceptors_when_called_with_level_registers_that_logger()
+    {
+        var logger = new RecordingLogger();
+
+        EntityFramework6Logging.AddLoggingInterceptors(logger, LogLevel.Debug);
+
+        AssertAlreadyRegistered(logger);
+    }
+
+
+
+    [Fact]
+    public void AddLoggingInterceptors_when_called_with_excluded_names_registers_that_logger()
+    {
+        var logger = new RecordingLogger();
+
+        EntityFramework6Logging.AddLoggingInterceptors(logger, new[] { "password" });
+
+        AssertAlreadyRegistered(logger);
+    }
+
+
+
+    [Fact]
+    public void AddLoggingInterceptors_when_logger_only_overload_gets_null_throws_ArgumentNullException()
+    {
+        var ex = Assert.Throws<ArgumentNullException>
+        (
+            () => EntityFramework6Logging.AddLoggingInterceptors(null!)
+        );
+
+        Assert.Equal("logger", ex.ParamName);
+    }
+
+
+
+    [Fact]
+    public void AddLoggingInterceptors_when_level_overload_gets_null_logger_throws_ArgumentNullException()
+    {
+        var ex = Assert.Throws<ArgumentNullException>
+        (
+            () => EntityFramework6Logging.AddLoggingInterceptors(null!, LogLevel.Debug)
+        );
+
+        Assert.Equal("logger", ex.ParamName);
+    }
+
+
+
+    [Fact]
+    public void AddLoggingInterceptors_when_excluded_names_overload_gets_null_logger_throws_ArgumentNullException()
+    {
+        var ex = Assert.Throws<ArgumentNullException>
+        (
+            () => EntityFramework6Logging.AddLoggingInterceptors(null!, new[] { "password" })
+        );
+
+        Assert.Equal("logger", ex.ParamName);
+    }
+
+
+
+    // The public overloads register through EF6's process-global DbInterception.Add. A logger
+    // they registered is in the registry, so the recording seam then registers nothing for it.
+    private static void AssertAlreadyRegistered(RecordingLogger logger)
+    {
+        var registered = new List<IDbInterceptor>();
+
+        EntityFramework6Logging.AddLoggingInterceptors(logger, null, LogLevel.Information, registered.Add);
+
+        Assert.Empty(registered);
+    }
 }

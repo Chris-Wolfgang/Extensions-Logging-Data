@@ -98,6 +98,8 @@ EntityFramework6Logging.AddLoggingInterceptors(
     level: LogLevel.Information);                    // optional — defaults to Information
 ```
 
+Shorter overloads cover the common cases: `AddLoggingInterceptors(logger)`, `AddLoggingInterceptors(logger, LogLevel.Debug)` and `AddLoggingInterceptors(logger, new[] { "password" })`.
+
 From then on, every `DbContext` in the process logs:
 
 - **Commands** — text + parameter snapshot (redacted), via `LogDbCommand`.
