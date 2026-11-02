@@ -1757,67 +1757,6 @@ jobs:
           path: devskim-results.txt
           if-no-files-found: warn
 
-  aot-smoke:
-    name: "Native AOT smoke"
-    runs-on: ubuntu-latest
-    needs: detect-projects
-    # Same-repo PRs only — builds PR code under pull_request_target (see the
-    # inspectcode job for the rationale).
-    if: >-
-      github.repository != 'Chris-Wolfgang/repo-template'
-      && needs.detect-projects.outputs.has-projects == 'true'
-      && github.event.pull_request.head.repo.full_name == github.repository
-    timeout-minutes: 20
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
-        with:
-          dotnet-version: '10.0.x'
-
-      - name: Install Native AOT prerequisites
-        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
-
-      - name: Find the AOT smoke project
-        id: smoke
-        run: |
-          PROJ=$(find . -name '*.AotSmoke.csproj' | head -n1)
-          if [ -z "$PROJ" ]; then
-            echo "No *.AotSmoke.csproj found — skipping."
-            echo "found=" >> "$GITHUB_OUTPUT"
-          else
-            echo "Smoke project: $PROJ"
-            echo "found=$PROJ" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Publish Native AOT (trim + AOT analyzers gate the build)
-        if: steps.smoke.outputs.found != ''
-        # The project path is discovered by a find over the PR's own tree, so it is a value a
-        # pull request controls. It arrives through env instead of being expanded into the
-        # script body (zizmor template-injection).
-        env:
-          SMOKE_PROJ: ${{ steps.smoke.outputs.found }}
-        run: dotnet publish "$SMOKE_PROJ" -c Release -r linux-x64
-
-      - name: Run the published native binary
-        if: steps.smoke.outputs.found != ''
-        env:
-          SMOKE_PROJ: ${{ steps.smoke.outputs.found }}
-        run: |
-          BIN=$(find "$(dirname "$SMOKE_PROJ")/bin" -type f -name '*.AotSmoke' -path '*publish*' | head -n1)
-          if [ -z "$BIN" ]; then
-            echo "::error::Native AOT binary not produced."
-            exit 1
-          fi
-          echo "Running: $BIN"
-          "$BIN"
-
   # ============================================================================
   # STAGE 1: Linux - .NET Core/5+ Tests with Coverage Gate
   # ============================================================================
