@@ -1,6 +1,6 @@
 # Wolfgang.Extensions.Logging.Data
 
-Extension methods on `ILogger` for logging `DbConnection`, `DbCommand`, and other `System.Data` types — with credential redaction baked in so passwords never reach the log.
+Extension methods on `ILogger` for logging a `DbConnection`, a `DbCommand`, or command text with its parameters — with credential redaction baked in so passwords never reach the log.
 
 [![NuGet](https://img.shields.io/nuget/v/Wolfgang.Extensions.Logging.Data.svg?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Wolfgang.Extensions.Logging.Data)
 [![NuGet downloads](https://img.shields.io/nuget/dt/Wolfgang.Extensions.Logging.Data.svg?logo=nuget&label=downloads)](https://www.nuget.org/packages/Wolfgang.Extensions.Logging.Data)
@@ -46,7 +46,7 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 ## 🚀 Quick Start
 
 ```csharp
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient; // any DbConnection provider works
 using Microsoft.Extensions.Logging;
 using Wolfgang.Extensions.Logging.Data;
 
@@ -75,12 +75,24 @@ logger.LogDbConnection(connection, LogLevel.Debug);
 |---|---|
 | Log a `DbConnection` at `LogLevel.Information` (default) | `ILogger.LogDbConnection(DbConnection)` |
 | Log a `DbConnection` at a specific `LogLevel` | `ILogger.LogDbConnection(DbConnection, LogLevel)` |
+| Log command text + a parameter dictionary | `ILogger.LogCommandText(string, IReadOnlyDictionary<string, object?>)` |
+| Log command text + a parameter dictionary at a specific `LogLevel` | `ILogger.LogCommandText(string, IReadOnlyDictionary<string, object?>, LogLevel)` |
+| Log command text + a parameter dictionary, redacting named parameters | `ILogger.LogCommandText(string, IReadOnlyDictionary<string, object?>, IEnumerable<string>)` |
+| Log command text + a parameter dictionary, redacting named parameters, at a specific `LogLevel` | `ILogger.LogCommandText(string, IReadOnlyDictionary<string, object?>, IEnumerable<string>, LogLevel)` |
+| Log command text + Dapper-style anonymous-object parameters | `ILogger.LogCommandText(string, object)` |
+| Log command text + anonymous-object parameters at a specific `LogLevel` | `ILogger.LogCommandText(string, object, LogLevel)` |
+| Log command text + anonymous-object parameters, redacting named parameters | `ILogger.LogCommandText(string, object, IEnumerable<string>)` |
+| Log command text + anonymous-object parameters, redacting named parameters, at a specific `LogLevel` | `ILogger.LogCommandText(string, object, IEnumerable<string>, LogLevel)` |
+| Log a live `DbCommand` (text + parameters) | `ILogger.LogDbCommand(DbCommand)` |
+| Log a live `DbCommand` at a specific `LogLevel` | `ILogger.LogDbCommand(DbCommand, LogLevel)` |
+| Log a live `DbCommand`, redacting named parameters | `ILogger.LogDbCommand(DbCommand, IEnumerable<string>)` |
+| Log a live `DbCommand`, redacting named parameters, at a specific `LogLevel` | `ILogger.LogDbCommand(DbCommand, IEnumerable<string>, LogLevel)` |
 | **Credential redaction** — `Password` / `Pwd` keys are stripped from the connection string before it's emitted | (built-in to every overload) |
 | **Structured logging** — emits as templated log entry with named properties (`{ConnectionType}`, `{Database}`, `{DataSource}`, etc.) for structured-log sinks like Serilog, Application Insights, or Elastic | (built-in) |
 | **`IsEnabled(level)` short-circuit** — work is skipped if the log level isn't enabled, so the redaction / `DbConnectionStringBuilder` parse only runs when the entry will actually be written | (built-in) |
-| **Null-safe** — throws `ArgumentNullException` (not `NullReferenceException`) when `logger` or `connection` is `null` | (every overload) |
+| **Null-safe** — throws `ArgumentNullException` (not `NullReferenceException`) when `logger` or any other reference argument (`connection`, `command`, `commandText`, `parameters`, `excludedParameterNames`) is `null` | (every overload) |
 
-`DbCommand` logging is also available via `ILogger.LogCommandText(...)` (command text + parameter snapshot with opt-in redaction) and `ILogger.LogDbCommand(DbCommand, ...)` (logs a live command directly). The library is intentionally narrow and grows one type at a time as needed.
+The library is intentionally narrow and grows one type at a time as needed.
 
 > **Trimming / Native AOT:** `LogDbConnection`, `LogDbCommand`, and the `IReadOnlyDictionary<string, object?>` overloads of `LogCommandText` are trim- and AOT-safe (verified by a `PublishAot` smoke in CI). The **anonymous-object** `LogCommandText(..., object parameters, ...)` overloads reflect over the parameter's runtime properties and are marked `[RequiresUnreferencedCode]` — in trimmed/AOT apps use the dictionary overload instead.
 
@@ -155,7 +167,7 @@ The repo uses **`BannedSymbols.txt`** to prohibit blocking APIs:
 
 ### Prerequisites
 
-- .NET 10.0 SDK (also need .NET 8 / 9 SDKs to run the full multi-targeting test matrix)
+- .NET 10.0 SDK (the full multi-targeting test matrix also needs the .NET Core 3.1 and .NET 5 / 6 / 7 / 8 / 9 runtimes, plus .NET Framework 4.6.2 - 4.8.1 on Windows)
 - Optional: [PowerShell Core](https://github.com/PowerShell/PowerShell) for the formatting / build helper scripts
 
 ### Build steps
