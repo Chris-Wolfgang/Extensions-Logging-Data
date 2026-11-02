@@ -2,3 +2,11 @@
 # semgrep pins mcp==1.29.0, which is affected by GHSA-84m7-p3x7-pcfv (fixed in 1.30.0).
 # Delete this line once semgrep's own requirement allows mcp>=1.30.0.
 mcp>=1.30.0,<2
+# semgrep pins the OpenTelemetry 1.37.0 / 0.58b0 family, and opentelemetry-api <= 1.45.0 is
+# affected by GHSA-xcq7-p3pf-p88h (fixed in 1.45.1). The family moves together.
+# Delete these lines once semgrep's own requirements allow opentelemetry-api>=1.45.1.
+opentelemetry-api>=1.45.1,<2
+opentelemetry-sdk>=1.45.1,<2
+opentelemetry-exporter-otlp-proto-http>=1.45.1,<2
+opentelemetry-instrumentation-requests>=0.66b1
+opentelemetry-instrumentation-threading>=0.66b1
