@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1791831669814,
+  "lastUpdate": 1793644160383,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -1338,6 +1338,72 @@ window.BENCHMARK_DATA = {
             "value": 2211.277816772461,
             "unit": "ns",
             "range": "± 10.544634478344365"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "3a8ac2ca15d848df6093733533888301748e9dba",
+          "message": "build(deps): override semgrep's OpenTelemetry pins to 1.45.1 (GHSA-xcq7-p3pf-p88h) (#315)\n\nsemgrep pins the OpenTelemetry 1.37.0 / 0.58b0 family (~=1.37.0, still so\nin 1.182.1); opentelemetry-api <= 1.45.0 is affected by GHSA-xcq7-p3pf-p88h\n(fixed in 1.45.1). opentelemetry-sdk pins the api exactly, so the family is\nadded to semgrep.overrides.txt and moves together: 1.37.0 -> 1.45.1 and\n0.58b0 -> 0.66b1. Two exporter helper packages come in; importlib-metadata\ndrops out.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-02T13:27:05-05:00",
+          "tree_id": "c1c237ce06894a0c8562058c84444fb6b68c048e",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/3a8ac2ca15d848df6093733533888301748e9dba"
+        },
+        "date": 1793644158363,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 173.56371720631918,
+            "unit": "ns",
+            "range": "± 7.120709057760247"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 247.54128726323447,
+            "unit": "ns",
+            "range": "± 4.909246698138518"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.0168186550339063,
+            "unit": "ns",
+            "range": "± 0.029130765033699775"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 54.11766000588735,
+            "unit": "ns",
+            "range": "± 1.1071150231166609"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0,
+            "unit": "ns",
+            "range": "± 0"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 1539.3993949890137,
+            "unit": "ns",
+            "range": "± 34.191872424221856"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 1482.4121284484863,
+            "unit": "ns",
+            "range": "± 9.21466483029908"
           }
         ]
       }
