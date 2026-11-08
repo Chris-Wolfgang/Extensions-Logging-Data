@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1793656227733,
+  "lastUpdate": 1794103242203,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -1470,6 +1470,72 @@ window.BENCHMARK_DATA = {
             "value": 3302.9698600769043,
             "unit": "ns",
             "range": "± 25.792995148304417"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "ce649ed1a9f250c22778f0f4d5beb3f9e9dc1e5e",
+          "message": "chore: move released API entries to PublicAPI.Shipped.txt (#296)\n\nLogCommandText / LogDbCommand shipped in 0.2.0 and AddLoggingInterceptors\nshipped in EF6 0.2.0, but both projects still listed them as unshipped.\nMove every entry to Shipped.txt so Unshipped.txt holds only new surface.\n\nCloses #288\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>",
+          "timestamp": "2026-11-07T20:44:38-05:00",
+          "tree_id": "e73071396c3374236afda54fc71642dc858e69f1",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/ce649ed1a9f250c22778f0f4d5beb3f9e9dc1e5e"
+        },
+        "date": 1794103240233,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 250.16200749079385,
+            "unit": "ns",
+            "range": "± 3.526514860236992"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 361.6085271835327,
+            "unit": "ns",
+            "range": "± 9.431393333643449"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.0012066507091124852,
+            "unit": "ns",
+            "range": "± 0.0017905222253773066"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 84.0046591758728,
+            "unit": "ns",
+            "range": "± 0.5051808747706082"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0.0001548329989115397,
+            "unit": "ns",
+            "range": "± 0.00023897984492356327"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 2111.7917760213218,
+            "unit": "ns",
+            "range": "± 26.64887835202433"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 2109.0473976135254,
+            "unit": "ns",
+            "range": "± 42.94260150091872"
           }
         ]
       }
