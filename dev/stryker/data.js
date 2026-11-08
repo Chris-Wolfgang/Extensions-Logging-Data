@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792305252176,
+  "lastUpdate": 1794143533182,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "Mutation score": [
@@ -102,6 +102,33 @@ window.BENCHMARK_DATA = {
           "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/71f31a663d09f7dea8b0bfc08f6f8f95cde5c091"
         },
         "date": 1792305248271,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score",
+            "value": 89.66,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "ce649ed1a9f250c22778f0f4d5beb3f9e9dc1e5e",
+          "message": "chore: move released API entries to PublicAPI.Shipped.txt (#296)\n\nLogCommandText / LogDbCommand shipped in 0.2.0 and AddLoggingInterceptors\nshipped in EF6 0.2.0, but both projects still listed them as unshipped.\nMove every entry to Shipped.txt so Unshipped.txt holds only new surface.\n\nCloses #288\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>",
+          "timestamp": "2026-11-08T01:44:38Z",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/ce649ed1a9f250c22778f0f4d5beb3f9e9dc1e5e"
+        },
+        "date": 1794143530179,
         "tool": "customBiggerIsBetter",
         "benches": [
           {
