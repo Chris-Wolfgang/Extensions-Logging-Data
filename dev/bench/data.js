@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794498750026,
+  "lastUpdate": 1794522497865,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -1668,6 +1668,90 @@ window.BENCHMARK_DATA = {
             "value": 1676.4453430175781,
             "unit": "ns",
             "range": "± 24.03730277546563"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "395c0fcf2e525691e1c16874f343411e711959c6",
+          "message": "build: mark the core package IsAotCompatible and IsTrimmable on net10.0 (#304)\n\nTurns on the trim and Native AOT analyzers for the library itself (the\nAotSmoke publish only covered the call sites it exercises) and stamps\nthe assembly as trimmable. Builds with 0 warnings: the reflection-based\nanonymous-object overloads already carry [RequiresUnreferencedCode].\n\nCloses #207\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>",
+          "timestamp": "2026-11-12T17:25:26-05:00",
+          "tree_id": "3a5fda30711f872c942548085fa5011062e85686",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/395c0fcf2e525691e1c16874f343411e711959c6"
+        },
+        "date": 1794522494779,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 246.9344360033671,
+            "unit": "ns",
+            "range": "± 1.511286253083853"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger_NoExclusions",
+            "value": 210.98899745941162,
+            "unit": "ns",
+            "range": "± 3.0641440359895262"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger",
+            "value": 360.46008618672687,
+            "unit": "ns",
+            "range": "± 1.72512715261143"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger_NoExclusions",
+            "value": 301.6462237040202,
+            "unit": "ns",
+            "range": "± 3.221026153201119"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 379.41986576716107,
+            "unit": "ns",
+            "range": "± 3.0297681103844885"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.007655382777253787,
+            "unit": "ns",
+            "range": "± 0.012260154742446759"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 80.78649993737538,
+            "unit": "ns",
+            "range": "± 0.8670366884157841"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0,
+            "unit": "ns",
+            "range": "± 0"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 2195.636660257975,
+            "unit": "ns",
+            "range": "± 6.407857325999952"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 2211.7194213867188,
+            "unit": "ns",
+            "range": "± 4.334821728274503"
           }
         ]
       }
