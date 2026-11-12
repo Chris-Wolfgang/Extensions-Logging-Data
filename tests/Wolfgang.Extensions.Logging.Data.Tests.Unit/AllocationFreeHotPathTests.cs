@@ -28,7 +28,7 @@ public class AllocationFreeHotPathTests
 
 
     [Fact]
-    public void LogDbConnection_with_disabled_logger_does_not_allocate()
+    public void LogDbConnection_when_logger_is_disabled_does_not_allocate()
     {
         var connection = new FakeDbConnection();
 
@@ -60,7 +60,7 @@ public class AllocationFreeHotPathTests
 
 
     [Fact]
-    public void LogDbConnection_with_disabled_logger_explicit_level_does_not_allocate()
+    public void LogDbConnection_when_logger_is_disabled_for_an_explicit_level_does_not_allocate()
     {
         var connection = new FakeDbConnection();
 
