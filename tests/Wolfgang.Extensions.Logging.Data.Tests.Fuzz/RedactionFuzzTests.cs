@@ -70,7 +70,8 @@ public class RedactionFuzzTests
                     parts.Insert(Math.Min(position, parts.Count), passwordKey + "=" + secret);
 
                     var logger = new CapturingLogger();
-                    using var connection = new FakeDbConnection { ConnectionString = string.Join(";", parts) };
+                    using var connection = new FakeDbConnection();
+                    connection.ConnectionString = string.Join(";", parts);
 
                     logger.LogDbConnection(connection);
 
@@ -92,7 +93,8 @@ public class RedactionFuzzTests
                 connectionString =>
                 {
                     var logger = new CapturingLogger();
-                    using var connection = new FakeDbConnection { ConnectionString = connectionString };
+                    using var connection = new FakeDbConnection();
+                    connection.ConnectionString = connectionString;
 
                     logger.LogDbConnection(connection);
 
