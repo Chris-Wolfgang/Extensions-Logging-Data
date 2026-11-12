@@ -23,6 +23,8 @@ internal sealed class LoggingCommandInterceptor : IDbCommandInterceptor
     private readonly string[] _excludedParameterNames;
     private readonly LogLevel _level;
 
+
+
     public LoggingCommandInterceptor(ILogger logger, IEnumerable<string> excludedParameterNames, LogLevel level)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -30,35 +32,49 @@ internal sealed class LoggingCommandInterceptor : IDbCommandInterceptor
         _level = level;
     }
 
+
+
     public void NonQueryExecuting(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
     {
         LogExecuting(command);
     }
+
+
 
     public void NonQueryExecuted(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
     {
         LogFailure(command, interceptionContext);
     }
 
+
+
     public void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
     {
         LogExecuting(command);
     }
+
+
 
     public void ReaderExecuted(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
     {
         LogFailure(command, interceptionContext);
     }
 
+
+
     public void ScalarExecuting(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
     {
         LogExecuting(command);
     }
 
+
+
     public void ScalarExecuted(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
     {
         LogFailure(command, interceptionContext);
     }
+
+
 
     private void LogExecuting(DbCommand command)
     {
@@ -69,6 +85,8 @@ internal sealed class LoggingCommandInterceptor : IDbCommandInterceptor
 
         _logger.LogDbCommand(command, _excludedParameterNames, _level);
     }
+
+
 
     private void LogFailure<TResult>(DbCommand command, DbCommandInterceptionContext<TResult> interceptionContext)
     {

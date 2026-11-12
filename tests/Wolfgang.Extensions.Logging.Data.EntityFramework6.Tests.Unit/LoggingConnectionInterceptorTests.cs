@@ -44,11 +44,30 @@ public class LoggingConnectionInterceptorTests
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Information);
 
-        sut.Opened(new FakeDbConnection(), new DbConnectionInterceptionContext());
+        var connection = new FakeDbConnection();
+
+        sut.Opened(connection, new DbConnectionInterceptionContext());
 
         var entry = Assert.Single(logger.Entries);
         Assert.Equal(LogLevel.Information, entry.Level);
         Assert.Contains("opened", entry.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(connection.DataSource, entry.GetValue("DataSource"));
+        Assert.Equal(connection.Database, entry.GetValue("Database"));
+    }
+
+
+
+    [Fact]
+    public void Opened_when_the_connection_is_null_logs_the_transition_without_connection_values()
+    {
+        var logger = new RecordingLogger();
+        var sut = new LoggingConnectionInterceptor(logger, LogLevel.Information);
+
+        sut.Opened(null!, new DbConnectionInterceptionContext());
+
+        var entry = Assert.Single(logger.Entries);
+        Assert.Null(entry.GetValue("DataSource"));
+        Assert.Null(entry.GetValue("Database"));
     }
 
 
@@ -89,9 +108,27 @@ public class LoggingConnectionInterceptorTests
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Information);
 
-        sut.Closed(new FakeDbConnection(), new DbConnectionInterceptionContext());
+        var connection = new FakeDbConnection();
 
-        Assert.Contains("closed", Assert.Single(logger.Entries).Message, StringComparison.OrdinalIgnoreCase);
+        sut.Closed(connection, new DbConnectionInterceptionContext());
+
+        var entry = Assert.Single(logger.Entries);
+        Assert.Contains("closed", entry.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(connection.DataSource, entry.GetValue("DataSource"));
+        Assert.Equal(connection.Database, entry.GetValue("Database"));
+    }
+
+
+
+    [Fact]
+    public void Closed_when_the_connection_is_null_logs_the_transition_without_connection_values()
+    {
+        var logger = new RecordingLogger();
+        var sut = new LoggingConnectionInterceptor(logger, LogLevel.Information);
+
+        sut.Closed(null!, new DbConnectionInterceptionContext());
+
+        Assert.Null(Assert.Single(logger.Entries).GetValue("Database"));
     }
 
 

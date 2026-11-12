@@ -17,16 +17,22 @@ internal sealed class LoggingTransactionInterceptor : IDbTransactionInterceptor
     private readonly ILogger _logger;
     private readonly LogLevel _level;
 
+
+
     public LoggingTransactionInterceptor(ILogger logger, LogLevel level)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _level = level;
     }
 
+
+
     public void Committing(DbTransaction transaction, DbTransactionInterceptionContext interceptionContext)
     {
         _logger.Log(_level, "EF6 transaction committing");
     }
+
+
 
     public void Committed(DbTransaction transaction, DbTransactionInterceptionContext interceptionContext)
     {
@@ -36,10 +42,14 @@ internal sealed class LoggingTransactionInterceptor : IDbTransactionInterceptor
         }
     }
 
+
+
     public void RollingBack(DbTransaction transaction, DbTransactionInterceptionContext interceptionContext)
     {
         _logger.Log(_level, "EF6 transaction rolling back");
     }
+
+
 
     public void RolledBack(DbTransaction transaction, DbTransactionInterceptionContext interceptionContext)
     {
@@ -48,6 +58,8 @@ internal sealed class LoggingTransactionInterceptor : IDbTransactionInterceptor
             _logger.Log(_level, "EF6 transaction rolled back");
         }
     }
+
+
 
     private bool LogErrorIfFailed(DbTransactionInterceptionContext interceptionContext, string message)
     {
@@ -60,27 +72,39 @@ internal sealed class LoggingTransactionInterceptor : IDbTransactionInterceptor
         return true;
     }
 
+
+
     // Deliberate no-ops — accessor callbacks carry no value for passive logging.
 
     public void ConnectionGetting(DbTransaction transaction, DbTransactionInterceptionContext<DbConnection> interceptionContext)
     {
     }
 
+
+
     public void ConnectionGot(DbTransaction transaction, DbTransactionInterceptionContext<DbConnection> interceptionContext)
     {
     }
+
+
 
     public void Disposing(DbTransaction transaction, DbTransactionInterceptionContext interceptionContext)
     {
     }
 
+
+
     public void Disposed(DbTransaction transaction, DbTransactionInterceptionContext interceptionContext)
     {
     }
 
+
+
     public void IsolationLevelGetting(DbTransaction transaction, DbTransactionInterceptionContext<IsolationLevel> interceptionContext)
     {
     }
+
+
 
     public void IsolationLevelGot(DbTransaction transaction, DbTransactionInterceptionContext<IsolationLevel> interceptionContext)
     {

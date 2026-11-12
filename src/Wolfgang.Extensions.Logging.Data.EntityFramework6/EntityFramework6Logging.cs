@@ -19,6 +19,11 @@ namespace Wolfgang.Extensions.Logging.Data.EntityFramework6;
 /// pattern safe, this type keeps a static record of the loggers it has already registered
 /// and treats a repeat registration of the same logger instance as a no-op.
 /// </para>
+/// <para>
+/// EF6 offers no way to remove a registration through this type, so every registered logger is
+/// retained (and keeps logging) for the lifetime of the process. Register long-lived (singleton)
+/// loggers only; do not register a per-request or per-scope logger.
+/// </para>
 /// </remarks>
 public static class EntityFramework6Logging
 {
@@ -46,6 +51,8 @@ public static class EntityFramework6Logging
     {
         AddLoggingInterceptors(logger, excludedParameterNames, level, DbInterception.Add);
     }
+
+
 
     /// <summary>
     /// Registration seam used by the public overload and by tests. The <paramref name="register"/>
@@ -76,6 +83,8 @@ public static class EntityFramework6Logging
         }
     }
 
+
+
     /// <summary>
     /// Reference-identity comparer so the registration set distinguishes logger instances by
     /// identity rather than by any overridden <see cref="object.Equals(object)"/>.
@@ -84,7 +93,11 @@ public static class EntityFramework6Logging
     {
         internal static readonly ReferenceEqualityComparer Instance = new ReferenceEqualityComparer();
 
+
+
         public bool Equals(ILogger? x, ILogger? y) => ReferenceEquals(x, y);
+
+
 
         public int GetHashCode(ILogger obj) => RuntimeHelpers.GetHashCode(obj);
     }
