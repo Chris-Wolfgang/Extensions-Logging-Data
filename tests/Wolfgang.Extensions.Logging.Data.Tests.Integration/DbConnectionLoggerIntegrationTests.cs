@@ -25,11 +25,7 @@ public class DbConnectionLoggerIntegrationTests
     public void LogDbConnection_when_sqlite_connection_is_open_emits_a_structured_entry()
     {
         using var provider = new CapturingLoggerProvider();
-        using var factory = LoggerFactory.Create(builder =>
-        {
-            builder.SetMinimumLevel(LogLevel.Trace);
-            builder.AddProvider(provider);
-        });
+        using var factory = CreateLoggerFactory(provider, LogLevel.Trace);
         var logger = factory.CreateLogger<DbConnectionLoggerIntegrationTests>();
 
         using var connection = new SqliteConnection("Data Source=:memory:");
@@ -58,11 +54,7 @@ public class DbConnectionLoggerIntegrationTests
     public void LogDbConnection_when_sqlite_connection_string_has_a_password_redacts_it()
     {
         using var provider = new CapturingLoggerProvider();
-        using var factory = LoggerFactory.Create(builder =>
-        {
-            builder.SetMinimumLevel(LogLevel.Trace);
-            builder.AddProvider(provider);
-        });
+        using var factory = CreateLoggerFactory(provider, LogLevel.Trace);
         var logger = factory.CreateLogger<DbConnectionLoggerIntegrationTests>();
 
         // SqliteConnectionStringBuilder accepts a Password keyword (it maps to
@@ -89,7 +81,7 @@ public class DbConnectionLoggerIntegrationTests
     public void LogDbConnection_when_sqlite_connection_is_closed_emits_null_server_version()
     {
         using var provider = new CapturingLoggerProvider();
-        using var factory = LoggerFactory.Create(builder => builder.AddProvider(provider));
+        using var factory = CreateLoggerFactory(provider, LogLevel.Information);
         var logger = factory.CreateLogger<DbConnectionLoggerIntegrationTests>();
 
         using var connection = new SqliteConnection("Data Source=:memory:");
@@ -108,11 +100,7 @@ public class DbConnectionLoggerIntegrationTests
     public void LogDbConnection_when_pipeline_minimum_is_Warning_logs_only_at_Warning_or_above()
     {
         using var provider = new CapturingLoggerProvider();
-        using var factory = LoggerFactory.Create(builder =>
-        {
-            builder.SetMinimumLevel(LogLevel.Warning);
-            builder.AddProvider(provider);
-        });
+        using var factory = CreateLoggerFactory(provider, LogLevel.Warning);
         var logger = factory.CreateLogger<DbConnectionLoggerIntegrationTests>();
 
         using var connection = new SqliteConnection("Data Source=:memory:");
@@ -134,7 +122,7 @@ public class DbConnectionLoggerIntegrationTests
     public void LogDbConnection_when_inside_a_caller_scope_emits_one_entry_through_the_pipeline()
     {
         using var provider = new CapturingLoggerProvider();
-        using var factory = LoggerFactory.Create(builder => builder.AddProvider(provider));
+        using var factory = CreateLoggerFactory(provider, LogLevel.Information);
         var logger = factory.CreateLogger<DbConnectionLoggerIntegrationTests>();
 
         using var connection = new SqliteConnection("Data Source=:memory:");
@@ -147,6 +135,23 @@ public class DbConnectionLoggerIntegrationTests
 
         Assert.Equal("import 42", Assert.Single(provider.Scopes));
         Assert.Equal(ConnectionState.Open, Assert.Single(provider.Entries).GetValue("State"));
+    }
+
+
+
+    /// <summary>
+    /// Builds a <see cref="LoggerFactory"/> over <paramref name="provider"/>. The builder lambda
+    /// runs synchronously inside <see cref="LoggerFactory.Create"/>, and taking the provider as a
+    /// parameter (rather than capturing each test's <c>using</c> local) keeps the closure off a
+    /// variable that is disposed later in the caller.
+    /// </summary>
+    private static ILoggerFactory CreateLoggerFactory(ILoggerProvider provider, LogLevel minimumLevel)
+    {
+        return LoggerFactory.Create(builder =>
+        {
+            builder.SetMinimumLevel(minimumLevel);
+            builder.AddProvider(provider);
+        });
     }
 }
 

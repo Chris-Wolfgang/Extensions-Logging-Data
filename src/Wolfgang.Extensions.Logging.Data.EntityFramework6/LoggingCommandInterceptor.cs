@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity.Infrastructure.Interception;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 
 namespace Wolfgang.Extensions.Logging.Data.EntityFramework6;
@@ -17,45 +18,63 @@ namespace Wolfgang.Extensions.Logging.Data.EntityFramework6;
 internal sealed class LoggingCommandInterceptor : IDbCommandInterceptor
 {
     private readonly ILogger _logger;
-    private readonly IEnumerable<string> _excludedParameterNames;
+    // Materialized once: a lazy sequence passed to AddLoggingInterceptors must not be
+    // re-evaluated for every command EF6 executes over the life of the process.
+    private readonly string[] _excludedParameterNames;
     private readonly LogLevel _level;
+
+
 
     public LoggingCommandInterceptor(ILogger logger, IEnumerable<string> excludedParameterNames, LogLevel level)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _excludedParameterNames = excludedParameterNames ?? Array.Empty<string>();
+        _excludedParameterNames = excludedParameterNames?.ToArray() ?? Array.Empty<string>();
         _level = level;
     }
+
+
 
     public void NonQueryExecuting(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
     {
         LogExecuting(command);
     }
 
+
+
     public void NonQueryExecuted(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
     {
         LogFailure(command, interceptionContext);
     }
+
+
 
     public void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
     {
         LogExecuting(command);
     }
 
+
+
     public void ReaderExecuted(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
     {
         LogFailure(command, interceptionContext);
     }
+
+
 
     public void ScalarExecuting(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
     {
         LogExecuting(command);
     }
 
+
+
     public void ScalarExecuted(DbCommand command, DbCommandInterceptionContext<object> interceptionContext)
     {
         LogFailure(command, interceptionContext);
     }
+
+
 
     private void LogExecuting(DbCommand command)
     {
@@ -66,6 +85,8 @@ internal sealed class LoggingCommandInterceptor : IDbCommandInterceptor
 
         _logger.LogDbCommand(command, _excludedParameterNames, _level);
     }
+
+
 
     private void LogFailure<TResult>(DbCommand command, DbCommandInterceptionContext<TResult> interceptionContext)
     {

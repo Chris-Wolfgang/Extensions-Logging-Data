@@ -163,6 +163,50 @@ public class DbCommandLoggerExtensionsTests
 
 
 
+
+    [Theory]
+    [InlineData("password", "password", true)]
+    [InlineData(":password", "password", true)]
+    [InlineData("password", "?password", true)]
+    [InlineData("@password", "@@password", false)]  // "@password" normalises to "password", not "@password"
+    [InlineData("@@password", "@password", false)]  // "@@password" normalises to "@password"
+    [InlineData("@@password", "@@password", true)]
+    [InlineData("@@password", ":@password", true)]
+    [InlineData("pass", "password", false)]
+    public void LogCommandText_when_names_carry_prefixes_redacts_only_names_that_normalise_to_the_excluded_name
+    (
+        string parameterName,
+        string excludedName,
+        bool redacted
+    )
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?> { [parameterName] = "hunter2" };
+
+        logger.LogCommandText("INSERT ...", parameters, new[] { excludedName });
+
+        Assert.Equal
+        (
+            "{" + parameterName + "=" + (redacted ? "***" : "hunter2") + "}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_when_nothing_is_excluded_renders_every_value()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?> { ["@id"] = 1, ["name"] = "x" };
+
+        logger.LogCommandText("SELECT ...", parameters, Array.Empty<string>());
+
+        Assert.Equal("{@id=1, name=x}", Assert.Single(logger.Entries).GetValue("Parameters"));
+    }
+
+
+
     [Fact]
     public void LogCommandText_when_given_an_object_reflects_public_properties_into_parameters()
     {
@@ -199,6 +243,65 @@ public class DbCommandLoggerExtensionsTests
 
         var rendered = (string)Assert.Single(logger.Entries).GetValue("Parameters")!;
         Assert.Contains("note=null", rendered, StringComparison.Ordinal);
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_renders_parameters_as_a_brace_wrapped_comma_separated_list()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?>(StringComparer.Ordinal)
+        {
+            ["@a"] = 1,
+            ["@b"] = "x",
+        };
+
+        logger.LogCommandText("SELECT 1", parameters);
+
+        Assert.Equal
+        (
+            "{@a=1, @b=x}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_with_an_empty_parameter_name_renders_it_without_throwing()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?>(StringComparer.Ordinal)
+        {
+            [string.Empty] = 1,
+        };
+
+        logger.LogCommandText("SELECT 1", parameters, new[] { "secret" });
+
+        Assert.Equal
+        (
+            "{=1}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_object_skips_indexers_and_write_only_properties()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new ParametersWithIndexerAndWriteOnlyProperty { Id = 7, WriteOnly = "never-read" };
+        Assert.Equal(3, parameters[3]);   // the indexer is a real, readable member
+
+        logger.LogCommandText("SELECT 1", parameters);
+
+        Assert.Equal
+        (
+            "{Id=7}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
     }
 
 
@@ -276,4 +379,25 @@ public class DbCommandLoggerExtensionsTests
 
         Assert.Same(dict, result);
     }
+}
+
+
+
+/// <summary>
+/// Parameter object with an indexer and a write-only property, neither of which the
+/// anonymous-object overloads may read: only <see cref="Id"/> is a readable, non-indexed
+/// property.
+/// </summary>
+internal sealed class ParametersWithIndexerAndWriteOnlyProperty
+{
+    public int Id { get; set; }
+
+#pragma warning disable S2376, CA1044 // Write-only on purpose: the reader must skip it.
+    public string WriteOnly
+    {
+        set => _ = value;
+    }
+#pragma warning restore S2376, CA1044
+
+    public int this[int index] => index;
 }
