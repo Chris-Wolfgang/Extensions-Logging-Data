@@ -27,16 +27,14 @@ permissions:
 
 env:
   # Minimum line coverage for PRODUCTION assemblies (anything under src/).
-  CODECOV_MINIMUM: 90
+  CODECOV_MINIMUM: 95
   # Minimum line coverage for TEST assemblies (anything under tests/).
   # Test code that never executes has no purpose — an uncovered helper, fake, or
   # branch in a test project is dead code and should be exercised or deleted.
   # This is LINE coverage; branch coverage legitimately can't reach 100%
   # (compiler-generated async state machines), and the gate reads only the
   # line-coverage column that ReportGenerator puts at end-of-row.
-  # Repository floor (template: 100). Test-assembly coverage sits below 100 here;
-  # raised toward 100 in the tracking issue, never lowered.
-  CODECOV_TEST_MINIMUM: 91
+  CODECOV_TEST_MINIMUM: 100
 
 on:
   pull_request:
@@ -263,7 +261,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68  # v6.0.0
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73  # v6.1.0
         with:
           # Install every SDK the test stages install. Solutions that
           # multi-target out-of-support TFMs (netcoreapp3.1 / net5.0 /
@@ -440,7 +438,7 @@ jobs:
 
       - name: Upload SARIF to Code Scanning
         if: steps.sarif.outcome == 'success' && hashFiles('inspect.sarif') != ''
-        uses: github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d  # v4.38.3
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066  # v4.39.3
         with:
           sarif_file: inspect.sarif
 
@@ -449,7 +447,9 @@ jobs:
   # ============================================================================
   test-linux-core:
     name: "Stage 1: Linux Tests (.NET 5.0-10.0) + Coverage Gate"
-    runs-on:  ubuntu-latest
+    # Pinned to 24.04: on ubuntu-latest (26.04) the netcoreapp3.1 test host finds no ICU it can
+    # load and aborts. Keep the pin until the netcoreapp3.1 slot is handled another way.
+    runs-on: ubuntu-24.04
     needs: detect-projects
     if: github.repository != 'Chris-Wolfgang/repo-template' && needs.detect-projects.outputs.has-projects == 'true'
 
@@ -460,20 +460,39 @@ jobs:
           persist-credentials: false
 
       - name: Install OpenSSL 1.1 for .NET 5.0
+        env:
+          # .NET 5.0 loads OpenSSL 1.x only and ubuntu-24.04 ships 3.x, so the focal-security
+          # libssl1.1 build is installed directly. It is pinned by version and SHA-256: every
+          # mirror below serves the same verified bytes, which replaces the apt signature check,
+          # and no apt index refresh runs, so the runner's default apt mirrors are never needed.
+          # Bump both values together when focal-security publishes a newer libssl1.1.
+          LIBSSL_DEB: libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb
+          LIBSSL_SHA256: 7cf39d70a639017d1dd7c8d36daa2258063608688e449fddf40ffdd46f992a78
         run: |
-          # signed-by= points apt at the Canonical archive keyring that ships on all
-          # GitHub-hosted Ubuntu runners. It contains the same signing key Canonical
-          # uses across releases (focal, jammy, noble), so it can verify focal-security
-          # packages from a non-focal runner without disabling signature checking.
-          # Earlier iteration used [trusted=yes] (skipping verification) as a quick
-          # unblock; this restores end-to-end signature verification.
-          echo "deb [signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] https://security.ubuntu.com/ubuntu focal-security main" | sudo tee /etc/apt/sources.list.d/focal-security.list
-          sudo apt-get update -q
-          sudo apt-get install --yes libssl1.1
-          sudo rm /etc/apt/sources.list.d/focal-security.list
+          deb="${RUNNER_TEMP:?}/${LIBSSL_DEB:?}"
+          # Mirrors in different DNS zones, so one unreachable host or zone does not fail the stage.
+          for base in \
+            https://security.ubuntu.com/ubuntu \
+            https://archive.ubuntu.com/ubuntu \
+            https://mirrors.edge.kernel.org/ubuntu \
+            https://mirror.math.princeton.edu/pub/ubuntu; do
+            if curl -fsSL --retry 3 --retry-all-errors --retry-delay 5 --max-time 120 \
+                 -o "$deb" "$base/pool/main/o/openssl/$LIBSSL_DEB" \
+               && echo "$LIBSSL_SHA256  $deb" | sha256sum -c --status -; then
+              echo "libssl1.1 fetched from $base"
+              break
+            fi
+            echo "::warning::libssl1.1 not fetched (or hash mismatch) from $base; trying the next mirror"
+            rm -f "$deb"
+          done
+          if [ ! -f "$deb" ]; then
+            echo "::error::libssl1.1 could not be fetched from any mirror"
+            exit 1
+          fi
+          sudo DEBIAN_FRONTEND=noninteractive dpkg -i "$deb"
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68  # v6.0.0
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73  # v6.1.0
         with:
           dotnet-version: |
             3.1.x
@@ -775,7 +794,7 @@ jobs:
             -targetdir:"CoverageReport" \
             -reporttypes:"Html;TextSummary;MarkdownSummaryGithub;CsvSummary"
 
-      - name: Enforce 90% coverage threshold
+      - name: Enforce coverage thresholds
         if: steps.check-coverage.outputs.has-coverage == 'true'
         run: |
           if [ ! -f CoverageReport/Summary.txt ]; then
@@ -943,7 +962,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68  # v6.0.0
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73  # v6.1.0
         with:
           dotnet-version: |
             3.1.x
@@ -1251,7 +1270,7 @@ jobs:
           }
           Write-Host "Every test assembly that collected coverage is present in the report."
 
-      - name: Enforce 90% coverage threshold
+      - name: Enforce coverage thresholds
         if: steps.check-coverage.outputs.has-coverage == 'true'
         shell: pwsh
         run: |
@@ -1386,7 +1405,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68  # v6.0.0
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73  # v6.1.0
         with:
           dotnet-version: |
             6.0.x
@@ -1533,20 +1552,23 @@ jobs:
 
           # while-read rather than mapfile: macOS runners ship bash 3.2, which has no
           # mapfile (the step would die with exit 127 before running a single test).
+          # *.Tests.Integration.* projects do not run on this stage, as on Stage 2 (Windows):
+          # macOS runners have no Docker, so container-based integration suites would only
+          # report Skipped tests and near-0% coverage against CODECOV_TEST_MINIMUM. Stage 1
+          # (Linux) runs every integration project and gates its coverage.
           test_projects=()
           while IFS= read -r -d '' file; do
             test_projects+=("$file")
           done < <(find ./tests -type f \( -name "*.csproj" -o -name "*.vbproj" -o -name "*.fsproj" \) -not -name "*.Tests.Integration.*" -print0)
 
-          # Report any integration test projects deliberately excluded from the
-          # coverage gate, so the skip is visible rather than silent (they are
-          # expected to run in a separate workflow).
+          # Report any integration test projects deliberately skipped on this stage,
+          # so the skip is visible rather than silent (Stage 1 runs and gates them).
           excluded_integration=()
           while IFS= read -r -d '' file; do
             excluded_integration+=("$file")
           done < <(find ./tests -type f \( -name "*.csproj" -o -name "*.vbproj" -o -name "*.fsproj" \) -name "*.Tests.Integration.*" -print0)
           if [ ${#excluded_integration[@]} -gt 0 ]; then
-            echo "::notice::Excluded ${#excluded_integration[@]} integration test project(s) from the coverage gate (expected to run in a separate workflow): ${excluded_integration[*]}"
+            echo "::notice::Skipped ${#excluded_integration[@]} integration test project(s) on Stage 3 (macOS); Stage 1 (Linux) runs and coverage-gates them: ${excluded_integration[*]}"
           fi
 
           if [ ${#test_projects[@]} -eq 0 ]; then
@@ -1679,7 +1701,7 @@ jobs:
             echo "ℹ️  No coverage files found and no test assembly ran - skipping report generation"
           fi
 
-      - name: Enforce 90% coverage threshold
+      - name: Enforce coverage thresholds
         run: |
           # If no cobertura files were produced (no tests, all test projects
           # skipped, etc.), the preceding step explicitly skipped report
@@ -1819,7 +1841,7 @@ jobs:
           echo "=========================================="
           echo "✅ ALL STAGES PASSED"
           echo "=========================================="
-          echo "Stage 1: Linux tests + 90% coverage ✅"
+          echo "Stage 1: Linux tests + coverage gate (${CODECOV_MINIMUM}% production, ${CODECOV_TEST_MINIMUM}% tests) ✅"
           echo "Stage 2: Windows .NET Core & .NET Framework tests ✅"
           echo "Stage 3: macOS tests ✅"
           echo ""
@@ -1899,7 +1921,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           dotnet-version: '10.0.x'
 
