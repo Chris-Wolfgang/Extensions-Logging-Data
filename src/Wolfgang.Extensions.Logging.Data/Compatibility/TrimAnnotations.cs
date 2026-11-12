@@ -7,8 +7,9 @@
 
 #pragma warning disable MA0048 // File name must match type name — this is a framework polyfill.
 
-// ReSharper disable once CheckNamespace — the polyfill MUST live in the BCL's namespace
-// so the trimmer/AOT compiler matches it by full type name; folder layout is irrelevant.
+// Intentional System.Diagnostics.CodeAnalysis polyfill: it MUST live in the BCL's namespace so
+// the trimmer/AOT compiler matches it by full type name; folder layout is irrelevant.
+// ReSharper disable once CheckNamespace
 namespace System.Diagnostics.CodeAnalysis
 {
     /// <summary>
