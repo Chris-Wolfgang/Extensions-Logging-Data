@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net462;net48;netstandard2.1</TargetFrameworks>
-		<LangVersion>latest</LangVersion>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 		<Version>0.2.1</Version>
 		<!-- Pin AssemblyVersion to a fixed binding-stability baseline so consumers
@@ -19,7 +18,7 @@
 		     the newest published version after every release — that's the
 		     "post-deploy baseline bump PR" step in the per-repo release flow.
 		     EF6 lags the main package's cadence — baseline is the last EF6
-		     release (0.2.0), not the current Data release. -->
+		     release (0.2.1), not the current Data release. -->
 		<EnablePackageValidation>true</EnablePackageValidation>
 		<PackageValidationBaselineVersion>0.2.1</PackageValidationBaselineVersion>
 		<Title>$(AssemblyName)</Title>
@@ -28,7 +27,7 @@
 		<RepositoryUrl>https://github.com/Chris-Wolfgang/Extensions-Logging-Data.git</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 		<PackageTags>logging;entityframework;ef6;interceptor;structured-logging;dbcommand;diagnostics</PackageTags>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<SignAssembly>False</SignAssembly>
@@ -41,6 +40,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Wolfgang.Extensions.Logging.Data\Wolfgang.Extensions.Logging.Data.csproj" />
 		<PackageReference Include="EntityFramework" Version="6.5.2" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.14" />
 	</ItemGroup>
 </Project>
