@@ -18,6 +18,14 @@ namespace Wolfgang.Extensions.Logging.Data;
 /// </remarks>
 public static class DbConnectionLoggerExtensions
 {
+    /// <summary>
+    /// Logged in place of a connection string that <see cref="DbConnectionStringBuilder"/> cannot
+    /// parse. The raw string is never logged because it may contain a password.
+    /// </summary>
+    internal const string UnparseableConnectionStringPlaceholder = "<unparseable connection string redacted>";
+
+
+
     private const string MessageTemplate =
         "DbConnection {ConnectionType} Database={Database} DataSource={DataSource} ServerVersion={ServerVersion} State={State} ConnectionTimeout={ConnectionTimeout} ConnectionString={ConnectionString}";
 
@@ -105,8 +113,9 @@ public static class DbConnectionLoggerExtensions
     /// </summary>
     /// <param name="connectionString">The raw connection string. May be <see langword="null"/> or empty.</param>
     /// <returns>
-    /// The connection string with password keys removed, or <see cref="string.Empty"/> when the
-    /// input is null or empty.
+    /// The connection string with password keys removed, <see cref="string.Empty"/> when the
+    /// input is null or empty, or <see cref="UnparseableConnectionStringPlaceholder"/> when the
+    /// input does not conform to the generic connection-string grammar.
     /// </returns>
     internal static string RedactConnectionString(string? connectionString)
     {
@@ -115,10 +124,21 @@ public static class DbConnectionLoggerExtensions
             return string.Empty;
         }
 
-        var builder = new DbConnectionStringBuilder
+        DbConnectionStringBuilder builder;
+        try
         {
-            ConnectionString = connectionString
-        };
+            builder = new DbConnectionStringBuilder
+            {
+                ConnectionString = connectionString
+            };
+        }
+        catch (ArgumentException)
+        {
+            // The generic key=value; parser rejects some provider-specific strings (a bare file
+            // path, an unbalanced quote). A logging helper must not take the caller's data path
+            // down, and the raw string may hold a password, so log a fixed placeholder instead.
+            return UnparseableConnectionStringPlaceholder;
+        }
 
         // DbConnectionStringBuilder.Remove is a no-op for keys that aren't present
         // (returns false rather than throwing), so the ContainsKey checks would be
