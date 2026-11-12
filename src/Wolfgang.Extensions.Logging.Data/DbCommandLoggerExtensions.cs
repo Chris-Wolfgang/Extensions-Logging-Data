@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
@@ -490,11 +491,28 @@ public static class DbCommandLoggerExtensions
         foreach (var kvp in parameters)
         {
             var isExcluded = excluded.Contains(NormalizeParameterName(kvp.Key));
-            var value = isExcluded ? RedactedValue : (kvp.Value?.ToString() ?? "null");
+            var value = isExcluded ? RedactedValue : FormatParameterValue(kvp.Value);
             parts.Add($"{kvp.Key}={value}");
         }
 
         return "{" + string.Join(", ", parts) + "}";
+    }
+
+
+
+    /// <summary>
+    /// Formats a parameter value for the rendered parameter list. <see langword="null"/> renders as
+    /// <c>null</c>; every other value is formatted with <see cref="CultureInfo.InvariantCulture"/> so
+    /// numbers and dates log the same text on every host regardless of its current culture.
+    /// </summary>
+    private static string FormatParameterValue(object? value)
+    {
+        if (value is null)
+        {
+            return "null";
+        }
+
+        return Convert.ToString(value, CultureInfo.InvariantCulture) ?? string.Empty;
     }
 
 
