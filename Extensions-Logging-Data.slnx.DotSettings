@@ -18,8 +18,8 @@
 
 	<!-- Redundant-code style rules — covered in-build by Roslynator / IDE00xx and
 	     .editorconfig. RedundantUsingDirective in particular is a FALSE POSITIVE on
-	     the src library project: <ImplicitUsings> is enabled only for net10.0, so
-	     explicit System usings are REQUIRED on net462/netstandard2.0/2.1 but look
+	     the src library project: implicit usings are off on every TFM, and some
+	     explicit usings are needed only on net462/netstandard2.0/2.1, so they look
 	     redundant to InspectCode (which analyses a single TFM). -->
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=RedundantUsingDirective/@EntryIndexedValue">DO_NOT_SHOW</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=RedundantNameQualifier/@EntryIndexedValue">DO_NOT_SHOW</s:String>

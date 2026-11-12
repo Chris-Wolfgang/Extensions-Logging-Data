@@ -38,7 +38,7 @@ public class GlobalizationInvarianceTests
     [InlineData("ar-SA")]   // RTL + non-Gregorian calendar
     [InlineData("ja-JP")]   // CJK + non-Gregorian calendar
     [InlineData("")]        // invariant
-    public void RedactConnectionString_removes_password_under_any_culture(string cultureName)
+    public void RedactConnectionString_when_current_culture_varies_removes_password(string cultureName)
     {
         using var _ = WithCurrentCulture(cultureName);
 
@@ -58,7 +58,7 @@ public class GlobalizationInvarianceTests
     [InlineData("tr-TR", "PWD")]
     [InlineData("tr-TR", "Pwd")]
     [InlineData("tr-TR", "pwd")]
-    public void RedactConnectionString_handles_all_password_key_casings_under_turkish_locale(string cultureName, string keyCasing)
+    public void RedactConnectionString_when_culture_is_Turkish_removes_every_password_key_casing(string cultureName, string keyCasing)
     {
         using var _ = WithCurrentCulture(cultureName);
 
@@ -74,7 +74,7 @@ public class GlobalizationInvarianceTests
     [InlineData("de-DE")]
     [InlineData("ja-JP")]
     [InlineData("")]
-    public void LogDbConnection_emits_invariant_connection_timeout_value_regardless_of_culture(string cultureName)
+    public void LogDbConnection_when_current_culture_varies_emits_invariant_connection_timeout_value(string cultureName)
     {
         using var _ = WithCurrentCulture(cultureName);
 
@@ -92,6 +92,40 @@ public class GlobalizationInvarianceTests
         // Insights, Elastic, etc.) see the same number across all
         // locales.
         Assert.Equal(12345, entry.GetValue("ConnectionTimeout"));
+    }
+
+
+
+    [Theory]
+    [InlineData("tr-TR")]
+    [InlineData("de-DE")]
+    [InlineData("zh-CN")]
+    [InlineData("ar-SA")]
+    [InlineData("ja-JP")]
+    [InlineData("")]
+    public void LogCommandText_renders_parameter_values_with_invariant_culture(string cultureName)
+    {
+        using var _ = WithCurrentCulture(cultureName);
+
+        var logger = new RecordingLogger();
+        var when = new DateTime(2026, 6, 14, 13, 45, 30, DateTimeKind.Utc);
+
+        logger.LogCommandText
+        (
+            "INSERT ...",
+            new { ratio = 1.5, amount = 1234.56m, when }
+        );
+
+        var rendered = (string)Assert.Single(logger.Entries).GetValue("Parameters")!;
+
+        Assert.Contains("ratio=1.5", rendered, StringComparison.Ordinal);
+        Assert.Contains("amount=1234.56", rendered, StringComparison.Ordinal);
+        Assert.Contains
+        (
+            "when=" + when.ToString(CultureInfo.InvariantCulture),
+            rendered,
+            StringComparison.Ordinal
+        );
     }
 
 
