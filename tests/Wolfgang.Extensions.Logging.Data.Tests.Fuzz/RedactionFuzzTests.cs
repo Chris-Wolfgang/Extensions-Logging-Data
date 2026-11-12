@@ -27,7 +27,7 @@ public class RedactionFuzzTests
         Gen.String[Gen.OneOf(Gen.Char['A', 'Z'], Gen.Char['0', '9']), 6, 20]
             .Select(s => "ZQX" + s);
 
-    private static readonly Gen<string> PasswordKey =
+    private static readonly Gen<string> RedactedKeyName =
         Gen.OneOfConst("Password", "password", "PASSWORD", "pAsSwOrD", "Pwd", "pwd", "PWD");
 
     private static readonly Gen<(string Key, string Value)> OrdinaryPair =
@@ -56,18 +56,18 @@ public class RedactionFuzzTests
             .Select
             (
                 OrdinaryPair.Array[0, 8],
-                PasswordKey,
+                RedactedKeyName,
                 Secret,
                 Gen.Int[0, 8]
             )
             .Sample
             (
-                (pairs, passwordKey, secret, position) =>
+                (pairs, redactedKeyName, secret, position) =>
                 {
                     var parts = pairs
                         .Select(p => p.Key + "=" + p.Value)
                         .ToList();
-                    parts.Insert(Math.Min(position, parts.Count), passwordKey + "=" + secret);
+                    parts.Insert(Math.Min(position, parts.Count), redactedKeyName + "=" + secret);
 
                     var logger = new CapturingLogger();
                     using var connection = new FakeDbConnection();
