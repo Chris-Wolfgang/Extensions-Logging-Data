@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794405891259,
+  "lastUpdate": 1794498750026,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -1602,6 +1602,72 @@ window.BENCHMARK_DATA = {
             "value": 2494.165682474772,
             "unit": "ns",
             "range": "± 37.28984243208359"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "fc96da9a4aab30d3e87862a4acce19322a98a437",
+          "message": "chore(pack): stop requiring licence acceptance for the MIT package (#334)\n\nPackageRequireLicenseAcceptance=True makes Visual Studio show an\naccept-licence prompt on install. MIT does not require acceptance, so the\nprompt is only friction.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-12T10:19:34-05:00",
+          "tree_id": "85830a9182f2d3ca869f7f44d86673baf7b2ff94",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/fc96da9a4aab30d3e87862a4acce19322a98a437"
+        },
+        "date": 1794498748489,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 187.8644355138143,
+            "unit": "ns",
+            "range": "± 10.395747204543557"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 252.33970109621683,
+            "unit": "ns",
+            "range": "± 9.073410025885263"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.002151204893986384,
+            "unit": "ns",
+            "range": "± 0.003725996173875238"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 57.51288060347239,
+            "unit": "ns",
+            "range": "± 0.6656306543658019"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0,
+            "unit": "ns",
+            "range": "± 0"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 1721.3093026479085,
+            "unit": "ns",
+            "range": "± 18.418471819688026"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 1676.4453430175781,
+            "unit": "ns",
+            "range": "± 24.03730277546563"
           }
         ]
       }
