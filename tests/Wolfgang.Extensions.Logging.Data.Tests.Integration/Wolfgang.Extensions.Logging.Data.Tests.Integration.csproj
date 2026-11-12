@@ -15,12 +15,12 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="3.0.1" />
 
     <!-- Real Microsoft.Extensions.Logging pipeline, not just Abstractions. -->
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.14" />
 
     <!-- Real DbConnection implementation for integration coverage. SQLite is
          lightweight, in-process, and works across every TFM the integration
          project targets, so the test doesn't need any external infrastructure. -->
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.14" />
   </ItemGroup>
 
   <ItemGroup>
