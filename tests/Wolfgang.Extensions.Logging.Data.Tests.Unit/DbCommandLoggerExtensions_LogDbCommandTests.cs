@@ -61,6 +61,33 @@ public class DbCommandLoggerExtensions_LogDbCommandTests
 
 
     [Fact]
+    public void LogDbCommand_when_log_level_is_disabled_and_excludedParameterNames_is_null_throws_ArgumentNullException()
+    {
+        var logger = new RecordingLogger { MinimumLevel = LogLevel.Warning };
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => logger.LogDbCommand(SampleCommand(), (System.Collections.Generic.IEnumerable<string>)null!, LogLevel.Information)
+        );
+    }
+
+
+
+    [Fact]
+    public void LogDbCommand_when_log_level_is_disabled_does_not_read_the_parameters()
+    {
+        var logger = new RecordingLogger { MinimumLevel = LogLevel.Warning };
+        var command = SampleCommand();
+        var readsBefore = command.ParameterCollectionReadCount;
+
+        logger.LogDbCommand(command, LogLevel.Information);
+
+        Assert.Equal(readsBefore, command.ParameterCollectionReadCount);
+    }
+
+
+
+    [Fact]
     public void LogDbCommand_default_overload_logs_at_information()
     {
         var logger = new RecordingLogger();
