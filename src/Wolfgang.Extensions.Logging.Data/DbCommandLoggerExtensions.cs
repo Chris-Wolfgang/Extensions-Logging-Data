@@ -173,15 +173,7 @@ public static class DbCommandLoggerExtensions
             return;
         }
 
-        var rendered = RenderParameters(parameters, excludedParameterNames);
-
-        logger.Log
-        (
-            level,
-            MessageTemplate,
-            commandText,
-            rendered
-        );
+        WriteCommandEntry(logger, commandText, parameters, excludedParameterNames, level);
     }
 
 
@@ -384,7 +376,26 @@ public static class DbCommandLoggerExtensions
             return;
         }
 
-        LogCommandText(logger, command.CommandText ?? string.Empty, ToDictionary(command.Parameters), excludedParameterNames, level);
+        WriteCommandEntry(logger, command.CommandText ?? string.Empty, ToDictionary(command.Parameters), excludedParameterNames, level);
+    }
+
+
+
+    /// <summary>
+    /// Renders the parameters and writes the entry. Callers have already validated every
+    /// argument and checked <c>ILogger.IsEnabled</c>, so this does neither.
+    /// </summary>
+    private static void WriteCommandEntry(ILogger logger, string commandText, IReadOnlyDictionary<string, object?> parameters, IEnumerable<string> excludedParameterNames, LogLevel level)
+    {
+        var rendered = RenderParameters(parameters, excludedParameterNames);
+
+        logger.Log
+        (
+            level,
+            MessageTemplate,
+            commandText,
+            rendered
+        );
     }
 
 
@@ -478,19 +489,12 @@ public static class DbCommandLoggerExtensions
     /// </summary>
     private static string RenderParameters(IReadOnlyDictionary<string, object?> parameters, IEnumerable<string> excludedParameterNames)
     {
-        var excluded = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var name in excludedParameterNames)
-        {
-            if (name is not null)
-            {
-                excluded.Add(NormalizeParameterName(name));
-            }
-        }
+        var excluded = BuildExcludedNames(excludedParameterNames);
 
         var parts = new List<string>(parameters.Count);
         foreach (var kvp in parameters)
         {
-            var isExcluded = excluded.Contains(NormalizeParameterName(kvp.Key));
+            var isExcluded = excluded is not null && IsExcluded(kvp.Key, excluded);
             var value = isExcluded ? RedactedValue : FormatParameterValue(kvp.Value);
             parts.Add($"{kvp.Key}={value}");
         }
@@ -518,12 +522,62 @@ public static class DbCommandLoggerExtensions
 
 
     /// <summary>
+    /// Normalises the excluded names once per call, or returns <see langword="null"/> when nothing
+    /// is excluded (the common case: every 2- and 3-argument overload passes an empty list), so
+    /// the caller skips the lookup entirely.
+    /// </summary>
+    private static List<string>? BuildExcludedNames(IEnumerable<string> excludedParameterNames)
+    {
+        List<string>? excluded = null;
+        foreach (var name in excludedParameterNames)
+        {
+            if (name is not null)
+            {
+                (excluded ??= new List<string>()).Add(NormalizeParameterName(name));
+            }
+        }
+
+        return excluded;
+    }
+
+
+
+    /// <summary>
+    /// True when <paramref name="parameterName"/>, with one leading ADO.NET prefix ignored, equals
+    /// one of the normalised <paramref name="excluded"/> names case-insensitively. Compares in
+    /// place, so no normalised copy of the parameter name is allocated. Exclusion lists are a
+    /// handful of names, so a linear scan is cheaper than building a hash set per call.
+    /// </summary>
+    private static bool IsExcluded(string parameterName, List<string> excluded)
+    {
+        var offset = HasParameterPrefix(parameterName) ? 1 : 0;
+        var length = parameterName.Length - offset;
+        foreach (var name in excluded)
+        {
+            if (name.Length == length
+                && string.Compare(parameterName, offset, name, 0, length, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+    private static bool HasParameterPrefix(string name) =>
+        name.Length > 0 && (name[0] == '@' || name[0] == ':' || name[0] == '?');
+
+
+
+    /// <summary>
     /// Strips a single leading ADO.NET parameter-prefix character (<c>@ : ?</c>) so that
     /// <c>@name</c>, <c>:name</c>, <c>?name</c>, and <c>name</c> all normalize to <c>name</c>.
     /// </summary>
     private static string NormalizeParameterName(string name)
     {
-        if (name.Length > 0 && (name[0] == '@' || name[0] == ':' || name[0] == '?'))
+        if (HasParameterPrefix(name))
         {
             return name.Substring(1);
         }
