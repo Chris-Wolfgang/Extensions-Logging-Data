@@ -36,6 +36,72 @@ public static class EntityFramework6Logging
 
     /// <summary>
     /// Registers command, connection, and transaction logging interceptors for the given
+    /// <paramref name="logger"/> into the EF6 interception pipeline, logging every non-error
+    /// event at <c>LogLevel.Information</c> with no parameter redaction. Safe to call more than
+    /// once with the same <paramref name="logger"/> instance — repeat calls are a no-op.
+    /// </summary>
+    /// <param name="logger">The logger every EF6 event is written to.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="logger"/> is <see langword="null"/>.</exception>
+    /// <example>
+    /// <code>
+    /// EntityFramework6Logging.AddLoggingInterceptors(logger);
+    /// </code>
+    /// </example>
+    public static void AddLoggingInterceptors(ILogger logger)
+    {
+        AddLoggingInterceptors(logger, excludedParameterNames: null, LogLevel.Information, DbInterception.Add);
+    }
+
+
+
+    /// <summary>
+    /// Registers command, connection, and transaction logging interceptors for the given
+    /// <paramref name="logger"/> into the EF6 interception pipeline, logging every non-error
+    /// event at <paramref name="level"/> with no parameter redaction. Safe to call more than
+    /// once with the same <paramref name="logger"/> instance — repeat calls are a no-op.
+    /// </summary>
+    /// <param name="logger">The logger every EF6 event is written to.</param>
+    /// <param name="level">The level every non-error event is logged at.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="logger"/> is <see langword="null"/>.</exception>
+    /// <example>
+    /// <code>
+    /// EntityFramework6Logging.AddLoggingInterceptors(logger, LogLevel.Debug);
+    /// </code>
+    /// </example>
+    public static void AddLoggingInterceptors(ILogger logger, LogLevel level)
+    {
+        AddLoggingInterceptors(logger, excludedParameterNames: null, level, DbInterception.Add);
+    }
+
+
+
+    /// <summary>
+    /// Registers command, connection, and transaction logging interceptors for the given
+    /// <paramref name="logger"/> into the EF6 interception pipeline, logging every non-error
+    /// event at <c>LogLevel.Information</c> and redacting the values of
+    /// <paramref name="excludedParameterNames"/>. Safe to call more than once with the same
+    /// <paramref name="logger"/> instance — repeat calls are a no-op.
+    /// </summary>
+    /// <param name="logger">The logger every EF6 event is written to.</param>
+    /// <param name="excludedParameterNames">
+    /// Parameter names whose values are redacted in logged commands. Matching is
+    /// case-insensitive and ADO.NET-prefix-tolerant.
+    /// </param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="logger"/> is <see langword="null"/>.</exception>
+    /// <example>
+    /// <code>
+    /// EntityFramework6Logging.AddLoggingInterceptors(logger, new[] { "password" });
+    /// </code>
+    /// </example>
+    public static void AddLoggingInterceptors(ILogger logger, IEnumerable<string> excludedParameterNames)
+    {
+        AddLoggingInterceptors(logger, excludedParameterNames, LogLevel.Information, DbInterception.Add);
+    }
+
+
+
+    /// <summary>
+    /// Registers command, connection, and transaction logging interceptors for the given
     /// <paramref name="logger"/> into the EF6 interception pipeline. Safe to call more than
     /// once with the same <paramref name="logger"/> instance — repeat calls are a no-op.
     /// </summary>
@@ -47,6 +113,11 @@ public static class EntityFramework6Logging
     /// </param>
     /// <param name="level">The level every non-error event is logged at. Defaults to <c>LogLevel.Information</c>.</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="logger"/> is <see langword="null"/>.</exception>
+    /// <remarks>
+    /// This overload's default values are compiled into each call site. The overloads with no
+    /// optional parameters cover every shape that omits an argument, so such a call binds to
+    /// one of them instead and no default value is compiled into it.
+    /// </remarks>
     public static void AddLoggingInterceptors(ILogger logger, IEnumerable<string>? excludedParameterNames = null, LogLevel level = LogLevel.Information)
     {
         AddLoggingInterceptors(logger, excludedParameterNames, level, DbInterception.Add);
