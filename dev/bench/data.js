@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794522497865,
+  "lastUpdate": 1794576642943,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -1752,6 +1752,90 @@ window.BENCHMARK_DATA = {
             "value": 2211.7194213867188,
             "unit": "ns",
             "range": "± 4.334821728274503"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "921c0b98292534fd8c4cafeaab1ffbcd2a97d4ed",
+          "message": "test: share the test doubles with the EF6 suite, add missing cases, mutation-test EF6 (#292) (#317)\n\n* test: share the test doubles with the EF6 suite, add missing cases, mutation-test EF6\n\nPart of #292:\n- EF6 tests compile Tests.Unit's TestHelpers (and their two contract test\n  classes) via linked <Compile> items instead of carrying drifting copies.\n  A new FakeDbConnection contract test pins every settable member, so the\n  linked double stays at 100% in the EF6 assembly too.\n- New LogDbCommand tests: a repeated parameter name logs the last value;\n  a null entry in excludedParameterNames is skipped.\n- tests/...EntityFramework6.Tests.Unit/stryker-config.json, which\n  stryker.yaml already discovers (tests/**/stryker-config.json).\n- docs/adr/0004 records the netstandard2.0 build-only decision (Proposed).\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* test: rename 82 test methods to the MethodUnderTest_when_condition_expected_result pattern (#292) (#330)\n\nEvery [Fact]/[Theory] method that lacked the `_when_` segment now names its\ncondition, chosen per test from what the test arranges (for example\n`Closing_logs_nothing` -> `Closing_when_called_logs_nothing`,\n`LogDbCommand_with_null_command_text_logs_empty_string` ->\n`LogDbCommand_when_command_text_is_null_logs_empty_string`). The one comment\nthat named a test (`DocExample_compiles`) follows the rename. Names only; no\ntest body, attribute or assertion changes. All 108 test methods across the\nfive test projects now follow the pattern.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n\n* ci(pr): raise CODECOV_TEST_MINIMUM to the template's 100 (#301)\n\nEvery test assembly, Tests.Integration included, now measures 100% line\ncoverage locally, so the repository floor of 91 is no longer needed.\n\nCloses #244\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>\n\n* ci(pr): raise CODECOV_MINIMUM to the fleet's 95 (#302)\n\nProduction assemblies measure 97% (Wolfgang.Extensions.Logging.Data)\nand 100% (EntityFramework6) locally, above the fleet policy of 95.\n\nRefs #262\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>\n\n* ci(pr): document why Stage 3 (macOS) skips integration test projects (#299)\n\nThe Stage 3 skip had no explanation and its notice still said the\nprojects run \"in a separate workflow\". Since #199 was filed, Stage 1\n(Linux) runs and coverage-gates every integration project and Stage 2\n(Windows) documents its skip; say the same on Stage 3.\n\nCloses #199\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>\n\n* ci(pr): gates that could not run fail instead of reporting success (#325)\n\n#263, the parts not already on main (Stage 1 had its ledger, the\ntests-ran-but-no-coverage failure and the integration-project fix):\n- InspectCode gate: set -euo pipefail; fail when inspect.sarif is missing\n  or empty, when jq is absent, or when the count is not a number (from\n  repo-template's pr.yaml).\n- Stage 2 (Windows): record the assemblies that ran a coverage-collecting\n  TFM; fail when they produced no coverage files; new step requires a\n  coverage row for each (from repo-template's pr.yaml).\n- Stage 3 (macOS): same ledger; report generation and the gate fail\n  instead of skipping when tests ran but produced no coverage; the gate\n  requires a row per assembly that ran (exact-name match).\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n\n* ci(aot): canonical AOT smoke workflow replaces the pr.yaml job (#258, protected) (#331)\n\n* ci(aot): canonical AOT smoke workflow replaces the pr.yaml job\n\nAdds .github/workflows/aot-smoke.yaml, the fleet-canonical Native AOT smoke\n(job name \"AOT smoke (linux-x64)\", no paths filter, workflow_call for the\nrelease gate), with this repo's SMOKE_PROJECT and LIBRARY_NAMESPACE.\n\nRemoves the \"Native AOT smoke\" job from pr.yaml so the smoke does not run\ntwice. No other pr.yaml job needs it or reads its outputs, and it is not a\nrequired status check in the main ruleset.\n\nRefs #258\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* ci(aot): strip the csproj suffix before the namespace match\n\nSyncs aot-smoke.yaml with the fixed canonical file. MSBuild appends\n\" [<path>.csproj]\" to every warning line, and the smoke project's path\ncontains the library namespace, so every IL warning matched the\nnamespace grep. The suffix is now stripped with sed first. The header\ncomment now says there is no push trigger: run the workflow once on main\nwith workflow_dispatch before making the check required.\n\nRefs #258\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* ci(release): gate NuGet publish on the AOT smoke (#332)\n\nCalls the canonical aot-smoke.yaml from release.yaml (job aot-smoke,\nneeds validate-release, contents: read) and adds it to publish-nuget's\nneeds, so a release whose tagged commit fails the Native AOT smoke is not\npublished.\n\nRefs #258\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* ci(release): generate the third-party notices before packing (#324)\n\n#198: license-audit.yaml, the licence allow-list, scripts/third-party-\nnotices.ps1 and the Directory.Build.props pack item are already on main,\nbut release.yaml never ran the script, so obj/THIRD-PARTY-NOTICES.md never\nexisted at pack time and the packages shipped without notices. Run it\nbetween \"Restore and build\" and \"Pack NuGet packages\", as repo-template's\nrelease.yaml does.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n\n* ci(scorecard): move the SARIF filter out of the publishing job (#300)\n\nscorecard.dev rejects publish_results from a job that has any run: step,\nand the analysis job ran the suppressed-findings filter after Scorecard,\nso every publish since 2026-08-20 was refused while the run stayed\ngreen. The analysis job now has only uses: steps and hands results.sarif\nto a new upload job that runs the unchanged filter and upload-sarif.\nMatches Log-Compressor#297; this repo's own action pins are kept.\n\nCloses #272\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>\n\n* docs: describe this repository and the OIDC release pipeline (#323)\n\n#291:\n- RELEASE-WORKFLOW-SETUP.md: the one-time setup is registering the NuGet\n  trusted publisher (release.yaml uses NuGet/login + id-token), not a\n  NUGET_API_KEY secret; troubleshooting and the job diagram follow; the\n  ruleset script is Fix-BranchRuleset.ps1.\n- DISASTER-RECOVERY.md: contain/recover via the trusted-publisher policy.\n- .github/copilot-instructions.md: replaced the unedited repo-template\n  text with a short description of this repository.\n- DocFX: getting-started/introduction filled from the README (no template\n  placeholders), package name fixed on the API index, ILogger<T> escaped.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>\n\n* docs: list every public method in README and fix CHANGELOG drift (#297)\n\n- README feature table lists all 12 LogCommandText / LogDbCommand\n  overloads, the intro names what ships, the Quick Start uses\n  Microsoft.Data.SqlClient, and the prerequisites name the runtimes the\n  test matrix needs.\n- CHANGELOG: 0.2.0 is dated 2026-07-12 (the v0.2.0 tag date) and the\n  empty [Unreleased] subsections are gone; changelog.ps1 assemble writes\n  that section from fragments.\n\nCloses #290\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>\n\n* ci: move the eight CI-only changes out of this PR\n\nNative stack 371 squash-merged into this branch instead of main, so this PR\ncarried eight protected-only workflow changes (#301, #302, #299, #325, #331,\n#332, #324, #300) next to test and docs changes, and the Protected Files Guard\nfailed it as mixed. Their workflow files return to the base versions here; the\neight changes are re-raised as protected-only PRs stacked above #373. The test\nand docs changes from #330, #323 and #297 stay.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-13T08:28:03-05:00",
+          "tree_id": "634ba601f3e251ed96f9c0de36fdec4aa17f60da",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/921c0b98292534fd8c4cafeaab1ffbcd2a97d4ed"
+        },
+        "date": 1794576641492,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 204.89525636037192,
+            "unit": "ns",
+            "range": "± 3.2615383774652935"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger_NoExclusions",
+            "value": 162.38849580287933,
+            "unit": "ns",
+            "range": "± 3.8780213229460205"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger",
+            "value": 257.90726947784424,
+            "unit": "ns",
+            "range": "± 2.6180283696377895"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger_NoExclusions",
+            "value": 234.03449622790018,
+            "unit": "ns",
+            "range": "± 8.777877229413257"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 273.2486958503723,
+            "unit": "ns",
+            "range": "± 4.291199179484896"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.045972490683197975,
+            "unit": "ns",
+            "range": "± 0.004456280327660718"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 59.551820278167725,
+            "unit": "ns",
+            "range": "± 1.8906733045299648"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0.011285819113254547,
+            "unit": "ns",
+            "range": "± 0.01954761210918881"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 1684.7659587860107,
+            "unit": "ns",
+            "range": "± 26.818411598431556"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 1727.2148342132568,
+            "unit": "ns",
+            "range": "± 10.482536189476734"
           }
         ]
       }
