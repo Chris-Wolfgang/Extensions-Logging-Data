@@ -7,18 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-
 ## [0.3.1] - 2026-08-21
 
 Both packages get this release. `Wolfgang.Extensions.Logging.Data` moves to
@@ -141,7 +129,7 @@ is unchanged and stays at 0.2.0.
   `IReadOnlyDictionary<string, object?>` overload instead. No change for
   non-trimmed consumers. (#94)
 
-## [0.2.0] - 2026-07-06
+## [0.2.0] - 2026-07-12
 
 ### Added
 
