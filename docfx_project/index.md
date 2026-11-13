@@ -14,7 +14,7 @@ Welcome to the Wolfgang.Extensions.Logging.Data documentation. This site contain
 
 ## About Wolfgang.Extensions.Logging.Data
 
-Extension methods on ILogger and ILogger<T> for logging DbConnection, DbCommand, and other System.Data related data
+Extension methods on `ILogger` and `ILogger<T>` for logging `DbConnection`, `DbCommand`, and other `System.Data` related data
 
 ## Installation
 
