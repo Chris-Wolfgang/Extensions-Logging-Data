@@ -40,3 +40,17 @@ updates:
       pip-tooling:
         patterns:
           - "*"
+    ignore:
+      # semgrep.txt is compiled by uv with `--override semgrep.overrides.txt`, which forces newer
+      # mcp / OpenTelemetry releases than semgrep itself pins (it pins mcp==1.29.0 and the
+      # OpenTelemetry 1.37 family). Dependabot's pip resolver has no notion of an override, so
+      # every attempt to bump semgrep or a package in the overridden OpenTelemetry family fails
+      # with dependency_file_not_resolvable (run 42608350628, 2026-11-09) and leaves a red
+      # "Dependabot Updates" run. The family is pinned in lockstep by the override file, so it
+      # is ignored by prefix. Move them by regenerating the lock from .github/requirements:
+      #   uv pip compile --universal --generate-hashes --upgrade --override semgrep.overrides.txt semgrep.in -o semgrep.txt
+      - dependency-name: "semgrep"
+      - dependency-name: "opentelemetry-*"
+      # semgrep imports mcp.server.fastmcp, which mcp 2.x removed; the override keeps mcp on 1.x.
+      - dependency-name: "mcp"
+        update-types: ["version-update:semver-major"]
