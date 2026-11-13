@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net462;net48;netstandard2.1</TargetFrameworks>
-		<LangVersion>latest</LangVersion>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 		<Version>0.2.1</Version>
 		<!-- Pin AssemblyVersion to a fixed binding-stability baseline so consumers
@@ -19,7 +18,7 @@
 		     the newest published version after every release — that's the
 		     "post-deploy baseline bump PR" step in the per-repo release flow.
 		     EF6 lags the main package's cadence — baseline is the last EF6
-		     release (0.2.0), not the current Data release. -->
+		     release (0.2.1), not the current Data release. -->
 		<EnablePackageValidation>true</EnablePackageValidation>
 		<PackageValidationBaselineVersion>0.2.1</PackageValidationBaselineVersion>
 		<Title>$(AssemblyName)</Title>

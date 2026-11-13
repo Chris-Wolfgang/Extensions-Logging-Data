@@ -16,7 +16,7 @@ namespace Wolfgang.Extensions.Logging.Data.Tests.Unit;
 public class FakeDbDoublesTests
 {
     [Fact]
-    public void FakeDbCommand_settable_members_round_trip()
+    public void FakeDbCommand_when_members_are_set_returns_the_set_values()
     {
         using var connection = new FakeDbConnection();
         using var command = new FakeDbCommand();
@@ -40,7 +40,7 @@ public class FakeDbDoublesTests
 
 
     [Fact]
-    public void FakeDbCommand_execution_surface_throws_NotSupportedException()
+    public void FakeDbCommand_when_execution_members_are_called_throws_NotSupportedException()
     {
         using var command = new FakeDbCommand();
 
@@ -54,7 +54,7 @@ public class FakeDbDoublesTests
 
 
     [Fact]
-    public void FakeDbParameter_settable_members_round_trip()
+    public void FakeDbParameter_when_members_are_set_returns_the_set_values()
     {
         using var command = new FakeDbCommand();
         var parameter = command.CreateParameter();
@@ -82,7 +82,7 @@ public class FakeDbDoublesTests
 
 
     [Fact]
-    public void FakeDbParameterCollection_supports_add_count_index_enumerate_and_clear()
+    public void FakeDbParameterCollection_when_used_supports_add_count_index_enumerate_and_clear()
     {
         using var command = new FakeDbCommand();
         command.AddParameter("@a", 1);
@@ -102,7 +102,7 @@ public class FakeDbDoublesTests
 
 
     [Fact]
-    public void FakeDbParameterCollection_unsupported_members_throw_NotSupportedException()
+    public void FakeDbParameterCollection_when_unsupported_members_are_called_throws_NotSupportedException()
     {
         using var command = new FakeDbCommand();
         command.AddParameter("@a", 1);
@@ -127,7 +127,7 @@ public class FakeDbDoublesTests
 
 
     [Fact]
-    public void FakeDbConnection_state_transitions_and_unsupported_members()
+    public void FakeDbConnection_when_opened_changed_and_closed_tracks_state_and_rejects_unsupported_members()
     {
         using var connection = new FakeDbConnection();
         connection.ConnectionString = null!;
@@ -146,5 +146,32 @@ public class FakeDbDoublesTests
 
         Assert.Throws<NotSupportedException>(() => connection.CreateCommand());
         Assert.Throws<NotSupportedException>(() => connection.BeginTransaction());
+    }
+
+
+
+    [Fact]
+    public void FakeDbConnection_when_values_are_set_reports_them_and_throws_the_configured_ServerVersion_exception()
+    {
+        // Pins every settable member here, so a suite that links these doubles without the
+        // connection-logging tests (the EF6 suite) still covers all of them.
+        using var connection = new FakeDbConnection
+        {
+            DatabaseValue = "Db",
+            DataSourceValue = "Host",
+            ServerVersionValue = "9.9",
+            StateValue = ConnectionState.Open,
+            ConnectionTimeoutValue = 7,
+        };
+
+        Assert.Equal("Db", connection.Database);
+        Assert.Equal("Host", connection.DataSource);
+        Assert.Equal("9.9", connection.ServerVersion);
+        Assert.Equal(ConnectionState.Open, connection.State);
+        Assert.Equal(7, connection.ConnectionTimeout);
+
+        connection.ServerVersionException = new InvalidOperationException("boom");
+
+        Assert.Same(connection.ServerVersionException, Assert.Throws<InvalidOperationException>(() => connection.ServerVersion));
     }
 }

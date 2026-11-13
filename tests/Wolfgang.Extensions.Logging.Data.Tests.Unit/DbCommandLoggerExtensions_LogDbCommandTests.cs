@@ -61,7 +61,34 @@ public class DbCommandLoggerExtensions_LogDbCommandTests
 
 
     [Fact]
-    public void LogDbCommand_default_overload_logs_at_information()
+    public void LogDbCommand_when_log_level_is_disabled_and_excludedParameterNames_is_null_throws_ArgumentNullException()
+    {
+        var logger = new RecordingLogger { MinimumLevel = LogLevel.Warning };
+
+        Assert.Throws<ArgumentNullException>
+        (
+            () => logger.LogDbCommand(SampleCommand(), (System.Collections.Generic.IEnumerable<string>)null!, LogLevel.Information)
+        );
+    }
+
+
+
+    [Fact]
+    public void LogDbCommand_when_log_level_is_disabled_does_not_read_the_parameters()
+    {
+        var logger = new RecordingLogger { MinimumLevel = LogLevel.Warning };
+        var command = SampleCommand();
+        var readsBefore = command.ParameterCollectionReadCount;
+
+        logger.LogDbCommand(command, LogLevel.Information);
+
+        Assert.Equal(readsBefore, command.ParameterCollectionReadCount);
+    }
+
+
+
+    [Fact]
+    public void LogDbCommand_when_using_the_default_overload_logs_at_information()
     {
         var logger = new RecordingLogger();
 
@@ -77,7 +104,7 @@ public class DbCommandLoggerExtensions_LogDbCommandTests
     [InlineData(LogLevel.Debug)]
     [InlineData(LogLevel.Warning)]
     [InlineData(LogLevel.Error)]
-    public void LogDbCommand_logs_at_specified_level(LogLevel level)
+    public void LogDbCommand_when_a_level_is_specified_logs_at_that_level(LogLevel level)
     {
         var logger = new RecordingLogger();
 
@@ -89,7 +116,7 @@ public class DbCommandLoggerExtensions_LogDbCommandTests
 
 
     [Fact]
-    public void LogDbCommand_logs_command_text_and_parameters_from_the_live_command()
+    public void LogDbCommand_when_command_has_parameters_logs_command_text_and_parameters_from_the_live_command()
     {
         var logger = new RecordingLogger();
 
@@ -104,7 +131,7 @@ public class DbCommandLoggerExtensions_LogDbCommandTests
 
 
     [Fact]
-    public void LogDbCommand_redacts_excluded_parameter_value()
+    public void LogDbCommand_when_a_parameter_is_excluded_redacts_its_value()
     {
         var logger = new RecordingLogger();
 
@@ -119,7 +146,7 @@ public class DbCommandLoggerExtensions_LogDbCommandTests
 
 
     [Fact]
-    public void LogDbCommand_with_no_parameters_renders_empty_set()
+    public void LogDbCommand_when_command_has_no_parameters_renders_empty_set()
     {
         var logger = new RecordingLogger();
         var command = new FakeDbCommand { CommandText = "SELECT 1" };
@@ -132,7 +159,7 @@ public class DbCommandLoggerExtensions_LogDbCommandTests
 
 
     [Fact]
-    public void LogDbCommand_normalizes_DBNull_parameter_value_to_null()
+    public void LogDbCommand_when_a_parameter_value_is_DBNull_renders_it_as_null()
     {
         var logger = new RecordingLogger();
         var command = new FakeDbCommand { CommandText = "UPDATE ..." };
@@ -147,7 +174,7 @@ public class DbCommandLoggerExtensions_LogDbCommandTests
 
 
     [Fact]
-    public void LogDbCommand_with_null_command_text_logs_empty_string()
+    public void LogDbCommand_when_command_text_is_null_logs_empty_string()
     {
         var logger = new RecordingLogger();
         var command = new FakeDbCommand { CommandText = null! };
@@ -155,5 +182,34 @@ public class DbCommandLoggerExtensions_LogDbCommandTests
         logger.LogDbCommand(command);
 
         Assert.Equal(string.Empty, Assert.Single(logger.Entries).GetValue("CommandText"));
+    }
+
+
+
+    [Fact]
+    public void LogDbCommand_when_a_parameter_name_repeats_logs_the_last_value()
+    {
+        var logger = new RecordingLogger();
+        var command = new FakeDbCommand { CommandText = "SELECT @id" };
+        command.AddParameter("@id", 1);
+        command.AddParameter("@id", 2);
+
+        logger.LogDbCommand(command);
+
+        Assert.Equal("{@id=2}", Assert.Single(logger.Entries).GetValue("Parameters"));
+    }
+
+
+
+    [Fact]
+    public void LogDbCommand_when_excludedParameterNames_contains_null_skips_it_and_redacts_the_rest()
+    {
+        var logger = new RecordingLogger();
+
+        logger.LogDbCommand(SampleCommand(), new[] { null!, "password" });
+
+        var rendered = (string)Assert.Single(logger.Entries).GetValue("Parameters")!;
+        Assert.Contains("@password=***", rendered, StringComparison.Ordinal);
+        Assert.Contains("@id=1", rendered, StringComparison.Ordinal);
     }
 }
