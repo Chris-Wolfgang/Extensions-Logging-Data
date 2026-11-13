@@ -25,7 +25,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Wolfgang.Extensions.Logging.Data\Wolfgang.Extensions.Logging.Data.csproj" />
+    <ProjectReference Include="..\..\src\Wolfgang.Extensions.Logging.Data\Wolfgang.Extensions.Logging.Data.csproj" Condition="'$(TargetFramework)' != 'net5.0'" />
+    <!-- The net5.0 slot runs the netstandard2.0 build, which nearest-asset resolution never
+         picks for any slot here (net5.0-net9.0 would all take netstandard2.1). Without this,
+         netstandard2.0 ships untested. See docs/adr/0004-netstandard20-tested-on-net50.md. -->
+    <ProjectReference Include="..\..\src\Wolfgang.Extensions.Logging.Data\Wolfgang.Extensions.Logging.Data.csproj" Condition="'$(TargetFramework)' == 'net5.0'" SetTargetFramework="TargetFramework=netstandard2.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
