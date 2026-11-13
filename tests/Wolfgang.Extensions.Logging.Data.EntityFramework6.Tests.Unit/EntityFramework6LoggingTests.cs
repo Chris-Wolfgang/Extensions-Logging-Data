@@ -21,7 +21,7 @@ public class EntityFramework6LoggingTests
 
 
     [Fact]
-    public void AddLoggingInterceptors_registers_command_connection_and_transaction_interceptors()
+    public void AddLoggingInterceptors_when_called_once_registers_command_connection_and_transaction_interceptors()
     {
         var logger = new RecordingLogger();
         var registered = new List<IDbInterceptor>();
@@ -54,7 +54,7 @@ public class EntityFramework6LoggingTests
 
 
     [Fact]
-    public void AddLoggingInterceptors_with_distinct_loggers_registers_each()
+    public void AddLoggingInterceptors_when_called_with_distinct_loggers_registers_each()
     {
         var registered = new List<IDbInterceptor>();
 
@@ -67,7 +67,7 @@ public class EntityFramework6LoggingTests
 
 
     [Fact]
-    public void AddLoggingInterceptors_public_overload_registers_into_EF6_without_throwing()
+    public void AddLoggingInterceptors_when_using_the_public_overload_registers_into_EF6_without_throwing()
     {
         // Exercises the real DbInterception.Add path. The interceptors register into EF6's
         // process-global pipeline but never fire (no DbContext runs in a unit test), and a
