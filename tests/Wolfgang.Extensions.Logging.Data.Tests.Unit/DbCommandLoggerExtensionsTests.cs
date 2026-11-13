@@ -79,7 +79,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_default_overload_logs_at_information()
+    public void LogCommandText_when_using_the_default_overload_logs_at_information()
     {
         var logger = new RecordingLogger();
 
@@ -98,7 +98,7 @@ public class DbCommandLoggerExtensionsTests
     [InlineData(LogLevel.Warning)]
     [InlineData(LogLevel.Error)]
     [InlineData(LogLevel.Critical)]
-    public void LogCommandText_logs_at_specified_level(LogLevel level)
+    public void LogCommandText_when_a_level_is_specified_logs_at_that_level(LogLevel level)
     {
         var logger = new RecordingLogger();
 
@@ -111,7 +111,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_dict_logs_command_text_and_parameters_in_log_values()
+    public void LogCommandText_when_given_a_dictionary_logs_command_text_and_parameters_in_log_values()
     {
         var logger = new RecordingLogger();
 
@@ -127,7 +127,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_dict_redacts_excluded_parameter_value()
+    public void LogCommandText_when_a_dictionary_parameter_is_excluded_redacts_its_value()
     {
         var logger = new RecordingLogger();
         var parameters = new Dictionary<string, object?> { ["id"] = 1, ["password"] = "hunter2" };
@@ -150,7 +150,7 @@ public class DbCommandLoggerExtensionsTests
     [InlineData("?password")]  // ODBC positional-ish
     [InlineData("PASSWORD")]   // case-insensitive
     [InlineData("@PassWord")]  // prefix + casing
-    public void LogCommandText_excluded_name_matching_is_prefix_tolerant_and_case_insensitive(string excludedName)
+    public void LogCommandText_when_an_excluded_name_differs_by_prefix_or_case_still_redacts_it(string excludedName)
     {
         var logger = new RecordingLogger();
         var parameters = new Dictionary<string, object?> { ["@password"] = "hunter2" };
@@ -163,8 +163,52 @@ public class DbCommandLoggerExtensionsTests
 
 
 
+
+    [Theory]
+    [InlineData("password", "password", true)]
+    [InlineData(":password", "password", true)]
+    [InlineData("password", "?password", true)]
+    [InlineData("@password", "@@password", false)]  // "@password" normalises to "password", not "@password"
+    [InlineData("@@password", "@password", false)]  // "@@password" normalises to "@password"
+    [InlineData("@@password", "@@password", true)]
+    [InlineData("@@password", ":@password", true)]
+    [InlineData("pass", "password", false)]
+    public void LogCommandText_when_names_carry_prefixes_redacts_only_names_that_normalise_to_the_excluded_name
+    (
+        string parameterName,
+        string excludedName,
+        bool redacted
+    )
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?> { [parameterName] = "hunter2" };
+
+        logger.LogCommandText("INSERT ...", parameters, new[] { excludedName });
+
+        Assert.Equal
+        (
+            "{" + parameterName + "=" + (redacted ? "***" : "hunter2") + "}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
     [Fact]
-    public void LogCommandText_object_reflects_public_properties_into_parameters()
+    public void LogCommandText_when_nothing_is_excluded_renders_every_value()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?> { ["@id"] = 1, ["name"] = "x" };
+
+        logger.LogCommandText("SELECT ...", parameters, Array.Empty<string>());
+
+        Assert.Equal("{@id=1, name=x}", Assert.Single(logger.Entries).GetValue("Parameters"));
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_when_given_an_object_reflects_public_properties_into_parameters()
     {
         var logger = new RecordingLogger();
 
@@ -178,7 +222,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_object_with_no_properties_logs_empty_parameter_set()
+    public void LogCommandText_when_object_has_no_properties_logs_empty_parameter_set()
     {
         var logger = new RecordingLogger();
 
@@ -191,7 +235,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_object_renders_null_property_values_as_null_literal()
+    public void LogCommandText_when_an_object_property_is_null_renders_null_literal()
     {
         var logger = new RecordingLogger();
 
@@ -204,7 +248,66 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_object_handles_mixed_value_types()
+    public void LogCommandText_renders_parameters_as_a_brace_wrapped_comma_separated_list()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?>(StringComparer.Ordinal)
+        {
+            ["@a"] = 1,
+            ["@b"] = "x",
+        };
+
+        logger.LogCommandText("SELECT 1", parameters);
+
+        Assert.Equal
+        (
+            "{@a=1, @b=x}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_with_an_empty_parameter_name_renders_it_without_throwing()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?>(StringComparer.Ordinal)
+        {
+            [string.Empty] = 1,
+        };
+
+        logger.LogCommandText("SELECT 1", parameters, new[] { "secret" });
+
+        Assert.Equal
+        (
+            "{=1}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_object_skips_indexers_and_write_only_properties()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new ParametersWithIndexerAndWriteOnlyProperty { Id = 7, WriteOnly = "never-read" };
+        Assert.Equal(3, parameters[3]);   // the indexer is a real, readable member
+
+        logger.LogCommandText("SELECT 1", parameters);
+
+        Assert.Equal
+        (
+            "{Id=7}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_when_object_has_mixed_value_types_renders_each_value()
     {
         var logger = new RecordingLogger();
         var when = new DateTime(2026, 6, 14, 0, 0, 0, DateTimeKind.Utc);
@@ -223,7 +326,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_object_redacts_excluded_property_value()
+    public void LogCommandText_when_an_object_property_is_excluded_redacts_its_value()
     {
         var logger = new RecordingLogger();
 
@@ -238,7 +341,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void LogCommandText_object_overload_with_level_logs_at_that_level()
+    public void LogCommandText_when_object_overload_is_given_a_level_logs_at_that_level()
     {
         var logger = new RecordingLogger();
 
@@ -250,7 +353,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void ToDictionary_caches_accessors_so_repeated_calls_are_consistent()
+    public void ToDictionary_when_called_repeatedly_returns_consistent_results_from_cached_accessors()
     {
         // Two anonymous instances of the same shape exercise the per-type cache
         // (first call builds the reader, second reuses it). Both must render the
@@ -268,7 +371,7 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
-    public void ToDictionary_passes_through_an_existing_dictionary_without_reflection()
+    public void ToDictionary_when_given_a_dictionary_passes_it_through_without_reflection()
     {
         var dict = new Dictionary<string, object?> { ["id"] = 1 };
 
@@ -276,4 +379,39 @@ public class DbCommandLoggerExtensionsTests
 
         Assert.Same(dict, result);
     }
+}
+
+
+
+/// <summary>
+/// Declares the write-only property of <see cref="ParametersWithIndexerAndWriteOnlyProperty"/>.
+/// Implementing it keeps that property an instance member, which is what the anonymous-object
+/// overloads reflect over, without a setter that has to touch instance state.
+/// </summary>
+internal interface IHasWriteOnlyProperty
+{
+#pragma warning disable S2376, CA1044 // Write-only on purpose: the reader must skip it.
+    string WriteOnly { set; }
+#pragma warning restore S2376, CA1044
+}
+
+
+
+/// <summary>
+/// Parameter object with an indexer and a write-only property, neither of which the
+/// anonymous-object overloads may read: only <see cref="Id"/> is a readable, non-indexed
+/// property.
+/// </summary>
+internal sealed class ParametersWithIndexerAndWriteOnlyProperty : IHasWriteOnlyProperty
+{
+    public int Id { get; set; }
+
+#pragma warning disable S2376, CA1044 // Write-only on purpose: the reader must skip it.
+    public string WriteOnly
+    {
+        set => _ = value;
+    }
+#pragma warning restore S2376, CA1044
+
+    public int this[int index] => index;
 }
