@@ -351,7 +351,10 @@ jobs:
     needs: validate-release
     permissions:
       contents: read
-    uses: ./.github/workflows/aot-smoke.yaml
+    # GitHub's `$/` self-repository syntax is preferred here, but actionlint
+    # (a required check) rejects it until rhysd/actionlint#732 ships. Switch
+    # to `$/.github/workflows/aot-smoke.yaml` and drop the ignore when it does.
+    uses: ./.github/workflows/aot-smoke.yaml  # zizmor: ignore[self-repository]
 
   # Pack and validate NuGet package
   pack-and-validate:
