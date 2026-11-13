@@ -4,7 +4,6 @@
     <TargetFrameworks>net462;net47;net471;net472;net48;net481;net5.0;net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 
-    <NoWarn>NU1701</NoWarn>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
@@ -13,7 +12,11 @@
     <PackageReference Include="coverlet.collector" Version="10.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Condition="'$(TargetFramework)' != 'net5.0'" Version="2.8.2" />
+    <!-- xunit.runner.visualstudio, split by target-framework slot: 3.x on net8.0+ (it runs
+         xunit v2 tests); 2.8.2 capped below 3.0 on the older slots, because runner 3.x drops
+         those frameworks and the cap keeps Dependabot from moving them. -->
+    <PackageReference Include="xunit.runner.visualstudio" Condition="'$(TargetFramework)' != 'net5.0' and !$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))" Version="2.8.2" allowedVersions="(,3.0.0)" />
+    <PackageReference Include="xunit.runner.visualstudio" Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))" Version="3.0.1" />
     <!-- Microsoft.Extensions.Logging.Abstractions comes transitively from the
          src project's ProjectReference below — do NOT re-pin it here. An
          explicit version here NU1605-downgrades every time src's floor moves
