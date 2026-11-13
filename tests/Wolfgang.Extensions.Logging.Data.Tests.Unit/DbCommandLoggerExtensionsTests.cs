@@ -384,11 +384,25 @@ public class DbCommandLoggerExtensionsTests
 
 
 /// <summary>
+/// Declares the write-only property of <see cref="ParametersWithIndexerAndWriteOnlyProperty"/>.
+/// Implementing it keeps that property an instance member, which is what the anonymous-object
+/// overloads reflect over, without a setter that has to touch instance state.
+/// </summary>
+internal interface IHasWriteOnlyProperty
+{
+#pragma warning disable S2376, CA1044 // Write-only on purpose: the reader must skip it.
+    string WriteOnly { set; }
+#pragma warning restore S2376, CA1044
+}
+
+
+
+/// <summary>
 /// Parameter object with an indexer and a write-only property, neither of which the
 /// anonymous-object overloads may read: only <see cref="Id"/> is a readable, non-indexed
 /// property.
 /// </summary>
-internal sealed class ParametersWithIndexerAndWriteOnlyProperty
+internal sealed class ParametersWithIndexerAndWriteOnlyProperty : IHasWriteOnlyProperty
 {
     public int Id { get; set; }
 
