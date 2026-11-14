@@ -18,7 +18,7 @@ public class CommandRedactionFuzzTests
 {
     private static readonly Gen<string> LowerWord = Gen.String[Gen.Char['a', 'z'], 1, 10];
 
-    private static readonly Gen<string> ParameterPrefix = Gen.OneOfConst("", "@", ":", "?");
+    private static readonly Gen<string> ParameterPrefix = Gen.OneOf("", "@", ":", "?");
 
 
 

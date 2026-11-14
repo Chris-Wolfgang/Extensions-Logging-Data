@@ -28,7 +28,7 @@ public class RedactionFuzzTests
             .Select(s => "ZQX" + s);
 
     private static readonly Gen<string> RedactedKeyName =
-        Gen.OneOfConst("Password", "password", "PASSWORD", "pAsSwOrD", "Pwd", "pwd", "PWD");
+        Gen.OneOf("Password", "password", "PASSWORD", "pAsSwOrD", "Pwd", "pwd", "PWD");
 
     private static readonly Gen<(string Key, string Value)> OrdinaryPair =
         Gen.Select
@@ -38,7 +38,7 @@ public class RedactionFuzzTests
             (key, value) => (key, value)
         );
 
-    private static readonly Gen<string> ParameterPrefix = Gen.OneOfConst("", "@", ":", "?");
+    private static readonly Gen<string> ParameterPrefix = Gen.OneOf("", "@", ":", "?");
 
 
 
