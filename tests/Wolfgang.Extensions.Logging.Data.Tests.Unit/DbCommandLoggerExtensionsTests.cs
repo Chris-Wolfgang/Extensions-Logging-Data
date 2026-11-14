@@ -353,6 +353,63 @@ public class DbCommandLoggerExtensionsTests
 
 
     [Fact]
+    public void LogCommandText_when_object_overload_is_given_excluded_names_and_a_level_redacts_and_logs_at_that_level()
+    {
+        var logger = new RecordingLogger();
+
+        logger.LogCommandText("INSERT ...", new { user = "bob", password = "hunter2" }, new[] { "password" }, LogLevel.Warning);
+
+        var entry = Assert.Single(logger.Entries);
+        Assert.Equal(LogLevel.Warning, entry.Level);
+        Assert.Equal("{user=bob, password=***}", entry.GetValue("Parameters"));
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_when_several_names_are_excluded_redacts_each_of_them()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?> { ["id"] = 1, ["password"] = "hunter2", ["pin"] = "1234" };
+
+        logger.LogCommandText("INSERT ...", parameters, new[] { "password", "pin" });
+
+        Assert.Equal
+        (
+            "{id=1, password=***, pin=***}",
+            Assert.Single(logger.Entries).GetValue("Parameters")
+        );
+    }
+
+
+
+    [Fact]
+    public void LogCommandText_when_a_value_formats_to_null_renders_an_empty_value()
+    {
+        var logger = new RecordingLogger();
+        var parameters = new Dictionary<string, object?> { ["value"] = new NullFormattingValue() };
+
+        logger.LogCommandText("SELECT 1", parameters);
+
+        Assert.Equal("{value=}", Assert.Single(logger.Entries).GetValue("Parameters"));
+    }
+
+
+
+    [Fact]
+    public void ToDictionary_when_the_parameter_collection_is_null_throws_ArgumentNullException()
+    {
+        var exception = Assert.Throws<ArgumentNullException>
+        (
+            () => DbCommandLoggerExtensions.ToDictionary((System.Data.Common.DbParameterCollection)null!)
+        );
+
+        Assert.Equal("parameters", exception.ParamName);
+    }
+
+
+
+    [Fact]
     public void ToDictionary_when_called_repeatedly_returns_consistent_results_from_cached_accessors()
     {
         // Two anonymous instances of the same shape exercise the per-type cache
@@ -378,6 +435,14 @@ public class DbCommandLoggerExtensionsTests
         var result = DbCommandLoggerExtensions.ToDictionary(dict);
 
         Assert.Same(dict, result);
+    }
+
+
+
+    /// <summary>A value whose <see cref="object.ToString"/> returns <see langword="null"/>.</summary>
+    private sealed class NullFormattingValue
+    {
+        public override string ToString() => null!;
     }
 }
 
