@@ -138,6 +138,7 @@ public class LoggingCommandInterceptorTests
         var entry = Assert.Single(logger.Entries);
         Assert.Equal(LogLevel.Error, entry.Level);
         Assert.Same(boom, entry.Exception);
+        Assert.Equal("EF6 command failed: SELECT * FROM Users WHERE Id = @id", entry.Message);
     }
 
 

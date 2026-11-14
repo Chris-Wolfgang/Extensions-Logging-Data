@@ -88,6 +88,7 @@ public class LoggingConnectionInterceptorTests
         var entry = Assert.Single(logger.Entries);
         Assert.Equal(LogLevel.Error, entry.Level);
         Assert.Same(boom, entry.Exception);
+        Assert.Equal("EF6 connection open failed", entry.Message);
     }
 
 
@@ -145,7 +146,9 @@ public class LoggingConnectionInterceptorTests
 
         sut.Closed(new FakeDbConnection(), context);
 
-        Assert.Equal(LogLevel.Error, Assert.Single(logger.Entries).Level);
+        var entry = Assert.Single(logger.Entries);
+        Assert.Equal(LogLevel.Error, entry.Level);
+        Assert.Equal("EF6 connection close failed", entry.Message);
     }
 
 
