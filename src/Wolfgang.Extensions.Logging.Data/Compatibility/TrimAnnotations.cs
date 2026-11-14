@@ -10,27 +10,26 @@
 // Intentional System.Diagnostics.CodeAnalysis polyfill: it MUST live in the BCL's namespace so
 // the trimmer/AOT compiler matches it by full type name; folder layout is irrelevant.
 // ReSharper disable once CheckNamespace
-namespace System.Diagnostics.CodeAnalysis
+namespace System.Diagnostics.CodeAnalysis;
+
+/// <summary>
+/// Indicates that the marked method uses functionality (here, reflection over a runtime
+/// type's members) that cannot be statically analysed by the trimmer, so calling it from
+/// a trimmed / Native AOT application is not guaranteed to be safe. Polyfill of the .NET 5+
+/// framework attribute for older target frameworks.
+/// </summary>
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor, Inherited = false)]
+[ExcludeFromCodeCoverage] // Attribute-only polyfill — no executable code to cover.
+internal sealed class RequiresUnreferencedCodeAttribute : Attribute
 {
-    /// <summary>
-    /// Indicates that the marked method uses functionality (here, reflection over a runtime
-    /// type's members) that cannot be statically analysed by the trimmer, so calling it from
-    /// a trimmed / Native AOT application is not guaranteed to be safe. Polyfill of the .NET 5+
-    /// framework attribute for older target frameworks.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor, Inherited = false)]
-    [ExcludeFromCodeCoverage] // Attribute-only polyfill — no executable code to cover.
-    internal sealed class RequiresUnreferencedCodeAttribute : Attribute
+    public RequiresUnreferencedCodeAttribute(string message)
     {
-        public RequiresUnreferencedCodeAttribute(string message)
-        {
-            Message = message;
-        }
-
-        public string Message { get; }
-
-        public string? Url { get; set; }
+        Message = message;
     }
+
+    public string Message { get; }
+
+    public string? Url { get; set; }
 }
 
 #pragma warning restore MA0048
