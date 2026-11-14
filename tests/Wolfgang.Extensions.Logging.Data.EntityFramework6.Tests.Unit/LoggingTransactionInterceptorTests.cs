@@ -49,6 +49,7 @@ public class LoggingTransactionInterceptorTests
         var entry = Assert.Single(logger.Entries);
         Assert.Equal(LogLevel.Error, entry.Level);
         Assert.Same(boom, entry.Exception);
+        Assert.Equal("EF6 transaction commit failed", entry.Message);
     }
 
 
@@ -88,7 +89,9 @@ public class LoggingTransactionInterceptorTests
 
         sut.RolledBack(null!, context);
 
-        Assert.Equal(LogLevel.Error, Assert.Single(logger.Entries).Level);
+        var entry = Assert.Single(logger.Entries);
+        Assert.Equal(LogLevel.Error, entry.Level);
+        Assert.Equal("EF6 transaction rollback failed", entry.Message);
     }
 
 

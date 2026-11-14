@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure.Interception;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Xunit;
 using Wolfgang.Extensions.Logging.Data.Tests.Unit.TestHelpers;
@@ -152,6 +153,35 @@ public class EntityFramework6LoggingTests
         );
 
         Assert.Equal("logger", ex.ParamName);
+    }
+
+
+
+    [Fact]
+    public void AddLoggingInterceptors_when_called_with_excluded_names_and_level_registers_that_logger()
+    {
+        var logger = new RecordingLogger();
+
+        EntityFramework6Logging.AddLoggingInterceptors(logger, new[] { "password" }, LogLevel.Debug);
+
+        AssertAlreadyRegistered(logger);
+    }
+
+
+
+    [Fact]
+    public void AddLoggingInterceptors_when_given_excluded_names_passes_them_to_the_command_interceptor()
+    {
+        var logger = new RecordingLogger();
+        var registered = new List<IDbInterceptor>();
+        var command = new FakeDbCommand { CommandText = "SELECT 1" };
+        command.AddParameter("@password", "hunter2");
+
+        EntityFramework6Logging.AddLoggingInterceptors(logger, new[] { "password" }, LogLevel.Information, registered.Add);
+        var interceptor = Assert.Single(registered.OfType<LoggingCommandInterceptor>());
+        interceptor.NonQueryExecuting(command, new DbCommandInterceptionContext<int>());
+
+        Assert.Equal("{@password=***}", Assert.Single(logger.Entries).GetValue("Parameters"));
     }
 
 
