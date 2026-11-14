@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794576642943,
+  "lastUpdate": 1794664341791,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -1836,6 +1836,90 @@ window.BENCHMARK_DATA = {
             "value": 1727.2148342132568,
             "unit": "ns",
             "range": "± 10.482536189476734"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "4fbb215505615484bf6e1d7ad5a6f4e0398ed401",
+          "message": "fix: use a file-scoped namespace in the TrimAnnotations polyfill so CheckNamespace stays suppressed on Linux (#240) (#388)\n\n* fix: use a file-scoped namespace in the TrimAnnotations polyfill (#240)\n\nInspectCode on the Linux CI runner still reports CheckNamespace (alert 78) on\nthe block-scoped `namespace System.Diagnostics.CodeAnalysis` even with the\n`// ReSharper disable once CheckNamespace` comment above it; Windows\nInspectCode (2026.2.3.1 and the pinned 2026.2.4.1) honours the comment.\nThe same comment on a file-scoped namespace inside `#if !NET5_0_OR_GREATER`\nleaves no open alert in ETL-Abstractions (IsExternalInit.cs), and the\nrepo's style is file-scoped namespaces, so convert the polyfill to that form.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* chore: add the changelog fragment for #240\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-14T08:48:22-05:00",
+          "tree_id": "aa5c47c8a7dd7302e80fd6cb2d607920a0c08fd0",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/4fbb215505615484bf6e1d7ad5a6f4e0398ed401"
+        },
+        "date": 1794664340407,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 154.20097589492798,
+            "unit": "ns",
+            "range": "± 1.1105065154947733"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger_NoExclusions",
+            "value": 138.06773408253989,
+            "unit": "ns",
+            "range": "± 3.064724825532146"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger",
+            "value": 241.16393518447876,
+            "unit": "ns",
+            "range": "± 0.989462516717055"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger_NoExclusions",
+            "value": 194.7739711602529,
+            "unit": "ns",
+            "range": "± 5.045847057235072"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 237.56755606333414,
+            "unit": "ns",
+            "range": "± 7.299283593684628"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0,
+            "unit": "ns",
+            "range": "± 0"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 52.79323369264603,
+            "unit": "ns",
+            "range": "± 1.6076889003901322"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0.00011203313867251079,
+            "unit": "ns",
+            "range": "± 0.0001940470883121983"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 1515.4061489105225,
+            "unit": "ns",
+            "range": "± 16.44145852002844"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 1566.6195646921794,
+            "unit": "ns",
+            "range": "± 27.125203383563157"
           }
         ]
       }
