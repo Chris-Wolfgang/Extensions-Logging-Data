@@ -14,7 +14,8 @@ public class LoggingConnectionInterceptorTests
         var logger = new RecordingLogger();
         var sut = new LoggingConnectionInterceptor(logger, LogLevel.Debug);
 
-        using var connection = new FakeDbConnection { ConnectionString = "Server=localhost;Database=Test;User Id=sa;Password=secret" };
+        using var connection = new FakeDbConnection();
+        connection.ConnectionString = "Server=localhost;Database=Test;User Id=sa;Password=secret";
 
         sut.Opening(connection, new DbConnectionInterceptionContext());
 
