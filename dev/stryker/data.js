@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794143533182,
+  "lastUpdate": 1794750829210,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "Mutation score": [
@@ -134,6 +134,38 @@ window.BENCHMARK_DATA = {
           {
             "name": "Mutation score",
             "value": 89.66,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "dependabot[bot]",
+            "username": "dependabot[bot]",
+            "email": "49699333+dependabot[bot]@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "c1e0e1b4812f5468083d7eef0335b9d8ce1d5934",
+          "message": "Bump CsCheck and 11 others (#397)\n\n* Bump CsCheck and 11 others\n\nBumps CsCheck from 4.9.1 to 5.0.1\nBumps dotnet-reportgenerator-globaltool from 5.5.12 to 5.6.0\nBumps dotnet-stryker from 5.0.0 to 5.1.0\nBumps jetbrains.resharper.globaltools from 2026.2.4.1 to 2026.3.0\nBumps Meziantou.Analyzer from 3.0.322 to 3.0.340\nBumps Microsoft.CodeAnalysis.CSharp to 5.12.0\nBumps microsoft.cst.devskim.cli from 1.0.100 to 1.0.103\nBumps Microsoft.Data.Sqlite to 10.0.15, 11.0.0\nBumps Microsoft.Extensions.Logging from 10.0.14 to 11.0.0\nBumps Microsoft.Extensions.Logging.Abstractions from 10.0.14 to 11.0.0\nBumps Microsoft.SourceLink.GitHub from 10.0.403 to 11.0.100\nBumps SonarAnalyzer.CSharp from 10.35.0.4138 to 10.36.0.15337\n\n---\nupdated-dependencies:\n- dependency-name: CsCheck\n  dependency-version: 5.0.1\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n  dependency-group: dotnet-dependencies\n- dependency-name: dotnet-reportgenerator-globaltool\n  dependency-version: 5.6.0\n  dependency-type: direct:production\n  update-type: version-update:semver-minor\n  dependency-group: dotnet-dependencies\n- dependency-name: dotnet-stryker\n  dependency-version: 5.1.0\n  dependency-type: direct:production\n  update-type: version-update:semver-minor\n  dependency-group: dotnet-dependencies\n- dependency-name: jetbrains.resharper.globaltools\n  dependency-version: 2026.3.0\n  dependency-type: direct:production\n  update-type: version-update:semver-minor\n  dependency-group: dotnet-dependencies\n- dependency-name: Meziantou.Analyzer\n  dependency-version: 3.0.340\n  dependency-type: direct:production\n  update-type: version-update:semver-patch\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.CodeAnalysis.CSharp\n  dependency-version: 5.12.0\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.CodeAnalysis.CSharp\n  dependency-version: 5.12.0\n  dependency-type: direct:production\n  update-type: version-update:semver-minor\n  dependency-group: dotnet-dependencies\n- dependency-name: microsoft.cst.devskim.cli\n  dependency-version: 1.0.103\n  dependency-type: direct:production\n  update-type: version-update:semver-patch\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.Data.Sqlite\n  dependency-version: 10.0.15\n  dependency-type: direct:production\n  update-type: version-update:semver-patch\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.Data.Sqlite\n  dependency-version: 10.0.15\n  dependency-type: direct:production\n  update-type: version-update:semver-patch\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.Extensions.Logging\n  dependency-version: 11.0.0\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.Extensions.Logging.Abstractions\n  dependency-version: 11.0.0\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.Extensions.Logging\n  dependency-version: 11.0.0\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.Extensions.Logging.Abstractions\n  dependency-version: 11.0.0\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.Extensions.Logging.Abstractions\n  dependency-version: 11.0.0\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.Extensions.Logging.Abstractions\n  dependency-version: 11.0.0\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.SourceLink.GitHub\n  dependency-version: 11.0.100\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n  dependency-group: dotnet-dependencies\n- dependency-name: SonarAnalyzer.CSharp\n  dependency-version: 10.36.0.15337\n  dependency-type: direct:production\n  update-type: version-update:semver-minor\n  dependency-group: dotnet-dependencies\n- dependency-name: Microsoft.Data.Sqlite\n  dependency-version: 11.0.0\n  dependency-type: direct:production\n  update-type: version-update:semver-major\n  dependency-group: dotnet-dependencies\n...\n\nSigned-off-by: dependabot[bot] <support@github.com>\n\n* test: use Gen.OneOf for constants (CsCheck 5 removed OneOfConst)\n\nCsCheck 5.0 dropped Gen.OneOfConst; Gen.OneOf<T>(params T[] constants) is\nthe same generator. The fuzz project failed to compile on this bump.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nSigned-off-by: dependabot[bot] <support@github.com>\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>\nCo-authored-by: Chris Wolfgang <210299580+Chris-Wolfgang@users.noreply.github.com>\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-14T21:54:14Z",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/c1e0e1b4812f5468083d7eef0335b9d8ce1d5934"
+        },
+        "date": 1794750822290,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score (tests/Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit)",
+            "value": 100,
+            "unit": "%"
+          },
+          {
+            "name": "Mutation score (tests/Wolfgang.Extensions.Logging.Data.Tests.Unit)",
+            "value": 97.98,
             "unit": "%"
           }
         ]
