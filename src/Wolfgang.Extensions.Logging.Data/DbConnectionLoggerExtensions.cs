@@ -147,6 +147,9 @@ public static class DbConnectionLoggerExtensions
         builder.Remove("Password");
         builder.Remove("Pwd");
 
+        // The getter never returns null, but the net462 / netstandard2.0 reference assemblies
+        // annotate it as nullable, so the fallback stays for the compiler.
+        // Stryker disable once String : equivalent mutant; the fallback is never reached.
         return builder.ConnectionString ?? string.Empty;
     }
 
@@ -163,6 +166,8 @@ public static class DbConnectionLoggerExtensions
         {
             return connection.ServerVersion;
         }
+        // Stryker disable once Block : equivalent mutant. Removing this block makes the method
+        // fall through to Stryker's injected `return default;`, which is the same null.
         catch (InvalidOperationException)
         {
             return null;
