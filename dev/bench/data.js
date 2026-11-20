@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794693422697,
+  "lastUpdate": 1795218722774,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -2004,6 +2004,90 @@ window.BENCHMARK_DATA = {
             "value": 3240.3009885152183,
             "unit": "ns",
             "range": "± 29.968845026105267"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "49161ec41eaa7a9e80eadfa1723ec02ae7d5d147",
+          "message": "fix(ef6): drop the unused default values from the three-argument AddLoggingInterceptors overload (#412)\n\nThe (logger), (logger, level) and (logger, excludedParameterNames) overloads\ncover every call that omits an argument, so the defaults never applied\n(InspectCode S3427, code-scanning alerts 342-344).\n\nCloses #383\nCloses #384\nCloses #385\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-20T18:49:21-05:00",
+          "tree_id": "cd01ba52c495dec19c5723a30f63ea78be7203b9",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/49161ec41eaa7a9e80eadfa1723ec02ae7d5d147"
+        },
+        "date": 1795218721091,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 242.85940583546957,
+            "unit": "ns",
+            "range": "± 1.8047262348984132"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger_NoExclusions",
+            "value": 213.07615296045938,
+            "unit": "ns",
+            "range": "± 3.8051418138305406"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger",
+            "value": 360.2645918528239,
+            "unit": "ns",
+            "range": "± 1.4238761629916932"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger_NoExclusions",
+            "value": 298.95128361384076,
+            "unit": "ns",
+            "range": "± 2.368962197502951"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 386.95271825790405,
+            "unit": "ns",
+            "range": "± 1.720090301721143"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0,
+            "unit": "ns",
+            "range": "± 0"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 73.69660723209381,
+            "unit": "ns",
+            "range": "± 0.3259191828178614"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0,
+            "unit": "ns",
+            "range": "± 0"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 2231.2319869995117,
+            "unit": "ns",
+            "range": "± 19.03685425534074"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 2219.108111063639,
+            "unit": "ns",
+            "range": "± 7.950160690547904"
           }
         ]
       }
