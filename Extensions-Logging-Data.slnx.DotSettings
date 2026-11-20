@@ -50,4 +50,12 @@
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=S3267/@EntryIndexedValue">DO_NOT_SHOW</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=S3220/@EntryIndexedValue">DO_NOT_SHOW</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=S2068/@EntryIndexedValue">DO_NOT_SHOW</s:String>
+
+	<!-- BCL polyfill: Compatibility/TrimAnnotations.cs declares System.Diagnostics.CodeAnalysis
+	     .RequiresUnreferencedCodeAttribute for net462 / netstandard2.x, and it MUST live in the
+	     BCL namespace (the trimmer matches it by full name), so CheckNamespace can never be
+	     satisfied there. The in-file `ReSharper disable once CheckNamespace` is not honoured by
+	     the Linux InspectCode run (code-scanning alerts 78 and 349, #240, #398), so the file is in
+	     the "file masks to skip" list, which InspectCode does not inspect. One file, by name. -->
+	<s:Boolean x:Key="/Default/CodeInspection/ExcludedFiles/FileMasksToSkip/=TrimAnnotations_002Ecs/@EntryIndexedValue">True</s:Boolean>
 </wpf:ResourceDictionary>
