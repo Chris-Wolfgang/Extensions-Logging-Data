@@ -188,6 +188,20 @@ dotnet test  --configuration Release
 pwsh ./scripts/format.ps1
 ```
 
+### CI test matrix
+
+Every pull request runs the test suite on five legs:
+
+| Leg | Workflow stage | Target frameworks |
+|---|---|---|
+| linux-x64 | `Stage 1: Linux Tests (.NET 5.0-10.0) + Coverage Gate` | net5.0 and later (coverage is gated here) |
+| windows-x64 | `Stage 2: Windows Tests (.NET 5.0-10.0, Framework 4.6.2-4.8.1)` | every TFM, .NET Framework 4.6.2 to net10.0 |
+| macos-arm64 | `Stage 3: macOS Tests (.NET 6.0-10.0)` | net6.0 and later |
+| linux-arm64 | `Stage 4: Linux ARM64 Tests` (`ubuntu-24.04-arm`) | net6.0 and later |
+| windows-arm64 | `Stage 5: Windows ARM64 Tests` (`windows-11-arm`) | net6.0 and later (.NET Framework stays on windows-x64) |
+
+The ARM64 stages run in parallel with Stages 1-3. The `AOT smoke` workflow publishes and runs the Native AOT consumer on linux-x64 and linux-arm64.
+
 ### Building documentation locally
 
 ```bash
