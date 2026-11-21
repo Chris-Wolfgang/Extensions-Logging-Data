@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1795218722774,
+  "lastUpdate": 1795269232996,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -2088,6 +2088,90 @@ window.BENCHMARK_DATA = {
             "value": 2219.108111063639,
             "unit": "ns",
             "range": "± 7.950160690547904"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "685e0b39ac56a3ad642caf7f9597ff66a8391358",
+          "message": "test: mark the two equivalent Stryker mutants in DbConnectionLoggerExtensions (#255) (#403)\n\n- TryGetServerVersion's catch block: removing it makes the method fall through to\n  Stryker's injected `return default;`, the same null. `// Stryker disable once Block`.\n- RedactConnectionString's `?? string.Empty`: DbConnectionStringBuilder.ConnectionString\n  never returns null, but the net462 / netstandard2.0 reference assemblies annotate it as\n  nullable (CS8603 without the fallback), so the fallback stays. `// Stryker disable once String`.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-21T08:50:28-05:00",
+          "tree_id": "6f983bcd24db9ca60850edb0fc52dc45b882753f",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/685e0b39ac56a3ad642caf7f9597ff66a8391358"
+        },
+        "date": 1795269231441,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 302.971683661143,
+            "unit": "ns",
+            "range": "± 2.2205436271492434"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger_NoExclusions",
+            "value": 264.5928729375203,
+            "unit": "ns",
+            "range": "± 4.565017062112107"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger",
+            "value": 458.6857393582662,
+            "unit": "ns",
+            "range": "± 27.57269333035042"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger_NoExclusions",
+            "value": 369.49938408533734,
+            "unit": "ns",
+            "range": "± 2.7677246448009973"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 463.87985293070477,
+            "unit": "ns",
+            "range": "± 3.415675140336012"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.00034849221507708233,
+            "unit": "ns",
+            "range": "± 0.00023148603419314147"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 101.1550990541776,
+            "unit": "ns",
+            "range": "± 1.0029478977498987"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0.0025670851270357766,
+            "unit": "ns",
+            "range": "± 0.002236538547387062"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 2706.6414273579917,
+            "unit": "ns",
+            "range": "± 8.478140563309513"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 2741.9490648905435,
+            "unit": "ns",
+            "range": "± 11.256235902601032"
           }
         ]
       }
