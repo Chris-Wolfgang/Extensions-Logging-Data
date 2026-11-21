@@ -111,14 +111,9 @@ public static class EntityFramework6Logging
     /// case-insensitive and ADO.NET-prefix-tolerant. When <see langword="null"/>, nothing is
     /// redacted.
     /// </param>
-    /// <param name="level">The level every non-error event is logged at. Defaults to <c>LogLevel.Information</c>.</param>
+    /// <param name="level">The level every non-error event is logged at.</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="logger"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This overload's default values are compiled into each call site. The overloads with no
-    /// optional parameters cover every shape that omits an argument, so such a call binds to
-    /// one of them instead and no default value is compiled into it.
-    /// </remarks>
-    public static void AddLoggingInterceptors(ILogger logger, IEnumerable<string>? excludedParameterNames = null, LogLevel level = LogLevel.Information)
+    public static void AddLoggingInterceptors(ILogger logger, IEnumerable<string>? excludedParameterNames, LogLevel level)
     {
         AddLoggingInterceptors(logger, excludedParameterNames, level, DbInterception.Add);
     }
