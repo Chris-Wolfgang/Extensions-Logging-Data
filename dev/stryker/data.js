@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794750829210,
+  "lastUpdate": 1795357820626,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "Mutation score": [
@@ -166,6 +166,38 @@ window.BENCHMARK_DATA = {
           {
             "name": "Mutation score (tests/Wolfgang.Extensions.Logging.Data.Tests.Unit)",
             "value": 97.98,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "658596d63611ab3bb4f4fc4114e4ef9021aed263",
+          "message": "docs(readme): state the five-leg CI test matrix and the ARM64 TFM rule (#362) (#408)\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-21T20:54:42Z",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/658596d63611ab3bb4f4fc4114e4ef9021aed263"
+        },
+        "date": 1795357816686,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score (tests/Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit)",
+            "value": 100,
+            "unit": "%"
+          },
+          {
+            "name": "Mutation score (tests/Wolfgang.Extensions.Logging.Data.Tests.Unit)",
+            "value": 100,
             "unit": "%"
           }
         ]
