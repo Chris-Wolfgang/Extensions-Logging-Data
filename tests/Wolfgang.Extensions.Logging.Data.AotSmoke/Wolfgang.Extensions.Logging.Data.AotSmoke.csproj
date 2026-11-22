@@ -17,7 +17,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
     <IsPackable>false</IsPackable>
-    <!-- Not a test project (no test SDK) — it is a compile+publish+run smoke. -->
+    <!-- Not a test project (no test SDK) — it is a compile+publish+run smoke. The explicit
+         opt-out keeps the pr.yaml test stages from failing on a tests/ project without
+         Microsoft.NET.Test.Sdk (they accept only an explicit IsTestProject=false). -->
+    <IsTestProject>false</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
