@@ -19,16 +19,12 @@ posture, a branching/release convention. Routine, obvious choices don't need one
    next free zero-padded number.
 2. Fill in Context / Decision / Consequences. Keep it short — a screenful.
 3. Set the status (`Proposed` → `Accepted`, later maybe `Superseded by ADR-XXXX`).
-4. Add a row to the index below.
+4. Add a row to [`index.md`](index.md).
 
 ADRs are **immutable once accepted** — don't rewrite history. If a decision
 changes, write a new ADR that supersedes the old one and update both statuses.
 
 ## Index
 
-| ADR | Title | Status |
-|---|---|---|
-| [0001](0001-vnext-protected-branching-model.md) | vNext / protected-vNext release branching model | Accepted |
-| [0002](0002-pinned-assemblyversion.md) | Pin `AssemblyVersion` at `1.0.0.0` | Accepted |
-| [0003](0003-anonymous-object-overload-not-aot-safe.md) | Anonymous-object `LogCommandText` overloads are not trim/AOT-safe | Accepted |
-| [0004](0004-netstandard20-tested-on-net50.md) | The net5.0 test slot runs the `netstandard2.0` build | Proposed |
+See [index.md](index.md) for every record and its status, starting with
+[ADR 0000](0000-record-architecture-decisions.md), which describes the practice.
