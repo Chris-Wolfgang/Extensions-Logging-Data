@@ -36,7 +36,7 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 - **CHANGELOG:** [CHANGELOG.md](CHANGELOG.md)
 - **Contributing Guide:** [CONTRIBUTING.md](CONTRIBUTING.md)
 - **Architecture Decision Records:** [docs/adr/](docs/adr/README.md)
-- **Reproducible builds (independent verification):** [docs/REPRODUCIBLE-BUILDS.md](docs/REPRODUCIBLE-BUILDS.md)
+- **Reproducible builds (independent verification):** [docs/REPRODUCIBLE-BUILD.md](docs/REPRODUCIBLE-BUILD.md)
 - **Migration guides:** [docs/migrations/](docs/migrations/README.md)
 - **Disaster recovery runbook:** [docs/DISASTER-RECOVERY.md](docs/DISASTER-RECOVERY.md)
 - **DocFX Version Picker Troubleshooting:** [docs/DOCFX-VERSION-PICKER.md](docs/DOCFX-VERSION-PICKER.md)
