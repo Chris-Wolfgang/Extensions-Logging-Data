@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Wolfgang.Extensions.Logging.Data.Tests.Unit.TestHelpers;
 
@@ -32,6 +33,12 @@ internal sealed class FakeDbConnection : DbConnection
 
     public override string DataSource => DataSourceValue;
 
+    [SuppressMessage
+    (
+        "Major Code Smell",
+        "S2372:Exceptions should not be thrown from property getters",
+        Justification = "Test double: real providers throw from DbConnection.ServerVersion (for example on a closed connection), and the logging tests need this getter to throw so they can pin how the library handles it."
+    )]
     public override string ServerVersion
     {
         get
