@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
+		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net10.0;net11.0</TargetFrameworks>
 		<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 		<Version>0.3.1</Version>
 		<!-- Pin AssemblyVersion to a fixed binding-stability baseline so consumers
@@ -32,10 +32,11 @@
 	</PropertyGroup>
 
 	<!-- Turns on the trim and Native AOT analyzers and marks the assembly trimmable.
-	     Only net8.0+ supports these properties, so they are set for net10.0 alone. The
+	     Only net8.0+ supports these properties, so they are set for net10.0 and later
+	     (net10.0, net11.0). The
 	     anonymous-object LogCommandText overloads carry [RequiresUnreferencedCode];
 	     everything else must stay warning-free. -->
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+	<PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">
 		<IsAotCompatible>true</IsAotCompatible>
 		<IsTrimmable>true</IsTrimmable>
 	</PropertyGroup>

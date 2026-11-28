@@ -6,7 +6,7 @@
 
 | Package | Project | Target frameworks |
 |---|---|---|
-| `Wolfgang.Extensions.Logging.Data` | `src/Wolfgang.Extensions.Logging.Data` | `net462`, `netstandard2.0`, `netstandard2.1`, `net10.0` |
+| `Wolfgang.Extensions.Logging.Data` | `src/Wolfgang.Extensions.Logging.Data` | `net462`, `netstandard2.0`, `netstandard2.1`, `net10.0`, `net11.0` |
 | `Wolfgang.Extensions.Logging.Data.EntityFramework6` | `src/Wolfgang.Extensions.Logging.Data.EntityFramework6` | `net462`, `net48`, `netstandard2.1` |
 
 The core package adds `ILogger` extension methods (`LogDbConnection`, `LogDbCommand`, `LogCommandText`)
@@ -17,7 +17,7 @@ interceptors that call those methods for every EF6 operation.
 ## Projects
 
 - `src/` - the two packages above.
-- `tests/Wolfgang.Extensions.Logging.Data.Tests.Unit` - unit tests for the core package (net462 through net10.0).
+- `tests/Wolfgang.Extensions.Logging.Data.Tests.Unit` - unit tests for the core package (net462 through net11.0).
 - `tests/Wolfgang.Extensions.Logging.Data.EntityFramework6.Tests.Unit` - unit tests for the EF6 package.
 - `tests/Wolfgang.Extensions.Logging.Data.Tests.Integration` - the real `Microsoft.Extensions.Logging` pipeline over SQLite.
 - `tests/Wolfgang.Extensions.Logging.Data.Tests.Docs` - compiles the XML-doc `<code>` examples.
