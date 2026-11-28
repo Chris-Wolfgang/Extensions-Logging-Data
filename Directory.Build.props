@@ -151,4 +151,20 @@
     </PackageReference>
   </ItemGroup>
 
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests.Aot')) or $(MSBuildProjectName.EndsWith('.AotSmoke'))">
+    <!-- Native AOT test harness settings (standards/aot-smoke.md). They apply to every
+         *.Tests.Aot project, and to the *.AotSmoke harness until it is converted, so the
+         settings cannot drift between projects. PublishAot is unconditional: it is the
+         signal aot-smoke.yaml uses to find the projects it publishes and runs.
+         TreatWarningsAsErrors is not set here: the Release line above applies.
+         InvariantGlobalization is only a default; a suite that tests real cultures sets
+         it to false in its own csproj. -->
+    <PublishAot>true</PublishAot>
+    <PublishTrimmed>true</PublishTrimmed>
+    <IsAotCompatible>true</IsAotCompatible>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    <InvariantGlobalization Condition="'$(InvariantGlobalization)' == ''">true</InvariantGlobalization>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
 </Project>
