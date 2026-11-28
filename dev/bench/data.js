@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1795829454052,
+  "lastUpdate": 1795879518676,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -2256,6 +2256,90 @@ window.BENCHMARK_DATA = {
             "value": 2106.2199427286782,
             "unit": "ns",
             "range": "± 8.74291999309593"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "1c921c1fba078450661395841572736e5cbcfd58",
+          "message": "build(scripts): build-pr.ps1 Stage 2 runs net11.0 tests too (#366, 4/4) (#437)\n\nThe local mirror of pr.yaml Stage 2 picks test TFMs from an explicit\nalternation that stopped at 10\\.0, so net11.0 tests were silently skipped\nby the local gate. It gains 11\\.0, as in repo-template.\n\nCloses #366\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-28T10:22:18-05:00",
+          "tree_id": "6f8e65cba225e0b39a3aa9b32376ab000bdfbe08",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/1c921c1fba078450661395841572736e5cbcfd58"
+        },
+        "date": 1795879517291,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 349.08515946070355,
+            "unit": "ns",
+            "range": "± 4.285849391860007"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger_NoExclusions",
+            "value": 317.10982116063434,
+            "unit": "ns",
+            "range": "± 6.501939921319912"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger",
+            "value": 472.6672175725301,
+            "unit": "ns",
+            "range": "± 2.4057147963796157"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger_NoExclusions",
+            "value": 407.208358446757,
+            "unit": "ns",
+            "range": "± 2.509155511472952"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 516.2897170384725,
+            "unit": "ns",
+            "range": "± 15.145072324196118"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.046556916708747544,
+            "unit": "ns",
+            "range": "± 0.07651193563838121"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 123.97131780783336,
+            "unit": "ns",
+            "range": "± 2.886097942222629"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0.0044638241330782575,
+            "unit": "ns",
+            "range": "± 0.003868405256321235"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 3311.9534619649253,
+            "unit": "ns",
+            "range": "± 31.42641392633109"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 3283.06573232015,
+            "unit": "ns",
+            "range": "± 23.314745351071092"
           }
         ]
       }
