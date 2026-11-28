@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1795269232996,
+  "lastUpdate": 1795829454052,
   "repoUrl": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data",
   "entries": {
     "BenchmarkDotNet": [
@@ -2172,6 +2172,90 @@ window.BENCHMARK_DATA = {
             "value": 2741.9490648905435,
             "unit": "ns",
             "range": "± 11.256235902601032"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "520ad6c6c5eeb720c7851f6e539a7237d2a5d836",
+          "message": "test(aot): run the unit suite as a Native AOT xUnit v3 binary (Tests.Aot) (#421)\n\nStep 2 of the approved Tests.Aot conversion plan (2026-11-20, group 3).\nLinks the Tests.Unit sources except the two files that exercise the\n[RequiresUnreferencedCode] anonymous-object overloads (ADR-0003).\n\nRefs Chris-Wolfgang/IEquatable-Extensions#158\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-27T20:22:27-05:00",
+          "tree_id": "c9a72f16f5f4abc353aa4717bc55fd3e3ed90e79",
+          "url": "https://github.com/Chris-Wolfgang/Extensions-Logging-Data/commit/520ad6c6c5eeb720c7851f6e539a7237d2a5d836"
+        },
+        "date": 1795829452084,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger",
+            "value": 246.43160009384155,
+            "unit": "ns",
+            "range": "± 3.8906139434710956"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_EnabledLogger_NoExclusions",
+            "value": 196.07648166020712,
+            "unit": "ns",
+            "range": "± 1.0458866001103768"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger",
+            "value": 360.6385742823283,
+            "unit": "ns",
+            "range": "± 13.946262830108251"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.LogDbCommand_EnabledLogger_NoExclusions",
+            "value": 286.4852083524068,
+            "unit": "ns",
+            "range": "± 2.068377801359336"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_EnabledLogger",
+            "value": 361.96490081151325,
+            "unit": "ns",
+            "range": "± 3.95012736277774"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.Dictionary_DisabledLogger_FastPath",
+            "value": 0.002769459659854571,
+            "unit": "ns",
+            "range": "± 0.002249973988440794"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbCommandLoggerExtensionsBenchmarks.AnonymousObject_DisabledLogger_FastPath",
+            "value": 77.95161672433217,
+            "unit": "ns",
+            "range": "± 0.5290516302934248"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_DisabledLogger_FastPath",
+            "value": 0,
+            "unit": "ns",
+            "range": "± 0"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_FullWork",
+            "value": 2124.1633631388345,
+            "unit": "ns",
+            "range": "± 14.887784068573781"
+          },
+          {
+            "name": "Wolfgang.Extensions.Logging.Data.Benchmarks.DbConnectionLoggerExtensionsBenchmarks.LogDbConnection_EnabledLogger_ExplicitDebugLevel",
+            "value": 2106.2199427286782,
+            "unit": "ns",
+            "range": "± 8.74291999309593"
           }
         ]
       }
