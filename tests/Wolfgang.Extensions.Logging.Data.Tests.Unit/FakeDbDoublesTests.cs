@@ -46,9 +46,9 @@ public class FakeDbDoublesTests
 
         command.Cancel();
         command.Prepare();
-        Assert.Throws<NotSupportedException>(() => command.ExecuteNonQuery());
-        Assert.Throws<NotSupportedException>(() => command.ExecuteScalar());
-        Assert.Throws<NotSupportedException>(() => command.ExecuteReader());
+        ThrowsFrom<NotSupportedException, FakeDbCommand>(command, c => c.ExecuteNonQuery());
+        ThrowsFrom<NotSupportedException, FakeDbCommand>(command, c => c.ExecuteScalar());
+        ThrowsFrom<NotSupportedException, FakeDbCommand>(command, c => c.ExecuteReader());
     }
 
 
@@ -144,8 +144,8 @@ public class FakeDbDoublesTests
         connection.Close();
         Assert.Equal(ConnectionState.Closed, connection.State);
 
-        Assert.Throws<NotSupportedException>(() => connection.CreateCommand());
-        Assert.Throws<NotSupportedException>(() => connection.BeginTransaction());
+        ThrowsFrom<NotSupportedException, FakeDbConnection>(connection, c => c.CreateCommand());
+        ThrowsFrom<NotSupportedException, FakeDbConnection>(connection, c => c.BeginTransaction());
     }
 
 
@@ -172,6 +172,21 @@ public class FakeDbDoublesTests
 
         connection.ServerVersionException = new InvalidOperationException("boom");
 
-        Assert.Same(connection.ServerVersionException, Assert.Throws<InvalidOperationException>(() => connection.ServerVersion));
+        Assert.Same
+        (
+            connection.ServerVersionException,
+            ThrowsFrom<InvalidOperationException, FakeDbConnection>(connection, c => c.ServerVersion)
+        );
     }
+
+
+
+    /// <summary>
+    /// <c>Assert.Throws</c> over a member of <paramref name="target"/>.
+    /// The target is passed in rather than captured, so the lambda never closes over a
+    /// <c>using</c> variable of the calling test (ReSharper AccessToDisposedClosure).
+    /// </summary>
+    private static TException ThrowsFrom<TException, TTarget>(TTarget target, Func<TTarget, object?> member)
+        where TException : Exception
+        => Assert.Throws<TException>(() => member(target));
 }
