@@ -135,6 +135,19 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
   </ItemGroup>
 
+  <PropertyGroup Condition="$(_RelativeProjectDir.StartsWith('src/')) and '$(TargetFramework)' == 'net11.0'">
+    <!-- Byte-identical output across operating systems, the net11.0 counterpart of the net4*
+         fix above. The Microsoft.NETCore.App.Ref 11.0.0 targeting pack that ships inside the
+         .NET 11 SDK is a different build on Linux and on Windows: all of its reference
+         assemblies differ, while the 8.0, 9.0 and 10.0 packs are identical across operating
+         systems. The PDB records every reference's MVID, so net11.0 built to different bytes
+         per OS. Pointing the pack root at a folder that does not exist makes the SDK download
+         the Microsoft.NETCore.App.Ref package from NuGet, which is the same on every OS.
+         That package carries no package-pruning data, so the missing data is allowed. -->
+    <NetCoreTargetingPackRoot>$(MSBuildThisFileDirectory)obj/no-installed-targeting-packs</NetCoreTargetingPackRoot>
+    <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
+  </PropertyGroup>
+
   <ItemGroup Condition="$(_RelativeProjectDir.StartsWith('src/')) and Exists('$(MSBuildProjectDirectory)/obj/THIRD-PARTY-NOTICES.md')">
     <!-- Third-party attribution: scripts/third-party-notices.ps1 renders the
          package's transitive NuGet closure to obj/THIRD-PARTY-NOTICES.md
