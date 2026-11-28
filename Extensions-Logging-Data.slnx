@@ -62,6 +62,7 @@
     <Project Path="tests/Wolfgang.Extensions.Logging.Data.Tests.Docs/Wolfgang.Extensions.Logging.Data.Tests.Docs.csproj" />
     <Project Path="tests/Wolfgang.Extensions.Logging.Data.Tests.Fuzz/Wolfgang.Extensions.Logging.Data.Tests.Fuzz.csproj" />
     <Project Path="tests/Wolfgang.Extensions.Logging.Data.AotSmoke/Wolfgang.Extensions.Logging.Data.AotSmoke.csproj" />
+    <Project Path="tests/Wolfgang.Extensions.Logging.Data.Tests.Aot/Wolfgang.Extensions.Logging.Data.Tests.Aot.csproj" />
   </Folder>
 </Solution>
 

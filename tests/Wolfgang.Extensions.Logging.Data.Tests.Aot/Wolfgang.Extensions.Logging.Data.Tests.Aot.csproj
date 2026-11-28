@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Native AOT test run (standards/aot-smoke.md).
+
+    Runs the SAME unit tests as Wolfgang.Extensions.Logging.Data.Tests.Unit, compiled as a
+    Native AOT executable with xUnit v3. The 2.x project stays as it is for every TFM; this
+    one exists only to prove the library under trimming + AOT, which a JIT test run cannot.
+
+    The test sources are linked, not copied: fix a test in Tests.Unit and it is fixed here.
+    xUnit v3's in-process console runner makes this project its own executable (no
+    Microsoft.NET.Test.Sdk), and with PublishAot that executable is a native binary.
+    PublishAot, PublishTrimmed, IsAotCompatible and IsPackable come from the *.Tests.Aot
+    block in Directory.Build.props.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Not a dotnet-test project: build-pr.ps1 and pr.yaml run `dotnet test` only on
+         IsTestProject / Microsoft.NET.Test.Sdk projects. This one is published and executed
+         by the AOT smoke job. -->
+    <IsTestProject>false</IsTestProject>
+    <!-- GlobalizationInvarianceTests switch to real cultures (new CultureInfo("de-DE")), so
+         ICU is required: InvariantGlobalization must stay OFF for this project. -->
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The AOT (source-generated) edition of xUnit.net v3: discovery, theory data and
+         attribute configuration are resolved at build time, so nothing needs reflection at
+         run time. The plain xunit.v3 package is reflection-based and cannot run under
+         Native AOT. -->
+    <PackageReference Include="xunit.v3.aot" Version="4.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Wolfgang.Extensions.Logging.Data\Wolfgang.Extensions.Logging.Data.csproj" />
+  </ItemGroup>
+
+  <!-- The unit tests themselves, linked from the 2.x project. -->
+  <ItemGroup>
+    <Compile Include="..\Wolfgang.Extensions.Logging.Data.Tests.Unit\*.cs" Link="Unit\%(Filename)%(Extension)" />
+    <Compile Include="..\Wolfgang.Extensions.Logging.Data.Tests.Unit\TestHelpers\*.cs" Link="Unit\TestHelpers\%(Filename)%(Extension)" />
+    <!-- These two files call the anonymous-object LogCommandText overload and
+         DbCommandLoggerExtensions.ToDictionary(object). Both reflect over the argument's runtime
+         type and are [RequiresUnreferencedCode] by design (docs/adr/0003), so the AOT compiler
+         rejects them with IL2026. They stay in Tests.Unit, which runs them on every TFM. The
+         AOT-safe IReadOnlyDictionary overloads are covered by the files linked above. -->
+    <Compile Remove="..\Wolfgang.Extensions.Logging.Data.Tests.Unit\DbCommandLoggerExtensionsTests.cs" />
+    <Compile Remove="..\Wolfgang.Extensions.Logging.Data.Tests.Unit\GlobalizationInvarianceTests.cs" />
+  </ItemGroup>
+
+</Project>
