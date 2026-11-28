@@ -133,7 +133,7 @@ This repo ships two packages, each with its own TFM matrix:
 
 | Package | Target Frameworks |
 |---|---|
-| `Wolfgang.Extensions.Logging.Data` | `net462`, `netstandard2.0`, `netstandard2.1`, `net10.0` |
+| `Wolfgang.Extensions.Logging.Data` | `net462`, `netstandard2.0`, `netstandard2.1`, `net10.0`, `net11.0` |
 | `Wolfgang.Extensions.Logging.Data.EntityFramework6` | `net462`, `net48`, `netstandard2.1` |
 
 `net462` is included so the library is usable from .NET Framework 4.6.2+ application hosts (existing `System.Data.SqlClient` consumers, classic web apps).
@@ -195,7 +195,7 @@ Every pull request runs the test suite on five legs:
 | Leg | Workflow stage | Target frameworks |
 |---|---|---|
 | linux-x64 | `Stage 1: Linux Tests (.NET 5.0-10.0) + Coverage Gate` | net5.0 and later (coverage is gated here) |
-| windows-x64 | `Stage 2: Windows Tests (.NET 5.0-10.0, Framework 4.6.2-4.8.1)` | every TFM, .NET Framework 4.6.2 to net10.0 |
+| windows-x64 | `Stage 2: Windows Tests (.NET 5.0-10.0, Framework 4.6.2-4.8.1)` | every TFM, .NET Framework 4.6.2 to net11.0 |
 | macos-arm64 | `Stage 3: macOS Tests (.NET 6.0-10.0)` | net6.0 and later |
 | linux-arm64 | `Stage 4: Linux ARM64 Tests` (`ubuntu-24.04-arm`) | net6.0 and later |
 | windows-arm64 | `Stage 5: Windows ARM64 Tests` (`windows-11-arm`) | net6.0 and later (.NET Framework stays on windows-x64) |
